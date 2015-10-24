@@ -7,7 +7,8 @@
   "licenseUrl": "",
 
   "dependencies": {
-    "Kasbah.Core": ""
+    "Kasbah.Core": "",
+    "Kasbah.Core.Events": ""
   },
 
   "frameworks": {

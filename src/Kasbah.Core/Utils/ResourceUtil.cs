@@ -15,12 +15,28 @@ namespace Kasbah.Core.Utils
             name = typeof(TAssembly).Assembly.GetName().Name + '.' + name;
 
             using (var stream = typeof(TAssembly).Assembly.GetManifestResourceStream(name))
-            using (var reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd();
+                if (stream == null)
+                {
+                    throw new ResourceNotFoundException(name);
+                }
+
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
             }
         }
 
         #endregion
+    }
+
+    public class ResourceNotFoundException : Exception
+    {
+        public ResourceNotFoundException(string resourceName)
+            : base($"Resource not found{resourceName}")
+        {
+
+        }
     }
 }

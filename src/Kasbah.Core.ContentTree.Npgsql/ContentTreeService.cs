@@ -3,11 +3,19 @@ using System.Linq;
 using Npgsql;
 using Dapper;
 using System.Collections.Generic;
+using Kasbah.Core.Utils;
+using Kasbah.Core.Events;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
     public class ContentTreeService : ContentTreeServiceBase, IContentTreeService
     {
+        public ContentTreeService(IEventService eventService)
+            : base(eventService)
+        {
+
+        }
+
         NpgsqlConnection GetConnection()
         {
             return new NpgsqlConnection();
@@ -17,7 +25,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.GetAllItemVersion.sql";
 
-            var sql = Kasbah.Core.Utils.ResourceHelper.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -31,7 +39,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.GetMostRecentlyCreatedItemVersion.sql";
 
-            var sql = Kasbah.Core.Utils.ResourceHelper.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -45,7 +53,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.Save.sql";
 
-            var sql = Kasbah.Core.Utils.ResourceHelper.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
             var data = SerialiseObject(item);
 
             using (var connection = GetConnection())
