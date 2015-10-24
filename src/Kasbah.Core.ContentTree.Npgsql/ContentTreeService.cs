@@ -1,20 +1,19 @@
 using System;
 using System.Linq;
-using Kasbah.Core.Models;
 using Npgsql;
 using Dapper;
 using System.Collections.Generic;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
-    public class ContentTreeService : IContentTreeService
+    public class ContentTreeService : ContentTreeServiceBase, IContentTreeService
     {
         NpgsqlConnection GetConnection()
         {
             return new NpgsqlConnection();
         }
 
-        public IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id)
+        protected override IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id)
         {
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.GetAllItemVersion.sql";
 
@@ -28,7 +27,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        public T GetMostRecentlyCreatedItemVersion<T>(Guid id)
+        protected override T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id)
         {
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.GetMostRecentlyCreatedItemVersion.sql";
 
@@ -42,9 +41,8 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        public void Save<T>(Guid id, T item) where T : ItemBase
+        protected override void InternalSave<T>(Guid id, T item)
         {
-            // TODO: raise before save event
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.Save.sql";
 
             var sql = Kasbah.Core.Utils.ResourceHelper.Get<ContentTreeService>(ResourceName);
@@ -54,8 +52,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
             {
                 connection.Execute(sql, new { id, data });
             }
-
-            // TODO: raise after save event
         }
 
         byte[] SerialiseObject(object input)
