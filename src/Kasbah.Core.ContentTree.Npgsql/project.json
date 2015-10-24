@@ -11,9 +11,13 @@
   "licenseUrl": "",
   "dependencies": {
     "Kasbah.Core.ContentTree": "",
-    "Npgsql": "3.1.0-alpha3"
+    "Npgsql": "3.1.0-alpha3",
+    "Dapper": "1.42.0"
   },
   "frameworks": {
     "dnx451": {}
-  }
+  },
+  "resource": [
+    "Sql/**/*.sql"
+  ]
 }

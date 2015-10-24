@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree
@@ -9,7 +10,7 @@ namespace Kasbah.Core.ContentTree
 
         T GetMostRecentlyCreatedItemVersion<T>(Guid id);
 
-        Tuple<T, DateTime> GetAllItemVersions<T>(Guid id);
+        IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id);
 
     }
 }
