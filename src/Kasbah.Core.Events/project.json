@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-*",
+  "description": "Kasbah.Core.Events Class Library",
+  "authors": [ "Chris Paynter" ],
+  "tags": [ "kasbah" ],
+  "projectUrl": "http://www.kasbah.io/",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "Kasbah.Core": ""
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}
+
