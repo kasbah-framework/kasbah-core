@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+  "description": "Kasbah.Core.ContentTree Npgsql Implementation",
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
+  "projectUrl": "http://www.kasbah.io/",
+  "licenseUrl": "",
+  "dependencies": {
+    "Kasbah.Core.ContentTree": "",
+    "Npgsql": "3.1.0-alpha3"
+  },
+  "frameworks": {
+    "dnx451": {}
+  }
+}
