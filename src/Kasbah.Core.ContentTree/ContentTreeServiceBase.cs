@@ -4,7 +4,7 @@ using Kasbah.Core.Models;
 using System.Collections.Generic;
 using Kasbah.Core.Events;
 
-namespace Kasbah.Core.ContentTree.Npgsql
+namespace Kasbah.Core.ContentTree
 {
     public abstract class ContentTreeServiceBase : IContentTreeService
     {
