@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace Kasbah.Core.Tests
@@ -27,6 +28,16 @@ namespace Kasbah.Core.Tests
             Assert.Throws<Utils.ResourceNotFoundException>(() =>
             {
                 Utils.ResourceUtil.Get<ResourceUtilTests>(ResourceName);
+            });
+        }
+
+        [Fact]
+        public void Get_NullName_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                Utils.ResourceUtil.Get<ResourceUtilTests>(null);
             });
         }
     }
