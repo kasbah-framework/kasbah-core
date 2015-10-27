@@ -34,7 +34,7 @@ namespace Kasbah.Core.Utils
     public class ResourceNotFoundException : Exception
     {
         public ResourceNotFoundException(string resourceName)
-            : base($"Resource not found{resourceName}")
+            : base($"Resource not found {resourceName}")
         {
 
         }

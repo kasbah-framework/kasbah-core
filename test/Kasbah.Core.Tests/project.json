@@ -1,8 +1,8 @@
 {
   "version": "1.0.0-*",
-  "description": "Kasbah.Core.Events Unit Tests",
+  "description": "Kasbah.Core.ContentTree Unit Tests",
   "authors": [
-    "Chris Paynter"
+    "Brendan McKenzie"
   ],
   "tags": [
     "kasbah"
@@ -12,12 +12,15 @@
   "dependencies": {
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-beta6-build191",
-    "Kasbah.Core.Events": ""
+    "Kasbah.Core": ""
   },
   "frameworks": {
     "dnx451": {}
   },
   "commands": {
     "test": "xunit.runner.dnx"
-  }
+  },
+  "resource": [
+    "Resources/**/*"
+  ]
 }
