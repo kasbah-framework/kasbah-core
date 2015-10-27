@@ -1,13 +1,12 @@
 namespace Kasbah.Core.Events
 {
-    public delegate void Message(string type, object data);
+    public delegate void KasbahEventHandler(string type, object data);
 
     public interface IEventService
     {
-        event Message OnMessage;
-
+        void Emit(string type);
         void Emit(string type, object data);
 
-        void RegisterListener(string type, Message listener);
+        void RegisterListener(string type, KasbahEventHandler handler);
     }
 }
