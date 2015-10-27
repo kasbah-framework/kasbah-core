@@ -1,14 +1,10 @@
 using System;
+using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree
 {
 	public interface IContentTreeEvents
 	{
-		delegate void OnItemSaved(object sender, ItemSavingEventsArgs e);	
+        event EventHandler<ItemBase> OnItemSaved;
 	}
-	
-	public class ItemSavingEventsArgs {
-		public ItemBase Item { get; set; }
-	}
-	
 }

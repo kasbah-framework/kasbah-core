@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Kasbah.Core.Models;
 using System.Collections.Generic;
 using Kasbah.Core.Events;
