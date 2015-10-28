@@ -1,6 +1,6 @@
 using System;
 
-namespace Kasbah.Core.ContentTree.Npgsql.Models
+namespace Kasbah.Core.ContentTree.Models
 {
     public class NodeVersion
     {

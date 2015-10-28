@@ -1,6 +1,6 @@
-insert into node ( id, parent_id, alias )
-values ( :id, :parent_id, :alias )
+insert into node_version ( id, node_id, "data" )
+values ( :id, :nodeId, :data )
 on conflict ( id ) do
     update set
-        parent_id = excluded.parent_id,
-        alias = excluded.alias;
+        "data" = excluded.data,
+        modified_at = current_timestamp;

@@ -1,47 +1,52 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Kasbah.Core.Events
 {
-        public class EventService : IEventService 
+    public class EventService
+    {
+        readonly IDictionary<Type, ICollection<IEventHandler>> _handlers;
+        readonly object _lockObj = new object();
+
+        public EventService()
         {
-                public List<KeyValuePair<string,IList<KasbahEventHandler>>> _listeners { get; set; }
-                
-                public EventService()
-                {
-                        _listeners = new List<KeyValuePair<string,IList<KasbahEventHandler>>>();
-                }
-                
-                public void RegisterListener(string type, KasbahEventHandler handler) 
-                {
-                        var key = _listeners.FirstOrDefault(u => u.Key.Equals(type));
-                        
-                        if (key.Equals(default(KeyValuePair<string, IList<KasbahEventHandler>>)))
-                        {
-                                key = new KeyValuePair<string,IList<KasbahEventHandler>>(type, new List<KasbahEventHandler>());
-                                _listeners.Add(key);
-                        }
-                        
-                        key.Value.Add(handler);
-                }
-                
-                // Generics to strongly type this someway?
-                // Try Catch to handle any error scenarios
-                
-                public void Emit(string type)
-                {
-                        Emit(type, null);
-                }
-                
-                public void Emit(string type, object data) 
-                {
-                        var key = _listeners.FirstOrDefault(u => u.Key.Equals(type));
-                        
-                        foreach(KasbahEventHandler listener in key.Value) 
-                        {
-                                listener(type, data);
-                        }
-                }
+            _handlers = new Dictionary<Type, ICollection<IEventHandler>>();
         }
+
+        public void Register<T>(IEventHandler handler)
+            where T : EventBase
+        {
+            lock (_lockObj)
+            {
+                var type = typeof(T);
+                if (_handlers.ContainsKey(type))
+                {
+                    _handlers[type].Add(handler);
+                }
+                else
+                {
+                    _handlers[type] = new List<IEventHandler>
+                {
+                    handler
+                };
+                }
+            }
+        }
+
+        public void Emit<T>(T @event)
+            where T : EventBase
+        {
+            lock (_lockObj)
+            {
+                var type = typeof(T);
+                if (_handlers.ContainsKey(type))
+                {
+                    foreach (var handler in _handlers[type])
+                    {
+                        handler.HandleEvent<T>(@event);
+                    }
+                }
+            }
+        }
+    }
 }

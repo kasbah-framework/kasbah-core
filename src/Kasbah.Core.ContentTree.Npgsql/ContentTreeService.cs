@@ -5,14 +5,14 @@ using Dapper;
 using System.Collections.Generic;
 using Kasbah.Core.Utils;
 using Kasbah.Core.Events;
-using Kasbah.Core.ContentTree.Npgsql.Models;
+using Kasbah.Core.ContentTree.Models;
 using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
     public class ContentTreeService : ContentTreeServiceBase, IContentTreeService
     {
-        public ContentTreeService(IEventService eventService)
+        public ContentTreeService(EventService eventService)
             : base(eventService)
         {
 
@@ -51,7 +51,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        protected override void InternalSave<T>(Guid id, T item)
+        protected override void InternalSave<T>(Guid id, Guid node, T item)
         {
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.Save.sql";
 
@@ -60,7 +60,19 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             using (var connection = GetConnection())
             {
-                connection.Execute(sql, new { id, data });
+                connection.Execute(sql, new { id, node, data });
+            }
+        }
+
+        protected override void InternalCreateNode(Guid id, Guid? parent, string alias)
+        {
+            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.CreateNode.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                connection.Execute(sql, new { id, parent, alias });
             }
         }
     }

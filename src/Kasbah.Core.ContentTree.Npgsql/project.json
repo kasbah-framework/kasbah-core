@@ -11,6 +11,7 @@
   "licenseUrl": "",
   "dependencies": {
     "Kasbah.Core.ContentTree": "",
+    "Kasbah.Core.Events": "",
     "Npgsql": "3.1.0-alpha3",
     "Dapper": "1.42.0",
     "Newtonsoft.Json": "8.0.1-beta1"

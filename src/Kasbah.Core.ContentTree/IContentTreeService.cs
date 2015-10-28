@@ -6,7 +6,11 @@ namespace Kasbah.Core.ContentTree
 {
     public interface IContentTreeService
     {
-        void Save<T>(Guid id, T item) where T : ItemBase;
+        void CreateNode(Guid id, Guid? parent, string alias);
+
+        void MoveNode(Guid id, Guid? parent);
+
+        void Save<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
 
         T GetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
 
