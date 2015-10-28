@@ -13,24 +13,27 @@ namespace Kasbah.Core.ContentTree
             _eventService = eventService;
         }
 
-        protected abstract IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id);
-        protected abstract T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id);
+        protected abstract IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id) where T : ItemBase;
+        protected abstract T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
         protected abstract void InternalSave<T>(Guid id, T item) where T : ItemBase;
 
 
         public IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id)
+             where T : ItemBase
         {
             return InternalGetAllItemVersions<T>(id);
         }
 
 
         public T GetMostRecentlyCreatedItemVersion<T>(Guid id)
+             where T : ItemBase
         {
             return InternalGetMostRecentlyCreatedItemVersion<T>(id);
         }
 
 
-        public void Save<T>(Guid id, T item) where T : ItemBase
+        public void Save<T>(Guid id, T item)
+            where T : ItemBase
         {
             _eventService.Emit("before:item_save", new { Id = id });
 

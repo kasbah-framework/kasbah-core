@@ -8,9 +8,9 @@ namespace Kasbah.Core.ContentTree
     {
         void Save<T>(Guid id, T item) where T : ItemBase;
 
-        T GetMostRecentlyCreatedItemVersion<T>(Guid id);
+        T GetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
 
-        IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id);
+        IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id) where T : ItemBase;
 
     }
 }

@@ -12,7 +12,8 @@
   "dependencies": {
     "Kasbah.Core.ContentTree": "",
     "Npgsql": "3.1.0-alpha3",
-    "Dapper": "1.42.0"
+    "Dapper": "1.42.0",
+    "Newtonsoft.Json": "8.0.1-beta1"
   },
   "frameworks": {
     "dnx451": {}

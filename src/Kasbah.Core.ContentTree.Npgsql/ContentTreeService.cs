@@ -5,6 +5,8 @@ using Dapper;
 using System.Collections.Generic;
 using Kasbah.Core.Utils;
 using Kasbah.Core.Events;
+using Kasbah.Core.ContentTree.Npgsql.Models;
+using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
@@ -18,7 +20,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         NpgsqlConnection GetConnection()
         {
-            return new NpgsqlConnection();
+            return new NpgsqlConnection(Environment.GetEnvironmentVariable("DB"));
         }
 
         protected override IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id)
@@ -31,7 +33,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             {
                 var data = connection.Query<NodeVersion>(sql, new { id });
 
-                return data.Select(ent => new Tuple<T, DateTime>(DeserialiseObject<T>(ent.Data), ent.Timestamp));
+                return data.Select(ent => new Tuple<T, DateTime>(Deserialise<T>(ent.Data), ent.Timestamp));
             }
         }
 
@@ -45,7 +47,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             {
                 var data = connection.Query<NodeVersion>(sql, new { id });
 
-                return data.Select(ent => DeserialiseObject<T>(ent.Data)).First();
+                return data.Select(ent => Deserialise<T>(ent.Data)).First();
             }
         }
 
@@ -54,37 +56,12 @@ namespace Kasbah.Core.ContentTree.Npgsql
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.Save.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-            var data = SerialiseObject(item);
+            var data = Serialise(item);
 
             using (var connection = GetConnection())
             {
                 connection.Execute(sql, new { id, data });
             }
-        }
-
-        byte[] SerialiseObject(object input)
-        {
-            return null;
-        }
-
-        T DeserialiseObject<T>(byte[] input)
-        {
-            return default(T);
-        }
-
-        class Node
-        {
-            public Guid Id { get; set; }
-
-            public string Alias { get; set; }
-        }
-
-        class NodeVersion
-        {
-            public Guid Id { get; set; }
-            public Guid NodeId { get; set; }
-            public DateTime Timestamp { get; set; }
-            public byte[] Data { get; set; }
         }
     }
 }
