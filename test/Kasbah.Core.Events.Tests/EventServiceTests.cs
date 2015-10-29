@@ -1,38 +1,25 @@
-using Xunit;
-using Kasbah.Core.Events;
-using System;
 using System.Collections.Generic;
+using Xunit;
 
 namespace Kasbah.Core.Events.Tests
 {
     public class EventServiceTests
     {
-        //  [Fact]
-        // I need to do a bit of research on current best practices with naming methods
-        // before we continue down this path - Chris
-        //  public void Emit_TypeSetDataNull_CorrectTypeAndNullDataIsPassed()
-        //  {
-        //      var bus = new EventService(); // TODO: Put in test harness
+        #region Public Methods
 
-        //      string expectedType = "test.events";
+        [Fact]
+        public void Emit_HandlerNotRegistered_WontReceiveEvents()
+        {
+            // Arrange
+            var service = new EventService();
+            var handler = new EventHandler();
 
-        //      string actualType = "";
-        //      object actualData = null;
+            // Act
+            service.Emit(new TestEvent());
 
-        //      bus.RegisterListener("test.events", (string type, object data) => {
-        //          actualType = type;
-        //          actualData = data;
-        //      });
-
-        //      bus.Emit("test.events");
-
-        //      Assert.True(actualType.Equals(expectedType));
-        //      Assert.True(actualData == null);
-        //  }
-
-        // Test multiple handlers
-        // Test data pass back
-        // Add a remove method to the event service
+            // Assert
+            Assert.Empty(handler.HandledEvents);
+        }
 
         [Fact]
         public void Emit_SingleEvent_EventHandled()
@@ -71,33 +58,28 @@ namespace Kasbah.Core.Events.Tests
             Assert.Contains(@event2, handler.HandledEvents);
         }
 
-        [Fact]
-        public void Emit_HandlerNotRegistered_WontReceiveEvents()
-        {
-            // Arrange
-            var service = new EventService();
-            var handler = new EventHandler();
-
-            // Act
-            service.Emit(new TestEvent());
-
-            // Assert
-            Assert.Empty(handler.HandledEvents);
-        }
+        #endregion
     }
 
     internal class EventHandler : IEventHandler
     {
+        #region Public Fields
+
         public ICollection<EventBase> HandledEvents = new List<EventBase>();
+
+        #endregion
+
+        #region Public Methods
 
         public void HandleEvent<T>(T @event) where T : EventBase
         {
             HandledEvents.Add(@event);
         }
+
+        #endregion
     }
 
     internal class TestEvent : EventBase
     {
-
     }
 }

@@ -3,9 +3,9 @@ using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree.Events
 {
-    public abstract class ItemEventBase : EventBase<ItemBase> { }
+    public class AfterItemSaved : ItemEventBase { }
 
     public class BeforeItemSaved : ItemEventBase { }
 
-    public class AfterItemSaved : ItemEventBase { }
+    public abstract class ItemEventBase : EventBase<ItemBase> { }
 }

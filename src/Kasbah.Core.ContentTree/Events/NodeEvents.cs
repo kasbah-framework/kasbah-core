@@ -3,9 +3,9 @@ using Kasbah.Core.Events;
 
 namespace Kasbah.Core.ContentTree.Events
 {
-    public abstract class NodeEventBase : EventBase<Node> { }
+    public class AfterNodeCreated : NodeEventBase { }
 
     public class BeforeNodeCreated : NodeEventBase { }
 
-    public class AfterNodeCreated : NodeEventBase { }
+    public abstract class NodeEventBase : EventBase<Node> { }
 }

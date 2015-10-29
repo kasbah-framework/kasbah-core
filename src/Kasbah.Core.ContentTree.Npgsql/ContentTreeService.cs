@@ -1,26 +1,42 @@
 using System;
-using System.Linq;
-using Npgsql;
-using Dapper;
 using System.Collections.Generic;
-using Kasbah.Core.Utils;
-using Kasbah.Core.Events;
+using System.Linq;
+using Dapper;
 using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.Events;
+using Kasbah.Core.Utils;
+using Npgsql;
 using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
     public class ContentTreeService : ContentTreeServiceBase, IContentTreeService
     {
+        #region Public Constructors
+
         public ContentTreeService(EventService eventService)
             : base(eventService)
         {
-
         }
 
-        NpgsqlConnection GetConnection()
+        #endregion
+
+        #region Protected Methods
+
+        protected override Guid InternalCreateNode(Guid? parent, string alias)
         {
-            return new NpgsqlConnection(Environment.GetEnvironmentVariable("DB"));
+            var id = Guid.NewGuid();
+
+            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.CreateNode.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                connection.Execute(sql, new { id, parent, alias });
+            }
+
+            return id;
         }
 
         protected override IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id)
@@ -64,20 +80,15 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        protected override Guid InternalCreateNode(Guid? parent, string alias)
+        #endregion
+
+        #region Private Methods
+
+        NpgsqlConnection GetConnection()
         {
-            var id = Guid.NewGuid();
-
-            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.CreateNode.sql";
-
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-
-            using (var connection = GetConnection())
-            {
-                connection.Execute(sql, new { id, parent, alias });
-            }
-
-            return id;
+            return new NpgsqlConnection(Environment.GetEnvironmentVariable("DB"));
         }
+
+        #endregion
     }
 }

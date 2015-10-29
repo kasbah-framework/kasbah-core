@@ -5,6 +5,8 @@ namespace Kasbah.Core.Tests
 {
     public class ResourceUtilTests
     {
+        #region Public Methods
+
         [Fact]
         public void Get_ExistingResource_ReturnsContents()
         {
@@ -40,5 +42,7 @@ namespace Kasbah.Core.Tests
                 Utils.ResourceUtil.Get<ResourceUtilTests>(null);
             });
         }
+
+        #endregion
     }
 }

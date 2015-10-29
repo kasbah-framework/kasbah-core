@@ -1,15 +1,11 @@
 using System;
 using Newtonsoft.Json;
-using System.Text;
 
 namespace Kasbah.Core.ContentTree.Npgsql.Utils
 {
     public static class SerialisationUtil
     {
-        public static string Serialise(object input)
-        {
-            return JsonConvert.SerializeObject(input);
-        }
+        #region Public Methods
 
         public static object Deserialise(string input, Type type)
         {
@@ -21,5 +17,12 @@ namespace Kasbah.Core.ContentTree.Npgsql.Utils
         {
             return JsonConvert.DeserializeObject<T>(input);
         }
+
+        public static string Serialise(object input)
+        {
+            return JsonConvert.SerializeObject(input);
+        }
+
+        #endregion
     }
 }

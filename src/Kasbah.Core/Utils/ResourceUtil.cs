@@ -33,10 +33,13 @@ namespace Kasbah.Core.Utils
 
     public class ResourceNotFoundException : Exception
     {
+        #region Public Constructors
+
         public ResourceNotFoundException(string resourceName)
             : base($"Resource not found {resourceName}")
         {
-
         }
+
+        #endregion
     }
 }
