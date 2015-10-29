@@ -11,7 +11,7 @@ namespace Kasbah.Core.ContentTree.Tests
         {
             // Arrange
             var obj = new { a = 1 };
-            var expected = Encoding.UTF8.GetBytes("{\"a\":1}");
+            var expected = "{\"a\":1}";
 
             // Act
             var output = SerialisationUtil.Serialise(obj);
@@ -24,7 +24,7 @@ namespace Kasbah.Core.ContentTree.Tests
         public void Deserialise_BasicString_ReturnsString()
         {
             // Arrange
-            var input = Encoding.UTF8.GetBytes("'string'");
+            var input = "'string'";
             var expected = "string";
 
             // Act

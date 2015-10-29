@@ -7,6 +7,6 @@ namespace Kasbah.Core.ContentTree.Models
         public Guid Id { get; set; }
         public Guid NodeId { get; set; }
         public DateTime Timestamp { get; set; }
-        public byte[] Data { get; set; }
+        public string Data { get; set; }
     }
 }

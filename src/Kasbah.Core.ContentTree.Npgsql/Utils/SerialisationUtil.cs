@@ -6,20 +6,20 @@ namespace Kasbah.Core.ContentTree.Npgsql.Utils
 {
     public static class SerialisationUtil
     {
-        public static byte[] Serialise(object input)
+        public static string Serialise(object input)
         {
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(input));
+            return JsonConvert.SerializeObject(input);
         }
 
-        public static object Deserialise(byte[] input, Type type)
+        public static object Deserialise(string input, Type type)
         {
-            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(input), type);
+            return JsonConvert.DeserializeObject(input, type);
         }
 
-        public static T Deserialise<T>(byte[] input)
+        public static T Deserialise<T>(string input)
             where T : class
         {
-            return JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(input));
+            return JsonConvert.DeserializeObject<T>(input);
         }
     }
 }
