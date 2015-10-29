@@ -1,7 +1,8 @@
 FROM kasbah-solr
 
+USER root
 
-COPY docker-entrypoint.sh /all-entrypoint.sh
-RUN chmod +x /all-entrypoint.sh
+ADD docker-entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["/all-entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
+

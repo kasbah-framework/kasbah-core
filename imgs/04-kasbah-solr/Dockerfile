@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libfontconfig1 
 #### END java:openjdk-8-jre
 
 RUN apt-get update && \
-  apt-get -y install lsof && \
+  apt-get -y install lsof wget && \
   rm -rf /var/lib/apt/lists/*
 
 ENV SOLR_USER solr
