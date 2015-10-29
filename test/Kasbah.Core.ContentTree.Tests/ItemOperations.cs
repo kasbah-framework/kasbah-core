@@ -14,7 +14,7 @@ namespace Kasbah.Core.ContentTree.Tests
         public void SaveItem_TriggersBeforeAndAfterEvents_EventsTriggered()
         {
             // Arrange
-            var eventService = new EventService();
+            var eventService = new InProcEventService();
             var handler = new BasicEventHandler();
 
             eventService.Register<BeforeItemSaved>(handler);

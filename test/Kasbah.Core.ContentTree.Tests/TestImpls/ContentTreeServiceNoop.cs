@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
 
 namespace Kasbah.Core.ContentTree.Tests.TestImpls
@@ -9,7 +10,7 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
     {
         #region Public Constructors
 
-        public ContentTreeServiceNoop(EventService eventService) : base(eventService)
+        public ContentTreeServiceNoop(IEventService eventService) : base(eventService)
         {
         }
 
@@ -32,8 +33,9 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
             return default(T);
         }
 
-        protected override void InternalSave<T>(Guid id, Guid nodeId, T item)
+        protected override NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item)
         {
+            return null;
         }
 
         #endregion

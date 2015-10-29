@@ -1,13 +1,14 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Kasbah.Core.Events
 {
-    public class EventService
+    public class InProcEventService : IEventService
     {
         #region Public Constructors
 
-        public EventService()
+        public InProcEventService()
         {
             _handlers = new Dictionary<Type, ICollection<IEventHandler>>();
         }
@@ -44,10 +45,39 @@ namespace Kasbah.Core.Events
                 }
                 else
                 {
-                    _handlers[type] = new List<IEventHandler>
+                    _handlers[type] = new List<IEventHandler> { handler };
+                }
+            }
+        }
+
+        public void Unregister(IEventHandler handler)
+        {
+            lock (_lockObj)
+            {
+                foreach (var kvp in _handlers.Where(ent => ent.Value.Contains(handler)).ToList())
                 {
-                    handler
-                };
+                    kvp.Value.Remove(handler);
+                    if (kvp.Value.Count == 0)
+                    {
+                        _handlers.Remove(kvp.Key);
+                    }
+                }
+            }
+        }
+
+        public void Unregister<T>(IEventHandler handler)
+            where T : EventBase
+        {
+            lock (_lockObj)
+            {
+                var type = typeof(T);
+                if (_handlers.ContainsKey(type) && _handlers[type].Contains(handler))
+                {
+                    _handlers[type].Remove(handler);
+                    if (_handlers[type].Count == 0)
+                    {
+                        _handlers.Remove(type);
+                    }
                 }
             }
         }

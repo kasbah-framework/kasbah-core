@@ -11,7 +11,7 @@ namespace Kasbah.Core.ContentTree
     {
         #region Public Constructors
 
-        public ContentTreeServiceBase(EventService eventService)
+        public ContentTreeServiceBase(IEventService eventService)
         {
             _eventService = eventService;
         }
@@ -22,7 +22,7 @@ namespace Kasbah.Core.ContentTree
 
         public Guid CreateNode(Guid? parent, string alias)
         {
-            var node = new Node { Id = Guid.Empty, ParentId = parent };
+            var node = new Node { Id = Guid.Empty, ParentId = parent, Alias = alias };
 
             _eventService.Emit(new BeforeNodeCreated { Data = node });
 
@@ -78,7 +78,7 @@ namespace Kasbah.Core.ContentTree
 
         #region Private Fields
 
-        readonly EventService _eventService;
+        readonly IEventService _eventService;
 
         #endregion
     }

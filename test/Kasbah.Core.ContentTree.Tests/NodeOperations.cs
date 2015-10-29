@@ -13,7 +13,7 @@ namespace Kasbah.Core.ContentTree.Tests
         public void CreateNode_TriggersBeforeAndAfterCreateEvents_EventsTriggered()
         {
             // Arrange
-            var eventService = new EventService();
+            var eventService = new InProcEventService();
             var handler = new BasicEventHandler();
 
             eventService.Register<BeforeNodeCreated>(handler);

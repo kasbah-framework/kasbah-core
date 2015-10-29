@@ -14,7 +14,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
     {
         #region Public Constructors
 
-        public ContentTreeService(EventService eventService)
+        public ContentTreeService(IEventService eventService)
             : base(eventService)
         {
         }
