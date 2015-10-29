@@ -1,7 +1,3 @@
-FROM kasbah-db
+FROM kasbah-pgsql
 
-ADD schema.sql /
-
-... start pgsql
-... run schema against it
-... profit
+ADD schema.sql /docker-entrypoint-initdb.d/
