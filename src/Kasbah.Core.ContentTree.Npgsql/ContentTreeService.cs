@@ -27,7 +27,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             var id = Guid.NewGuid();
 
-            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.CreateNode.sql";
+            const string ResourceName = "Sql/CreateNode.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
@@ -41,7 +41,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         protected override IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id)
         {
-            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.GetAllItemVersion.sql";
+            const string ResourceName = "Sql/GetAllItemVersion.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
@@ -49,13 +49,13 @@ namespace Kasbah.Core.ContentTree.Npgsql
             {
                 var data = connection.Query<NodeVersion>(sql, new { id });
 
-                return data.Select(ent => new Tuple<T, DateTime>(Deserialise<T>(ent.Data), ent.Timestamp));
+                return data.Select(ent => new Tuple<T, DateTime>(Deserialise<T>(ent.Data), ent.Modified));
             }
         }
 
         protected override T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id)
         {
-            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.GetMostRecentlyCreatedItemVersion.sql";
+            const string ResourceName = "Sql/GetMostRecentlyCreatedItemVersion.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
@@ -67,16 +67,16 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        protected override void InternalSave<T>(Guid id, Guid node, T item)
+        protected override NodeVersion InternalSave<T>(Guid id, Guid node, T item)
         {
-            const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.Save.sql";
+            const string ResourceName = "Sql/Save.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
             var data = Serialise(item);
 
             using (var connection = GetConnection())
             {
-                connection.Execute(sql, new { id, node, data });
+                return connection.Query<NodeVersion>(sql, new { id, node, data }).FirstOrDefault();
             }
         }
 

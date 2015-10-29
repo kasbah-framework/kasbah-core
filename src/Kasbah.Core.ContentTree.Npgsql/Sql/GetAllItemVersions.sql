@@ -1,11 +1,12 @@
 select
     id as "Id",
     node_id as "NodeId",
-    "timestamp" as "Timestamp",
+    created_at as "Created",
+    modified_at as "Modified",
     "data" as "Data"
 from
     node_version
 where
     node_id = :id
 order by
-    "timestamp"
+    created_at

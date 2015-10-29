@@ -50,14 +50,16 @@ namespace Kasbah.Core.ContentTree
             throw new NotImplementedException();
         }
 
-        public void Save<T>(Guid id, Guid nodeId, T item)
+        public NodeVersion Save<T>(Guid id, Guid nodeId, T item)
             where T : ItemBase
         {
             _eventService.Emit(new BeforeItemSaved { Data = item });
 
-            InternalSave<T>(id, nodeId, item);
+            var ret = InternalSave<T>(id, nodeId, item);
 
             _eventService.Emit(new AfterItemSaved { Data = item });
+
+            return ret;
         }
 
         #endregion
@@ -70,7 +72,7 @@ namespace Kasbah.Core.ContentTree
 
         protected abstract T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
 
-        protected abstract void InternalSave<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
+        protected abstract NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
 
         #endregion
 

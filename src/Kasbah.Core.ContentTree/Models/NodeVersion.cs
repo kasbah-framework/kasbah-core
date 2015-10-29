@@ -9,7 +9,8 @@ namespace Kasbah.Core.ContentTree.Models
         public string Data { get; set; }
         public Guid Id { get; set; }
         public Guid NodeId { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
 
         #endregion
     }

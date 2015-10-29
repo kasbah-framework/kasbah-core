@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree
@@ -16,7 +17,7 @@ namespace Kasbah.Core.ContentTree
 
         void MoveNode(Guid id, Guid? parent);
 
-        void Save<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
+        NodeVersion Save<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
 
         #endregion
     }
