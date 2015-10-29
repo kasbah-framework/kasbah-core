@@ -19,7 +19,7 @@ namespace Kasbah.Core.ContentTree
         protected abstract T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
         protected abstract void InternalSave<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
 
-        protected abstract void InternalCreateNode(Guid id, Guid? parent, string alias);
+        protected abstract Guid InternalCreateNode(Guid? parent, string alias);
 
 
         public IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id)
@@ -46,15 +46,17 @@ namespace Kasbah.Core.ContentTree
             _eventService.Emit(new AfterItemSaved { Data = item });
         }
 
-        public void CreateNode(Guid id, Guid? parent, string alias)
+        public Guid CreateNode(Guid? parent, string alias)
         {
-            var node = new Node { Id = id, ParentId = parent };
+            var node = new Node { Id = Guid.Empty, ParentId = parent };
 
             _eventService.Emit(new BeforeNodeCreated { Data = node });
 
-            InternalCreateNode(id, parent, alias);
+            node.Id = InternalCreateNode(parent, alias);
 
             _eventService.Emit(new AfterNodeCreated { Data = node });
+
+            return node.Id;
         }
 
         public void MoveNode(Guid id, Guid? parent)

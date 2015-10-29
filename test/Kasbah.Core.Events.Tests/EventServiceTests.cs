@@ -70,6 +70,20 @@ namespace Kasbah.Core.Events.Tests
             Assert.Contains(@event1, handler.HandledEvents);
             Assert.Contains(@event2, handler.HandledEvents);
         }
+
+        [Fact]
+        public void Emit_HandlerNotRegistered_WontReceiveEvents()
+        {
+            // Arrange
+            var service = new EventService();
+            var handler = new EventHandler();
+
+            // Act
+            service.Emit(new TestEvent());
+
+            // Assert
+            Assert.Empty(handler.HandledEvents);
+        }
     }
 
     internal class EventHandler : IEventHandler

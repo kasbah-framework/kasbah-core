@@ -6,7 +6,7 @@ namespace Kasbah.Core.ContentTree
 {
     public interface IContentTreeService
     {
-        void CreateNode(Guid id, Guid? parent, string alias);
+        Guid CreateNode(Guid? parent, string alias);
 
         void MoveNode(Guid id, Guid? parent);
 

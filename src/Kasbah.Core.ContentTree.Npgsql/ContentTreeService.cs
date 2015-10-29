@@ -64,8 +64,10 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        protected override void InternalCreateNode(Guid id, Guid? parent, string alias)
+        protected override Guid InternalCreateNode(Guid? parent, string alias)
         {
+            var id = Guid.NewGuid();
+
             const string ResourceName = "Kasbah.Core.ContentTree.Npgsql.Sql.CreateNode.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
@@ -74,6 +76,8 @@ namespace Kasbah.Core.ContentTree.Npgsql
             {
                 connection.Execute(sql, new { id, parent, alias });
             }
+
+            return id;
         }
     }
 }
