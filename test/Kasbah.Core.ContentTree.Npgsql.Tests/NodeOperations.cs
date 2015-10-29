@@ -8,11 +8,9 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
 {
     public class NodeOperations
     {
-        [Fact]
+        [DbFact]
         public void NpgsqlContentTree_CreateNode_NodeCreated()
         {
-            if (Environment.GetEnvironmentVariable("DB") == null) { return; }
-
             // Arrange
             var eventService = new EventService();
             var service = new ContentTreeService(eventService);
@@ -24,11 +22,9 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.NotEqual(Guid.Empty, id);
         }
 
-        [Fact]
+        [DbFact]
         public void NpgsqlContentTree_SaveNewItem_ItemSaved()
         {
-            if (Environment.GetEnvironmentVariable("DB") == null) { return; }
-
             // Arrange
             var eventService = new EventService();
             var service = new ContentTreeService(eventService);
@@ -45,11 +41,9 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.NotNull(savedItem);
         }
 
-        [Fact]
+        [DbFact]
         public void NpgsqlContentTree_SaveExistingItem_ItemUpdated()
         {
-            if (Environment.GetEnvironmentVariable("DB") == null) { return; }
-
             // Arrange
             var eventService = new EventService();
             var service = new ContentTreeService(eventService);
@@ -76,5 +70,16 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
     internal class TestItem : ItemBase
     {
         public string Value { get; set; }
+    }
+
+    public class DbFactAttribute : FactAttribute
+    {
+        public DbFactAttribute()
+        {
+            if (Environment.GetEnvironmentVariable("DB") == null)
+            {
+                Skip = "Database unavailable";
+            }
+        }
     }
 }
