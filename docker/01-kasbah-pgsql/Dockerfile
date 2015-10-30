@@ -42,6 +42,7 @@ ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 VOLUME /var/lib/postgresql/data
 
+USER root
 COPY docker-entrypoint.sh /pgsql-entrypoint.sh
 RUN chmod +x /pgsql-entrypoint.sh
 

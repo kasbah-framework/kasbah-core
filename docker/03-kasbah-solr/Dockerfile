@@ -9,8 +9,6 @@ FROM    kasbah-redis
 
 # FROM buildpack-deps:jessie-curl
 
-RUN apt-get update && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
-
 RUN echo 'deb http://httpredir.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list
 
 # Default to UTF-8 file.encoding
@@ -26,6 +24,7 @@ ENV CA_CERTIFICATES_JAVA_VERSION 20140324
 RUN set -x \
   && apt-get update \
   && apt-get install -y \
+    unzip lsof wget \
     openjdk-8-jre-headless="$JAVA_DEBIAN_VERSION" \
     ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
   && rm -rf /var/lib/apt/lists/*
@@ -43,10 +42,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends libfontconfig1 
 
 
 #### END java:openjdk-8-jre
-
-RUN apt-get update && \
-  apt-get -y install lsof wget && \
-  rm -rf /var/lib/apt/lists/*
 
 ENV SOLR_USER solr
 ENV SOLR_UID 8983
@@ -73,7 +68,15 @@ RUN mkdir -p /opt/solr && \
 # https://issues.apache.org/jira/browse/SOLR-8107
 RUN sed --in-place -e 's/^    "$JAVA" "${SOLR_START_OPTS\[@\]}" $SOLR_ADDL_ARGS -jar start.jar "${SOLR_JETTY_CONFIG\[@\]}"/    exec "$JAVA" "${SOLR_START_OPTS[@]}" $SOLR_ADDL_ARGS -jar start.jar "${SOLR_JETTY_CONFIG[@]}"/' /opt/solr/bin/solr
 
+USER root
+COPY docker-entrypoint.sh /solr-entrypoint.sh
+RUN chmod +x /solr-entrypoint.sh
+
+RUN rm -rf /opt/solr/docs
+RUN rm -rf /usr/share/docs
+
 EXPOSE 8983
 WORKDIR /opt/solr
 USER $SOLR_USER
 CMD ["/opt/solr/bin/solr", "-f"]
+
