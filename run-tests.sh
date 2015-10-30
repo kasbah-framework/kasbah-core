@@ -8,7 +8,7 @@ case "$1" in
     content-tree)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Tests/project.json test"
         ;;
-    content-tree-ngpsql)
+    content-tree-npgsql)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Npgsql.Tests/project.json test"
         ;;
     *)
