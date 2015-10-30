@@ -2,17 +2,20 @@ using System;
 using System.Threading;
 using Kasbah.Core.Events;
 using Kasbah.Core.Models;
+using Moq;
 using Xunit;
 
 namespace Kasbah.Core.ContentTree.Npgsql.Tests
 {
     public class NodeOperations
     {
+        #region Public Methods
+
         [DbFact]
         public void NpgsqlContentTree_CreateNode_NodeCreated()
         {
             // Arrange
-            var eventService = new EventService();
+            var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
 
             // Act
@@ -23,29 +26,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         [DbFact]
-        public void NpgsqlContentTree_SaveNewItem_ItemSaved()
-        {
-            // Arrange
-            var eventService = new EventService();
-            var service = new ContentTreeService(eventService);
-
-            var node = service.CreateNode(null, Guid.NewGuid().ToString());
-
-            // Act
-            var id = Guid.NewGuid();
-            var item = new TestItem { Value = "test" };
-
-            var savedItem = service.Save(id, node, item);
-
-            // Assert
-            Assert.NotNull(savedItem);
-        }
-
-        [DbFact]
         public void NpgsqlContentTree_SaveExistingItem_ItemUpdated()
         {
             // Arrange
-            var eventService = new EventService();
+            var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
 
             var node = service.CreateNode(null, Guid.NewGuid().ToString());
@@ -65,21 +49,35 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.Equal(firstSave.Created, secondSave.Created);
             Assert.Equal(firstSave.Id, secondSave.Id);
         }
+
+        [DbFact]
+        public void NpgsqlContentTree_SaveNewItem_ItemSaved()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+
+            // Act
+            var id = Guid.NewGuid();
+            var item = new TestItem { Value = "test" };
+
+            var savedItem = service.Save(id, node, item);
+
+            // Assert
+            Assert.NotNull(savedItem);
+        }
+
+        #endregion
     }
 
     internal class TestItem : ItemBase
     {
-        public string Value { get; set; }
-    }
+        #region Public Properties
 
-    public class DbFactAttribute : FactAttribute
-    {
-        public DbFactAttribute()
-        {
-            if (Environment.GetEnvironmentVariable("DB") == null)
-            {
-                Skip = "Database unavailable";
-            }
-        }
+        public string Value { get; set; }
+
+        #endregion
     }
 }

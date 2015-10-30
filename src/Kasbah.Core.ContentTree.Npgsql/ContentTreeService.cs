@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.ContentTree.Npgsql.Models;
 using Kasbah.Core.Events;
 using Kasbah.Core.Utils;
 using Npgsql;
@@ -47,7 +48,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             using (var connection = GetConnection())
             {
-                var data = connection.Query<NodeVersion>(sql, new { id });
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
 
                 return data.Select(ent => new Tuple<T, DateTime>(Deserialise<T>(ent.Data), ent.Modified));
             }
@@ -61,7 +62,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             using (var connection = GetConnection())
             {
-                var data = connection.Query<NodeVersion>(sql, new { id });
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
 
                 return data.Select(ent => Deserialise<T>(ent.Data)).First();
             }
