@@ -39,6 +39,8 @@ namespace Kasbah.Core.ContentTree
             return InternalGetAllItemVersions<T>(id);
         }
 
+        public abstract IEnumerable<Node> GetChildren(Guid? id);
+
         public T GetMostRecentlyCreatedItemVersion<T>(Guid id)
              where T : ItemBase
         {

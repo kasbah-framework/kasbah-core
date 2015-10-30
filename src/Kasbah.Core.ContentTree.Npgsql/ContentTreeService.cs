@@ -22,6 +22,22 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         #endregion
 
+        #region Public Methods
+
+        public override IEnumerable<Node> GetChildren(Guid? id)
+        {
+            const string ResourceName = "Sql/GetChildren.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                return connection.Query<Node>(sql, new { id });
+            }
+        }
+
+        #endregion
+
         #region Protected Methods
 
         protected override Guid InternalCreateNode(Guid? parent, string alias)

@@ -13,6 +13,8 @@ namespace Kasbah.Core.ContentTree
 
         IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id) where T : ItemBase;
 
+        IEnumerable<Node> GetChildren(Guid? id);
+
         T GetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
 
         void MoveNode(Guid id, Guid? parent);

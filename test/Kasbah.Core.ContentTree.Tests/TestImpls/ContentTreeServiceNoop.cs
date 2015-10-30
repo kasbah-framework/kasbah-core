@@ -18,6 +18,11 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
 
         #region Protected Methods
 
+        public override IEnumerable<Node> GetChildren(Guid? id)
+        {
+            return Enumerable.Empty<Node>();
+        }
+
         protected override Guid InternalCreateNode(Guid? parent, string alias)
         {
             return Guid.Empty;
