@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Kasbah.Core.ContentTree.Models;
+﻿using Kasbah.Core.ContentTree.Models;
 
 namespace Kasbah.Core.ContentTree.Npgsql.Models
 {
     public class NpgsqlNodeVersion : NodeVersion
     {
+        #region Public Properties
+
         public string Data { get; set; }
+
+        #endregion
     }
 }
