@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0-*",
+  "description": "Provides a raw visual interface to the content tree",
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
+  "projectUrl": "http://www.kasbah.io/",
+  "licenseUrl": "",
+  "dependencies": {
+    "Kasbah.Core": "",
+    "Microsoft.AspNet.Mvc": "6.0.0-beta8",
+    "Kestrel": "1.0.0-beta6",
+    "Microsoft.Framework.Logging": "1.0.0-beta8",
+    "Microsoft.Framework.Logging.Console": "1.0.0-beta8",
+    "Microsoft.AspNet.Diagnostics": "1.0.0-beta8",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-beta8",
+    "Microsoft.AspNet.Hosting": "1.0.0-beta8"
+  },
+  "frameworks": {
+    "dnx451": {}
+  },
+  "commands": {
+    "kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://0.0.0.0:5004",
+    "web": "Microsoft.AspNet.Hosting --config hosting.ini"
+  },
+  "webroot": "wwwroot"
+}
