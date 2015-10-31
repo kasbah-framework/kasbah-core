@@ -36,6 +36,48 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        public override IEnumerable<Tuple<NodeVersion, T>> GetAllNodeVersions<T>(Guid id)
+        {
+            const string ResourceName = "Sql/GetAllNodeVersions.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
+
+                return data.Select(ent => new Tuple<NodeVersion, T>(ent, Deserialise<T>(ent.Data)));
+            }
+        }
+
+        public override T GetMostRecentlyCreatedNodeVersion<T>(Guid id)
+        {
+            const string ResourceName = "Sql/GetMostRecentlyCreatedNodeVersion.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
+
+                return data.Select(ent => Deserialise<T>(ent.Data)).First();
+            }
+        }
+
+        public override T GetActiveNodeVersion<T>(Guid id)
+        {
+            const string ResourceName = "Sql/GetActiveNodeVersion.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
+
+                return data.Select(ent => Deserialise<T>(ent.Data)).First();
+            }
+        }
+
         #endregion
 
         #region Protected Methods
@@ -54,34 +96,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
 
             return id;
-        }
-
-        protected override IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id)
-        {
-            const string ResourceName = "Sql/GetAllItemVersion.sql";
-
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-
-            using (var connection = GetConnection())
-            {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
-
-                return data.Select(ent => new Tuple<T, DateTime>(Deserialise<T>(ent.Data), ent.Modified));
-            }
-        }
-
-        protected override T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id)
-        {
-            const string ResourceName = "Sql/GetMostRecentlyCreatedItemVersion.sql";
-
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-
-            using (var connection = GetConnection())
-            {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
-
-                return data.Select(ent => Deserialise<T>(ent.Data)).First();
-            }
         }
 
         protected override NodeVersion InternalSave<T>(Guid id, Guid node, T item)

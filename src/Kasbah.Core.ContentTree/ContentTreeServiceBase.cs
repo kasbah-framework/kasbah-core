@@ -33,19 +33,13 @@ namespace Kasbah.Core.ContentTree
             return node.Id;
         }
 
-        public IEnumerable<Tuple<T, DateTime>> GetAllItemVersions<T>(Guid id)
-             where T : ItemBase
-        {
-            return InternalGetAllItemVersions<T>(id);
-        }
-
         public abstract IEnumerable<Node> GetChildren(Guid? id);
 
-        public T GetMostRecentlyCreatedItemVersion<T>(Guid id)
-             where T : ItemBase
-        {
-            return InternalGetMostRecentlyCreatedItemVersion<T>(id);
-        }
+        public abstract IEnumerable<Tuple<NodeVersion, T>> GetAllNodeVersions<T>(Guid id) where T : ItemBase;
+
+        public abstract T GetActiveNodeVersion<T>(Guid id) where T : ItemBase;
+
+        public abstract T GetMostRecentlyCreatedNodeVersion<T>(Guid id) where T : ItemBase;
 
         public void MoveNode(Guid id, Guid? parent)
         {
@@ -69,10 +63,6 @@ namespace Kasbah.Core.ContentTree
         #region Protected Methods
 
         protected abstract Guid InternalCreateNode(Guid? parent, string alias);
-
-        protected abstract IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id) where T : ItemBase;
-
-        protected abstract T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id) where T : ItemBase;
 
         protected abstract NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
 

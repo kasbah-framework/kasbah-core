@@ -28,12 +28,17 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
             return Guid.Empty;
         }
 
-        protected override IEnumerable<Tuple<T, DateTime>> InternalGetAllItemVersions<T>(Guid id)
+        public override IEnumerable<Tuple<NodeVersion, T>> GetAllNodeVersions<T>(Guid id)
         {
-            return Enumerable.Empty<Tuple<T, DateTime>>();
+            return Enumerable.Empty<Tuple<NodeVersion, T>>();
         }
 
-        protected override T InternalGetMostRecentlyCreatedItemVersion<T>(Guid id)
+        public override T GetMostRecentlyCreatedNodeVersion<T>(Guid id)
+        {
+            return default(T);
+        }
+
+        public override T GetActiveNodeVersion<T>(Guid id)
         {
             return default(T);
         }
