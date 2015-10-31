@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Kasbah.Core.Events;
@@ -105,6 +106,64 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
 
             // Assert
             Assert.NotNull(savedItem);
+        }
+
+        [Fact]
+        public void Save_WithUniqueIds_MultipleVersionCreated()
+        {
+            // TODO: this test asserts too much.
+
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+
+            // Act
+            var ids = new [] { Guid.NewGuid(), Guid.NewGuid() };
+            var item = new TestItem { Value = Guid.NewGuid().ToString() };
+
+            foreach (var id in ids)
+            {
+                service.Save(id, node, item);
+            }
+
+            var versions = service.GetAllNodeVersions<TestItem>(node);
+
+            // Assert
+            Assert.NotEmpty(versions);
+            Assert.Equal(ids, versions.Select(ent => ent.Item1.Id));
+            Assert.Equal(versions.First().Item2.Value, item.Value);
+        }
+
+        [Fact]
+        public void GetMostRecentlyCreatedVersion_WhenMultipleVersionsExist_ReturnsLatestVersion()
+        {
+            // TODO: this assertion could be cleaner
+            
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+
+            // Act
+            var ids = new [] { Guid.NewGuid(), Guid.NewGuid() };
+            var item = new TestItem { Value = Guid.NewGuid().ToString() };
+            var values = new Dictionary<Guid, string>();
+
+            foreach (var id in ids)
+            {
+                values[id] = Guid.NewGuid().ToString();
+
+                service.Save(id, node, new TestItem { Value = values[id] });
+                Thread.Sleep(5);
+            }
+
+            var latest = service.GetMostRecentlyCreatedNodeVersion<TestItem>(node);
+
+            // Assert
+            Assert.Equal(latest.Value, values[ids.Last()]);
         }
 
         #endregion
