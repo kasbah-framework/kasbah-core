@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "Kasbah.Core.Events Class Library",
+  "description": "Provides a messaging system for inter-system communication",
   "authors": [ "Chris Paynter" ],
   "tags": [ "kasbah" ],
   "projectUrl": "http://www.kasbah.io/",

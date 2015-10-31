@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "Kasbah.Core Class Library",
+  "description": "Core functions and helpers used system-wide",
   "authors": [ "Brendan McKenzie", "Chris Paynter" ],
   "tags": [ "kasbah" ],
   "projectUrl": "http://www.kasbah.io/",

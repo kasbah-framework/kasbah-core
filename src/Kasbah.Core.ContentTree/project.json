@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "Kasbah.Core.ContentTree Class Library",
+  "description": "Defines the operations availble for querying and manipulating the content tree",
   "authors": [ "Brendan McKenzie" ],
   "tags": [ "kasbah" ],
   "projectUrl": "http://www.kasbah.io/",

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "Kasbah.Core.ContentTree Npgsql Implementation",
+  "description": "Implements the content tree operations against the PostgreSQL database provider",
   "authors": [
     "Brendan McKenzie"
   ],
