@@ -1,11 +1,16 @@
 select
-	id as "Id",
-	parent_id as "ParentId",
-	alias as "Alias",
-	current_version_id as "CurrentVersionId"
+	n.id as "Id",
+	n.parent_id as "ParentId",
+	n.alias as "Alias",
+	n.current_version_id as "CurrentVersionId",
+    case (select count(1) from node where parent_id = n.id)
+        when 0 then false
+        else true
+    end as "HasChildren"
 from
-	node
+	node n
 where
-	parent_id = :id
+	(:id is not null and n.parent_id = :id)
+    or (:id is null and n.parent_id is null)
 order by
-	alias;
+	n.alias;

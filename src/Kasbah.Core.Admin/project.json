@@ -11,8 +11,11 @@
   "licenseUrl": "",
   "dependencies": {
     "Kasbah.Core": "",
+    "Kasbah.Core.ContentTree": "",
+    "Kasbah.Core.ContentTree.Npgsql": "",
+    "Kasbah.Core.Events": "",
     "Microsoft.AspNet.Mvc": "6.0.0-beta8",
-    "Kestrel": "1.0.0-beta6",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-beta8",
     "Microsoft.Framework.Logging": "1.0.0-beta8",
     "Microsoft.Framework.Logging.Console": "1.0.0-beta8",
     "Microsoft.AspNet.Diagnostics": "1.0.0-beta8",
@@ -23,7 +26,7 @@
     "dnx451": {}
   },
   "commands": {
-    "kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://0.0.0.0:5004",
+    "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://*:5004",
     "web": "Microsoft.AspNet.Hosting --config hosting.ini"
   },
   "webroot": "wwwroot"

@@ -8,6 +8,7 @@ namespace Kasbah.Core.ContentTree.Models
 
         public string Alias { get; set; }
         public Guid? CurrentVersionId { get; set; }
+        public bool HasChildren{ get; set; }
         public Guid Id { get; set; }
 
         public Guid? ParentId { get; set; }
