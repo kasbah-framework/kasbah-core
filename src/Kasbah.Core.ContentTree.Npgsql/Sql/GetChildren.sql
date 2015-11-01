@@ -1,6 +1,6 @@
 select
 	n.id as "Id",
-	n.parent_id as "ParentId",
+	n.parent_id as "Parent",
 	n.alias as "Alias",
 	n.current_version_id as "CurrentVersionId",
     case (select count(1) from node where parent_id = n.id)

@@ -1,8 +1,8 @@
-import { combineReducers }    from 'redux';
+import { combineReducers } from 'redux';
 import { routerStateReducer } from 'redux-router';
-import counter                from './counter';
+import NodeTree from './node-tree';
 
 export default combineReducers({
-  counter,
-  router: routerStateReducer
+    nodeTree: NodeTree,
+    router: routerStateReducer
 });

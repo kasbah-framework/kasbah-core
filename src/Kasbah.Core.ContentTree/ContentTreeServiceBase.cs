@@ -22,7 +22,7 @@ namespace Kasbah.Core.ContentTree
 
         public Guid CreateNode(Guid? parent, string alias)
         {
-            var node = new Node { Id = Guid.Empty, ParentId = parent, Alias = alias };
+            var node = new Node { Id = Guid.Empty, Parent = parent, Alias = alias };
 
             _eventService.Emit(new BeforeNodeCreated { Data = node });
 

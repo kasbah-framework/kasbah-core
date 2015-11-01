@@ -4,3 +4,67 @@
 body {
     font-family: "Titillium Web";
 }
+
+.col-node-list {
+    padding-right: 0;
+    padding-left: 0;
+
+    .loading {
+        font-size: 12px;
+    }
+}
+
+.node-list {
+    list-style-type: none;
+    padding-left: 0;
+
+    li {
+        background-color: #f7f7f9;
+        padding: 0;
+        color: #222;
+
+        & > .node-list {
+            padding-left: 20px;
+
+            li {
+                border-left: 1px solid darken(#f7f7f9, 20%);
+
+                &:first-child {
+                    border-top: 1px solid darken(#f7f7f9, 20%);
+                }
+            }
+        }
+
+        button {
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            text-decoration: underline;
+            color: #ccc;
+
+            i {
+                margin: 4px;
+                color: #222;
+            }
+
+            span {
+                color: #222;
+            }
+
+            &:focus {
+               outline: 0;
+            }
+        }
+
+        button.toggle {
+            float: right;
+            color: lighten(#222, 20%);
+
+            i {
+                font-size: 16px;
+            }
+        }
+    }
+}
