@@ -1,37 +1,48 @@
 import React from 'react';
-import NodeList from './NodeList';
-
-class NodeExpandButton extends React.Component {
-    render() {
-        if (this.props.node.hasChildren) {
-            const iconClass = 'fa fa-' + (this.props.expanded ? 'minus-square-o' : 'plus-square-o');
-
-            return (
-                <button className='toggle' onClick={this.props.onClick}>
-                    <i className={iconClass}></i>
-                </button>
-            );
-        }
-
-        return null;
-    }
-}
 
 export default class Node extends React.Component {
+
+    _renderChildren() {
+        if (!this.props.node.expanded || !this.props.node.hasChildren) {
+            return null;
+        }
+
+        var children = [];
+        for (var k in this.props.nodeTree) {
+            var ent = this.props.nodeTree[k];
+            if (ent.parent === this.props.node.id) {
+                children.push(ent);
+            }
+        }
+
+        return (
+            <ul className='node-list'>
+            {children.map(ent => (
+                <Node
+                    key={ent.id}
+                    node={ent}
+                    nodeTree={this.props.nodeTree}
+                    onToggle={this.props.onToggle} />
+            ))}
+            </ul>
+        );
+    }
+
     render() {
+        const iconClass = 'fa fa-' + (this.props.node.expanded ? 'minus-square-o' : 'plus-square-o');
+
+        const toggleButton = this.props.node.hasChildren ? <button className='toggle' onClick={this.props.onToggle}><i className={iconClass}></i></button> : null;
+
         return (
             <li>
-                <NodeExpandButton
-                    node={this.props.node}
-                    expanded={this.props.expanded}
-                    onClick={this.props.onToggle} />
+                {toggleButton}
 
                 <button onClick={this.props.onSelect}>
                     <i className='fa fa-files-o' />
                     {this.props.node.alias}
                 </button>
 
-                {this.props.expanded ? <NodeList parent={this.props.node.id} /> : null}
+                {this._renderChildren()}
             </li>
         );
     }
