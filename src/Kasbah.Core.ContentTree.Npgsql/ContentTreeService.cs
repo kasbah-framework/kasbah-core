@@ -36,7 +36,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        public override IEnumerable<Tuple<NodeVersion, T>> GetAllNodeVersions<T>(Guid id)
+        public override IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
             const string ResourceName = "Sql/GetAllNodeVersions.sql";
 
@@ -44,9 +44,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             using (var connection = GetConnection())
             {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
-
-                return data.Select(ent => new Tuple<NodeVersion, T>(ent, Deserialise<T>(ent.Data)));
+                return connection.Query<NpgsqlNodeVersion>(sql, new { id });
             }
         }
 
@@ -64,6 +62,18 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        public override Node GetNode(Guid id)
+        {
+            const string ResourceName = "Sql/GetNode.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                return connection.Query<Node>(sql, new { id }).First();
+            }
+        }
+
         public override T GetActiveNodeVersion<T>(Guid id)
         {
             const string ResourceName = "Sql/GetActiveNodeVersion.sql";
@@ -75,6 +85,34 @@ namespace Kasbah.Core.ContentTree.Npgsql
                 var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
 
                 return data.Select(ent => Deserialise<T>(ent.Data)).First();
+            }
+        }
+
+        public override T GetNodeVersion<T>(Guid id, Guid version)
+        {
+            const string ResourceName = "Sql/GetNodeVersion.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id, version });
+
+                return data.Select(ent => Deserialise<T>(ent.Data)).First();
+            }
+        }
+
+        public override object GetNodeVersion(Guid id, Guid version, Type type)
+        {
+            const string ResourceName = "Sql/GetNodeVersion.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id, version });
+
+                return data.Select(ent => Deserialise(ent.Data, type)).First();
             }
         }
 

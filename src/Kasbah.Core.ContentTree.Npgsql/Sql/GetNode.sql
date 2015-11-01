@@ -11,7 +11,4 @@ select
 from
 	node n
 where
-	(:id is not null and n.parent_id = :id)
-    or (:id is null and n.parent_id is null)
-order by
-	n.alias;
+	id = :id;

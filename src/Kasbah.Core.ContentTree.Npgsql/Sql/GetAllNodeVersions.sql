@@ -2,8 +2,7 @@ select
     id as "Id",
     node_id as "NodeId",
     created_at as "Created",
-    modified_at as "Modified",
-    "data" as "Data"
+    modified_at as "Modified"
 from
     node_version
 where

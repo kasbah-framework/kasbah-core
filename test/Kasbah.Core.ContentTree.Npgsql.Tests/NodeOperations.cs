@@ -111,8 +111,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         [Fact]
         public void Save_WithUniqueIds_MultipleVersionCreated()
         {
-            // TODO: this test asserts too much.
-
             // Arrange
             var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
@@ -128,19 +126,18 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
                 service.Save(id, node, item);
             }
 
-            var versions = service.GetAllNodeVersions<TestItem>(node);
+            var versions = service.GetAllNodeVersions(node);
 
             // Assert
             Assert.NotEmpty(versions);
-            Assert.Equal(ids, versions.Select(ent => ent.Item1.Id));
-            Assert.Equal(versions.First().Item2.Value, item.Value);
+            Assert.Equal(ids, versions.Select(ent => ent.Id));
         }
 
         [Fact]
         public void GetMostRecentlyCreatedVersion_WhenMultipleVersionsExist_ReturnsLatestVersion()
         {
             // TODO: this assertion could be cleaner
-            
+
             // Arrange
             var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);

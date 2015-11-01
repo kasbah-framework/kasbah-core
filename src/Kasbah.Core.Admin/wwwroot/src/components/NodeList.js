@@ -2,7 +2,9 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Node from './Node';
-import { fetchChildren, clearChildren, toggleNode } from 'actions/node-tree';
+import { fetchChildren, clearChildren, toggleNode } from 'actions/nodes';
+
+// TODO: convert this to dumb component
 
 const actionCreators = {
     toggleNode : (node) => toggleNode(node),
@@ -38,8 +40,8 @@ export class NodeList extends React.Component {
 
     _renderChildren() {
         var children = [];
-        for (var k in this.props.nodeTree) {
-            var ent = this.props.nodeTree[k];
+        for (var k in this.props.nodeTree.nodes) {
+            var ent = this.props.nodeTree.nodes[k];
             if (ent.parent === null) {
                 children.push(ent);
             }
@@ -50,7 +52,8 @@ export class NodeList extends React.Component {
                 key={ent.id}
                 node={ent}
                 nodeTree={this.props.nodeTree}
-                onToggle={this.toggleNode.bind(this, ent)} />
+                onToggle={this.toggleNode.bind(this, ent)}
+                onSelect={this.props.onNodeSelected} />
         ));
     }
 

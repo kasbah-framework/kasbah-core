@@ -68,3 +68,19 @@ body {
         }
     }
 }
+
+.node-version-list {
+    font-size: 12px;
+
+    p {
+        padding: 1px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    li button {
+        text-align: left;
+        color: #222;
+    }
+}

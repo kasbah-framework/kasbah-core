@@ -8,8 +8,8 @@ export default class Node extends React.Component {
         }
 
         var children = [];
-        for (var k in this.props.nodeTree) {
-            var ent = this.props.nodeTree[k];
+        for (var k in this.props.nodeTree.nodes) {
+            var ent = this.props.nodeTree.nodes[k];
             if (ent.parent === this.props.node.id) {
                 children.push(ent);
             }
@@ -22,7 +22,8 @@ export default class Node extends React.Component {
                     key={ent.id}
                     node={ent}
                     nodeTree={this.props.nodeTree}
-                    onToggle={this.props.onToggle} />
+                    onToggle={this.props.onToggle}
+                    onSelect={this.props.onSelect.bind(this, ent)} />
             ))}
             </ul>
         );
@@ -37,7 +38,7 @@ export default class Node extends React.Component {
             <li>
                 {toggleButton}
 
-                <button onClick={this.props.onSelect}>
+                <button onClick={this.props.onSelect.bind(this, this.props.node)}>
                     <i className='fa fa-files-o' />
                     {this.props.node.alias}
                 </button>

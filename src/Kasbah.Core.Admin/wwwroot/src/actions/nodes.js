@@ -53,3 +53,34 @@ export function clearChildren(node) {
         })
     };
 }
+
+
+export const REQUEST_NODE_VERSIONS = 'REQUEST_NODE_VERSIONS'
+function requestNodeVersions(node) {
+    return {
+        type: REQUEST_NODE_VERSIONS,
+        payload: {
+            node
+        }
+    }
+}
+
+export const RECEIVE_NODE_VERSIONS = 'RECEIVE_NODE_VERSIONS'
+function receiveNodeVersions(node, data) {
+    return {
+        type: RECEIVE_NODE_VERSIONS,
+        payload: {
+            node,
+            data
+        }
+    }
+}
+
+export function fetchNodeVersions(node) {
+    return dispatch => {
+        dispatch(requestNodeVersions(node))
+            return fetch(`http://localhost:5004/api/versions/${node}`)
+                .then(response => response.json())
+                .then(json => dispatch(receiveNodeVersions(node, json)))
+    }
+}

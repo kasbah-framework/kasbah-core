@@ -12,6 +12,7 @@ namespace Kasbah.Core.ContentTree.Models
         public Guid Id { get; set; }
 
         public Guid? Parent { get; set; }
+        public string Type { get; set; }
 
         #endregion
     }
