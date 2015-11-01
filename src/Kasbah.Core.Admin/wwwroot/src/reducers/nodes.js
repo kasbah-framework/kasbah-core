@@ -1,12 +1,17 @@
 import { createReducer } from 'utils';
 
-import { RECEIVE_NODES, TOGGLE_NODE, CLEAR_CHILDREN, RECEIVE_NODE_VERSIONS } from 'actions/nodes';
+import {
+    RECEIVE_NODES,
+    TOGGLE_NODE,
+    CLEAR_CHILDREN,
+    RECEIVE_NODE_VERSIONS,
+    RECEIVE_NODE_VERSION } from 'actions/nodes';
 
 function clone(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
-const initialState = { nodes: {}, versions: {} };
+const initialState = { nodes: {}, versions: {}, items: {} };
 export default createReducer(initialState, {
     [RECEIVE_NODES] : (state, payload) => {
         let ret = clone(state);
@@ -39,6 +44,15 @@ export default createReducer(initialState, {
         let ret = clone(state);
 
         ret.versions[payload.node] = payload.data;
+
+        return ret;
+    },
+    [RECEIVE_NODE_VERSION]: (state, payload) => {
+        let ret = clone(state);
+
+        ret.items[payload.id] = ret.items[payload.id] || {};
+
+        ret.items[payload.id][payload.version] = payload.data;
 
         return ret;
     }

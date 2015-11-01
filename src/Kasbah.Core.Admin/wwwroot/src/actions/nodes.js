@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
-export const REQUEST_NODES = 'REQUEST_NODES'
+export const REQUEST_NODES = 'REQUEST_NODES';
 function requestNodes(parent) {
     return {
         type: REQUEST_NODES,
@@ -10,7 +10,7 @@ function requestNodes(parent) {
     }
 }
 
-export const RECEIVE_NODES = 'RECEIVE_NODES'
+export const RECEIVE_NODES = 'RECEIVE_NODES';
 function receiveNodes(parent, data) {
     return {
         type: RECEIVE_NODES,
@@ -55,7 +55,7 @@ export function clearChildren(node) {
 }
 
 
-export const REQUEST_NODE_VERSIONS = 'REQUEST_NODE_VERSIONS'
+export const REQUEST_NODE_VERSIONS = 'REQUEST_NODE_VERSIONS';
 function requestNodeVersions(node) {
     return {
         type: REQUEST_NODE_VERSIONS,
@@ -65,7 +65,7 @@ function requestNodeVersions(node) {
     }
 }
 
-export const RECEIVE_NODE_VERSIONS = 'RECEIVE_NODE_VERSIONS'
+export const RECEIVE_NODE_VERSIONS = 'RECEIVE_NODE_VERSIONS';
 function receiveNodeVersions(node, data) {
     return {
         type: RECEIVE_NODE_VERSIONS,
@@ -82,5 +82,38 @@ export function fetchNodeVersions(node) {
             return fetch(`http://localhost:5004/api/versions/${node}`)
                 .then(response => response.json())
                 .then(json => dispatch(receiveNodeVersions(node, json)))
+    }
+}
+
+
+export const REQUEST_NODE_VERSION = 'REQUEST_NODE_VERSION';
+function requestNodeVersion(id, version) {
+    return {
+        type: REQUEST_NODE_VERSION,
+        payload: {
+            id,
+            version
+        }
+    }
+}
+
+export const RECEIVE_NODE_VERSION = 'RECEIVE_NODE_VERSION';
+function receiveNodeVersion(id, version, data) {
+    return {
+        type: RECEIVE_NODE_VERSION,
+        payload: {
+            id,
+            version,
+            data
+        }
+    }
+}
+
+export function fetchNodeVersion(id, version) {
+    return dispatch => {
+        dispatch(requestNodeVersions(id, version))
+            return fetch(`http://localhost:5004/api/version/${id}/${version}`)
+                .then(response => response.json())
+                .then(json => dispatch(receiveNodeVersion(id, version, json)))
     }
 }

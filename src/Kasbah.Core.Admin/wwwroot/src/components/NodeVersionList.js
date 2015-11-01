@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 export default class NodeVersionList extends React.Component {
     render() {
@@ -16,7 +17,11 @@ export default class NodeVersionList extends React.Component {
                 <p>Node versions for <strong>{this.props.selectedNode.alias}</strong></p>
                 <ul className='node-list'>
                     {versions.map(ent =>
-                        <li key={ent.id}><button onClick={this.props.onVersionSelected.bind(this, ent)}>{ent.id}</button></li>
+                        <li key={ent.id}>
+                            <button onClick={this.props.onVersionSelected.bind(this, ent)}>
+                                <i className='fa fa-code-fork' /> {moment.utc(ent.modified).format()}
+                            </button>
+                        </li>
                     )}
                 </ul>
             </div>

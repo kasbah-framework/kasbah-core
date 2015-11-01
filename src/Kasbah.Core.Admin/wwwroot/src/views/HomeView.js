@@ -3,10 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import NodeList from 'components/NodeList';
 import NodeVersionList from 'components/NodeVersionList';
-import { fetchNodeVersions } from 'actions/nodes';
+import NodeVersionDisplay from 'components/NodeVersionDisplay';
+import { fetchNodeVersions, fetchNodeVersion } from 'actions/nodes';
 
 const actionCreators = {
-    fetchNodeVersions: (node) => fetchNodeVersions(node)
+    fetchNodeVersions: (node) => fetchNodeVersions(node),
+    fetchNodeVersion: (id, version) => fetchNodeVersion(id, version.id)
 };
 
 const mapStateToProps = (state) => ({
@@ -33,7 +35,8 @@ export class HomeView extends React.Component {
     }
 
     handleVersionSelected(version) {
-        console.log(version);
+        this.props.actions.fetchNodeVersion(this.state.selectedNode.id, version);
+        this.setState({ selectedVersion: version });
     }
 
     render () {
@@ -52,7 +55,10 @@ export class HomeView extends React.Component {
                             onVersionSelected={this.handleVersionSelected.bind(this)} />
                     </div>
                     <div className='col-lg-8 col-md-6'>
-                        <p>Content.</p>
+                        <NodeVersionDisplay
+                            selectedNode={this.state.selectedNode}
+                            selectedVersion={this.state.selectedVersion}
+                            items={this.props.nodeTree.items} />
                     </div>
                 </div>
             </div>
