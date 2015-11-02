@@ -1,10 +1,10 @@
 namespace Kasbah.Core.Models
 {
-    public abstract class ItemBase
+    public class EmptyItem : ItemBase
     {
     }
 
-    public class EmptyItem : ItemBase
+    public abstract class ItemBase
     {
     }
 }

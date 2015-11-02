@@ -24,15 +24,17 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         #region Public Methods
 
-        public override IEnumerable<Node> GetChildren(Guid? id)
+        public override T GetActiveNodeVersion<T>(Guid id)
         {
-            const string ResourceName = "Sql/GetChildren.sql";
+            const string ResourceName = "Sql/GetActiveNodeVersion.sql";
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
             using (var connection = GetConnection())
             {
-                return connection.Query<Node>(sql, new { id });
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
+
+                return data.Select(ent => Deserialise<T>(ent.Data)).First();
             }
         }
 
@@ -45,6 +47,18 @@ namespace Kasbah.Core.ContentTree.Npgsql
             using (var connection = GetConnection())
             {
                 return connection.Query<NpgsqlNodeVersion>(sql, new { id });
+            }
+        }
+
+        public override IEnumerable<Node> GetChildren(Guid? id)
+        {
+            const string ResourceName = "Sql/GetChildren.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                return connection.Query<Node>(sql, new { id });
             }
         }
 
@@ -71,20 +85,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
             using (var connection = GetConnection())
             {
                 return connection.Query<Node>(sql, new { id }).First();
-            }
-        }
-
-        public override T GetActiveNodeVersion<T>(Guid id)
-        {
-            const string ResourceName = "Sql/GetActiveNodeVersion.sql";
-
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-
-            using (var connection = GetConnection())
-            {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
-
-                return data.Select(ent => Deserialise<T>(ent.Data)).First();
             }
         }
 

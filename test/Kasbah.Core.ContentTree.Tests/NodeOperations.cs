@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using Kasbah.Core.ContentTree.Events;
 using Kasbah.Core.ContentTree.Tests.TestImpls;
 using Kasbah.Core.Events;
-using Moq;
 using Xunit;
 
 namespace Kasbah.Core.ContentTree.Tests

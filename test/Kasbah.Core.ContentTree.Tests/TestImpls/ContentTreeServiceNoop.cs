@@ -18,19 +18,19 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
 
         #region Protected Methods
 
+        public override T GetActiveNodeVersion<T>(Guid id)
+        {
+            return default(T);
+        }
+
+        public override IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<Node> GetChildren(Guid? id)
         {
             return Enumerable.Empty<Node>();
-        }
-
-        protected override Guid InternalCreateNode(Guid? parent, string alias)
-        {
-            return Guid.Empty;
-        }
-
-        public override IEnumerable<Tuple<NodeVersion, T>> GetAllNodeVersions<T>(Guid id)
-        {
-            return Enumerable.Empty<Tuple<NodeVersion, T>>();
         }
 
         public override T GetMostRecentlyCreatedNodeVersion<T>(Guid id)
@@ -38,9 +38,24 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
             return default(T);
         }
 
-        public override T GetActiveNodeVersion<T>(Guid id)
+        public override Node GetNode(Guid id)
         {
-            return default(T);
+            throw new NotImplementedException();
+        }
+
+        public override T GetNodeVersion<T>(Guid id, Guid version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object GetNodeVersion(Guid id, Guid version, Type type)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Guid InternalCreateNode(Guid? parent, string alias)
+        {
+            return Guid.Empty;
         }
 
         protected override NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item)

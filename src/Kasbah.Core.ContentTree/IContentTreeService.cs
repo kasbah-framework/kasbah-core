@@ -11,16 +11,18 @@ namespace Kasbah.Core.ContentTree
 
         Guid CreateNode(Guid? parent, string alias);
 
+        T GetActiveNodeVersion<T>(Guid id) where T : ItemBase;
+
         IEnumerable<NodeVersion> GetAllNodeVersions(Guid id);
 
         IEnumerable<Node> GetChildren(Guid? id);
 
-        T GetActiveNodeVersion<T>(Guid id)  where T : ItemBase;
-
         T GetMostRecentlyCreatedNodeVersion<T>(Guid id) where T : ItemBase;
+
         Node GetNode(Guid id);
 
-        T GetNodeVersion<T>(Guid id, Guid version)  where T : ItemBase;
+        T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase;
+
         object GetNodeVersion(Guid id, Guid version, Type type);
 
         void MoveNode(Guid id, Guid? parent);

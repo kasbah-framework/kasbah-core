@@ -33,11 +33,11 @@ namespace Kasbah.Core.ContentTree
             return node.Id;
         }
 
-        public abstract IEnumerable<Node> GetChildren(Guid? id);
+        public abstract T GetActiveNodeVersion<T>(Guid id) where T : ItemBase;
 
         public abstract IEnumerable<NodeVersion> GetAllNodeVersions(Guid id);
 
-        public abstract T GetActiveNodeVersion<T>(Guid id) where T : ItemBase;
+        public abstract IEnumerable<Node> GetChildren(Guid? id);
 
         public abstract T GetMostRecentlyCreatedNodeVersion<T>(Guid id) where T : ItemBase;
 
