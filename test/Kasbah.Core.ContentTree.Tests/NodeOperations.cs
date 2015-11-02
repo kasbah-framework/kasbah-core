@@ -2,6 +2,7 @@ using System;
 using Kasbah.Core.ContentTree.Events;
 using Kasbah.Core.ContentTree.Tests.TestImpls;
 using Kasbah.Core.Events;
+using Kasbah.Core.Models;
 using Xunit;
 
 namespace Kasbah.Core.ContentTree.Tests
@@ -23,7 +24,7 @@ namespace Kasbah.Core.ContentTree.Tests
             var service = new ContentTreeServiceNoop(eventService);
 
             // Act
-            service.CreateNode(null, Guid.NewGuid().ToString());
+            service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Assert
             Assert.NotEmpty(handler.HandledEvents);

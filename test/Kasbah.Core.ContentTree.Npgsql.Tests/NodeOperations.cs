@@ -19,12 +19,12 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Arrange
             var service = new ContentTreeService(Mock.Of<IEventService>());
 
-            var parentNode = service.CreateNode(null, Guid.NewGuid().ToString());
+            var parentNode = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Act
             var createdChildNodes = new[] {
-                service.CreateNode(parentNode, Guid.NewGuid().ToString()),
-                service.CreateNode(parentNode, Guid.NewGuid().ToString())
+                service.CreateNode<EmptyItem>(parentNode, Guid.NewGuid().ToString()),
+                service.CreateNode<EmptyItem>(parentNode, Guid.NewGuid().ToString())
             };
 
             var actualChildNodes = service.GetChildren(parentNode);
@@ -41,7 +41,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Arrange
             var service = new ContentTreeService(Mock.Of<IEventService>());
 
-            var parentNode = service.CreateNode(null, Guid.NewGuid().ToString());
+            var parentNode = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Act
             var childNodes = service.GetChildren(parentNode);
@@ -59,7 +59,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
 
-            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Act
             var ids = new[] { Guid.NewGuid(), Guid.NewGuid() };
@@ -88,7 +88,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             var service = new ContentTreeService(eventService);
 
             // Act
-            var id = service.CreateNode(null, Guid.NewGuid().ToString());
+            var id = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Assert
             Assert.NotEqual(Guid.Empty, id);
@@ -101,7 +101,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
 
-            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Act
             var id = Guid.NewGuid();
@@ -126,7 +126,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
 
-            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Act
             var id = Guid.NewGuid();
@@ -145,7 +145,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             var eventService = Mock.Of<IEventService>();
             var service = new ContentTreeService(eventService);
 
-            var node = service.CreateNode(null, Guid.NewGuid().ToString());
+            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
 
             // Act
             var ids = new[] { Guid.NewGuid(), Guid.NewGuid() };

@@ -9,7 +9,7 @@ namespace Kasbah.Core.ContentTree
     {
         #region Public Methods
 
-        Guid CreateNode(Guid? parent, string alias);
+        Guid CreateNode<T>(Guid? parent, string alias) where T : ItemBase;
 
         T GetActiveNodeVersion<T>(Guid id) where T : ItemBase;
 

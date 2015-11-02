@@ -53,7 +53,7 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
             throw new NotImplementedException();
         }
 
-        protected override Guid InternalCreateNode(Guid? parent, string alias)
+        protected override Guid InternalCreateNode<T>(Guid? parent, string alias)
         {
             return Guid.Empty;
         }

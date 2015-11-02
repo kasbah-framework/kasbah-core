@@ -120,7 +120,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         #region Protected Methods
 
-        protected override Guid InternalCreateNode(Guid? parent, string alias)
+        protected override Guid InternalCreateNode<T>(Guid? parent, string alias)
         {
             var id = Guid.NewGuid();
 
@@ -128,9 +128,11 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
 
+            var type = TypeUtil.TypeName<T>();
+
             using (var connection = GetConnection())
             {
-                connection.Execute(sql, new { id, parent, alias });
+                connection.Execute(sql, new { id, parent, alias, type });
             }
 
             return id;

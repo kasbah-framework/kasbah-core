@@ -20,13 +20,14 @@ namespace Kasbah.Core.ContentTree
 
         #region Public Methods
 
-        public Guid CreateNode(Guid? parent, string alias)
+        public Guid CreateNode<T>(Guid? parent, string alias)
+            where T : ItemBase
         {
-            var node = new Node { Id = Guid.Empty, Parent = parent, Alias = alias };
+            var node = new Node { Id = Guid.Empty, Parent = parent, Alias = alias, Type = typeof(T).FullName };
 
             _eventService.Emit(new BeforeNodeCreated { Data = node });
 
-            node.Id = InternalCreateNode(parent, alias);
+            node.Id = InternalCreateNode<T>(parent, alias);
 
             _eventService.Emit(new AfterNodeCreated { Data = node });
 
@@ -68,7 +69,8 @@ namespace Kasbah.Core.ContentTree
 
         #region Protected Methods
 
-        protected abstract Guid InternalCreateNode(Guid? parent, string alias);
+        protected abstract Guid InternalCreateNode<T>(Guid? parent, string alias) 
+            where T : ItemBase;
 
         protected abstract NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
 
