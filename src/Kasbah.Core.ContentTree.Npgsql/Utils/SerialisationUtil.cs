@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -26,6 +27,11 @@ namespace Kasbah.Core.ContentTree.Npgsql.Utils
             where T : class
         {
             return JsonConvert.DeserializeObject<T>(input, _settings);
+        }
+
+        public static IDictionary<string, object> DeserialiseAnonymous(string input)
+        {
+            return Deserialise<Dictionary<string, object>>(input);
         }
 
         public static string Serialise(object input)

@@ -1,15 +1,61 @@
 import React from 'react';
 
-export default class NodeVersionDisplay extends React.Component {
+class FieldEditor extends React.Component {
+    static propTypes = {
+        field: React.PropTypes.string.isRequired,
+        value: React.PropTypes.any.isRequired,
+        onChange: React.PropTypes.func.isRequired
+    }
+
     render() {
-        if (this.props.selectedNode == null || this.props.selectedVersion == null) { return null; }
+        return (
+            <div className='form-group'>
+                <dt htmlFor={this.props.field}>
+                    {this.props.field}
+                </dt>
+                <dd>
+                    <input
+                        id={this.props.field}
+                        type='text'
+                        value={this.props.value}
+                        onChange={this.props.onChange.bind(this, this.props.field)} />
+                </dd>
+            </div>
+        );
+    }
+}
 
-        const nodeVals = this.props.items[this.props.selectedNode.id];
-        if (!nodeVals) { return null;}
+export default class NodeVersionDisplay extends React.Component {
+    _renderFields(obj) {
+        var fields = Object.keys(obj);
 
-        const val = nodeVals[this.props.selectedVersion.id];
-        if (!val) { return null; }
+        return (
+            <div>
+                <dl>
+                    {fields.map(f =>
+                        <FieldEditor
+                            key={f}
+                            field={f}
+                            value={obj[f]}
+                            onChange={this.props.onChange} />)}
+                </dl>
+                <pre>{JSON.stringify(obj)}</pre>
+                <button className='btn btn-primary'>Save</button>
+            </div>
+        );
+    }
 
-        return <pre>{JSON.stringify(val)}</pre>;
+    render() {
+        if (this.props.selectedNode == null || this.props.selectedVersion == null) {
+            return null;
+        }
+
+        const values = this.props.items[this.props.selectedNode.id];
+        if (!values) { return null;}
+
+        const value = values[this.props.selectedVersion.id];
+        if (!value) { return null; }
+
+        return this._renderFields(value);
     }
 }

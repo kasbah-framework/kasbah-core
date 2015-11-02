@@ -25,6 +25,8 @@ namespace Kasbah.Core.ContentTree
 
         object GetNodeVersion(Guid id, Guid version, Type type);
 
+        IDictionary<string, object> GetNodeVersion(Guid id, Guid version);
+
         void MoveNode(Guid id, Guid? parent);
 
         NodeVersion Save<T>(Guid id, Guid nodeId, T item) where T : ItemBase;

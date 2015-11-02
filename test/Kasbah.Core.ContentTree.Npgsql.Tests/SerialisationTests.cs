@@ -35,6 +35,20 @@ namespace Kasbah.Core.ContentTree.Tests
             Assert.Equal(expected, output);
         }
 
+        [Fact]
+        public void Serialisation_DeserialiseToDictionary_ReturnsValidDictionary()
+        {
+            // Arrange
+            const string Input = "{\"a\":1, \"b\":\"b\"}";
+
+            // Act
+            var output = SerialisationUtil.DeserialiseAnonymous(Input);
+
+            // Assert
+            Assert.Equal((long)1, output["a"]);
+            Assert.Equal("b", output["b"]);
+        }
+
         #endregion
     }
 }

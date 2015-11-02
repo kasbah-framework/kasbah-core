@@ -117,3 +117,22 @@ export function fetchNodeVersion(id, version) {
                 .then(json => dispatch(receiveNodeVersion(id, version, json)))
     }
 }
+
+function notifyUpdateItem(node, version, field, value) {
+    return {
+        type: UPDATE_ITEM,
+        payload: {
+            node,
+            version,
+            field,
+            value
+        }
+    }
+}
+
+export const UPDATE_ITEM = 'UPDATE_ITEM';
+export function updateItem(node, version, field, value) {
+    return dispatch => {
+        dispatch(notifyUpdateItem(node, version, field, value));
+    }
+}

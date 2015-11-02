@@ -116,6 +116,20 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        public override IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
+        {
+            const string ResourceName = "Sql/GetNodeVersion.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id, version });
+
+                return data.Select(ent => DeserialiseAnonymous(ent.Data)).First();
+            }
+        }
+
         #endregion
 
         #region Protected Methods

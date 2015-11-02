@@ -50,7 +50,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.Empty(childNodes);
         }
 
-        [Fact]
+        [DbFact]
         public void GetMostRecentlyCreatedVersion_WhenMultipleVersionsExist_ReturnsLatestVersion()
         {
             // TODO: this assertion could be cleaner
@@ -138,7 +138,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.NotNull(savedItem);
         }
 
-        [Fact]
+        [DbFact]
         public void Save_WithUniqueIds_MultipleVersionCreated()
         {
             // Arrange

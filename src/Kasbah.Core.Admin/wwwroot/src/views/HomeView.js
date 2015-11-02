@@ -9,14 +9,16 @@ import {
     fetchNodeVersion,
     fetchChildren,
     toggleNode,
-    clearChildren } from 'actions/nodes';
+    clearChildren,
+    updateItem } from 'actions/nodes';
 
 const actionCreators = {
     toggleNode : (node) => toggleNode(node),
     fetchChildren: (node) => fetchChildren(node.id),
     clearChildren: (node) => clearChildren(node),
     fetchNodeVersions: (node) => fetchNodeVersions(node),
-    fetchNodeVersion: (id, version) => fetchNodeVersion(id, version.id)
+    fetchNodeVersion: (id, version) => fetchNodeVersion(id, version.id),
+    updateItem: (node, version, field, value) => updateItem(node, version, field, value)
 };
 
 const mapStateToProps = (state) => ({
@@ -61,6 +63,11 @@ export class HomeView extends React.Component {
         }
     }
 
+    handleFieldChange(field, event) {
+        if (!this.state.selectedNode || !this.state.selectedVersion) { return; }
+        this.props.actions.updateItem(this.state.selectedNode.id, this.state.selectedVersion.id, field, event.target.value);
+    }
+
     render () {
         return (
             <div className='container-fluid'>
@@ -82,7 +89,8 @@ export class HomeView extends React.Component {
                         <NodeVersionDisplay
                             selectedNode={this.state.selectedNode}
                             selectedVersion={this.state.selectedVersion}
-                            items={this.props.nodeTree.items} />
+                            items={this.props.nodeTree.items}
+                            onChange={this.handleFieldChange.bind(this)} />
                     </div>
                 </div>
             </div>

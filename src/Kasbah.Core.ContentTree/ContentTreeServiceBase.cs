@@ -48,6 +48,8 @@ namespace Kasbah.Core.ContentTree
 
         public abstract object GetNodeVersion(Guid id, Guid version, Type type);
 
+        public abstract IDictionary<string, object> GetNodeVersion(Guid id, Guid version);
+
         public void MoveNode(Guid id, Guid? parent)
         {
             throw new NotImplementedException();
@@ -69,7 +71,7 @@ namespace Kasbah.Core.ContentTree
 
         #region Protected Methods
 
-        protected abstract Guid InternalCreateNode<T>(Guid? parent, string alias) 
+        protected abstract Guid InternalCreateNode<T>(Guid? parent, string alias)
             where T : ItemBase;
 
         protected abstract NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item) where T : ItemBase;

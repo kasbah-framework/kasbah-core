@@ -26,11 +26,9 @@ namespace Kasbah.Core.Admin
         }
 
         [Route("api/version/{id}/{version}")]
-        public object GetVersion(Guid id, Guid version)
+        public IDictionary<string, object> GetVersion(Guid id, Guid version)
         {
-            var node = _contentTreeService.GetNode(id);
-            var type = Type.GetType(node.Type);
-            return _contentTreeService.GetNodeVersion(id, version, type);
+            return _contentTreeService.GetNodeVersion(id, version);
         }
 
         [Route("api/versions/{id}")]

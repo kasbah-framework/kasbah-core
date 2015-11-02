@@ -3,15 +3,12 @@
 
 body {
     font-family: "Titillium Web";
+    font-size: 12px;
 }
 
 .col-node-list {
     padding-right: 0;
     padding-left: 0;
-
-    .loading {
-        font-size: 12px;
-    }
 }
 
 .node-list {
@@ -40,7 +37,6 @@ body {
             background-color: transparent;
             padding: 0;
             margin: 0;
-            font-size: 12px;
             text-decoration: underline;
             color: #ccc;
 
@@ -70,8 +66,6 @@ body {
 }
 
 .node-version-list {
-    font-size: 12px;
-
     p {
         padding: 1px;
         text-overflow: ellipsis;

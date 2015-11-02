@@ -5,7 +5,8 @@ import {
     TOGGLE_NODE,
     CLEAR_CHILDREN,
     RECEIVE_NODE_VERSIONS,
-    RECEIVE_NODE_VERSION } from 'actions/nodes';
+    RECEIVE_NODE_VERSION,
+    UPDATE_ITEM } from 'actions/nodes';
 
 function clone(obj) {
     return JSON.parse(JSON.stringify(obj));
@@ -53,6 +54,13 @@ export default createReducer(initialState, {
         ret.items[payload.id] = ret.items[payload.id] || {};
 
         ret.items[payload.id][payload.version] = payload.data;
+
+        return ret;
+    },
+    [UPDATE_ITEM]: (state, payload) => {
+        let ret = clone(state);
+
+        ret.items[payload.node][payload.version][payload.field] = payload.value;
 
         return ret;
     }
