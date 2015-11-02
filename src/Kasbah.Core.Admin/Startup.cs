@@ -9,6 +9,19 @@ namespace Kasbah.Core.Admin
 {
     public class Startup
     {
+        #region Public Methods
+
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole();
+
+            app.UseCors("allowSingleOrigin");
+
+            app.UseDeveloperExceptionPage();
+
+            app.UseMvcWithDefaultRoute();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -25,15 +38,6 @@ namespace Kasbah.Core.Admin
             services.AddSingleton<Events.IEventService, Events.InProcEventService>();
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole();
-
-            app.UseCors("allowSingleOrigin");
-
-            app.UseDeveloperExceptionPage();
-
-            app.UseMvcWithDefaultRoute();
-        }
+        #endregion
     }
 }
