@@ -1,38 +1,17 @@
 import React from 'react';
+import NodeList from './NodeList';
 
 export default class Node extends React.Component {
-
-    _renderChildren() {
-        if (!this.props.node.expanded || !this.props.node.hasChildren) {
-            return null;
-        }
-
-        var children = [];
-        for (var k in this.props.nodeTree.nodes) {
-            var ent = this.props.nodeTree.nodes[k];
-            if (ent.parent === this.props.node.id) {
-                children.push(ent);
-            }
-        }
-
-        return (
-            <ul className='node-list'>
-            {children.map(ent => (
-                <Node
-                    key={ent.id}
-                    node={ent}
-                    nodeTree={this.props.nodeTree}
-                    onToggle={this.props.onToggle}
-                    onSelect={this.props.onSelect.bind(this, ent)} />
-            ))}
-            </ul>
-        );
+    static propTypes = {
+        onToggle: React.PropTypes.func.isRequired,
+        onSelect: React.PropTypes.func.isRequired
     }
 
     render() {
-        const iconClass = 'fa fa-' + (this.props.node.expanded ? 'minus-square-o' : 'plus-square-o');
+        const expanded = this.props.node.expanded;
+        const iconClass = 'fa fa-' + (expanded ? 'minus-square-o' : 'plus-square-o');
 
-        const toggleButton = this.props.node.hasChildren ? <button className='toggle' onClick={this.props.onToggle}><i className={iconClass}></i></button> : null;
+        const toggleButton = this.props.node.hasChildren ? <button className='toggle' onClick={this.props.onToggle.bind(this, this.props.node)}><i className={iconClass}></i></button> : null;
 
         return (
             <li>
@@ -43,7 +22,11 @@ export default class Node extends React.Component {
                     {this.props.node.alias}
                 </button>
 
-                {this._renderChildren()}
+                {expanded ? <NodeList
+                    parent={this.props.node.id}
+                    nodeTree={this.props.nodeTree}
+                    onNodeSelected={this.props.onSelect}
+                    onToggleNode={this.props.onToggle} /> : null}
             </li>
         );
     }

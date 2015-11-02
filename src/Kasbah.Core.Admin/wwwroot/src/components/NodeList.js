@@ -1,58 +1,28 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import Node from './Node';
-import { fetchChildren, clearChildren, toggleNode } from 'actions/nodes';
 
-// TODO: convert this to dumb component
-
-const actionCreators = {
-    toggleNode : (node) => toggleNode(node),
-    fetchChildren: (node) => fetchChildren(node.id),
-    clearChildren: (node) => clearChildren(node)
-};
-
-const mapStateToProps = (state) => ({
-    nodeTree : state.nodeTree
-});
-const mapDispatchToProps = (dispatch) => ({
-    actions : bindActionCreators(actionCreators, dispatch)
-});
-export class NodeList extends React.Component {
+export default class NodeList extends React.Component {
     static propTypes = {
-        actions: React.PropTypes.object,
-        nodeTree: React.PropTypes.object
-    }
-
-    componentWillMount() {
-        this.props.actions.fetchChildren({ id: null });
-    }
-
-    toggleNode(node) {
-        this.props.actions.toggleNode(node);
-        if (node.expanded) {
-            this.props.actions.clearChildren(node);
-        }
-        else {
-            this.props.actions.fetchChildren(node);
-        }
+        nodeTree: React.PropTypes.object.isRequired,
+        parent: React.PropTypes.oneOfType([
+            React.PropTypes.object,
+            React.PropTypes.string
+        ]),
+        onToggleNode: React.PropTypes.func.isRequired,
+        onNodeSelected: React.PropTypes.func.isRequired
     }
 
     _renderChildren() {
-        var children = [];
-        for (var k in this.props.nodeTree.nodes) {
-            var ent = this.props.nodeTree.nodes[k];
-            if (ent.parent === null) {
-                children.push(ent);
-            }
-        }
+        var children = Object.keys(this.props.nodeTree.nodes)
+            .map(k => this.props.nodeTree.nodes[k])
+            .filter(ent => ent.parent === this.props.parent);
 
         return children.map(ent => (
             <Node
                 key={ent.id}
                 node={ent}
                 nodeTree={this.props.nodeTree}
-                onToggle={this.toggleNode.bind(this, ent)}
+                onToggle={this.props.onToggleNode}
                 onSelect={this.props.onNodeSelected} />
         ));
     }
@@ -65,5 +35,3 @@ export class NodeList extends React.Component {
         );
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(NodeList);

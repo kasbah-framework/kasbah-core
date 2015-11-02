@@ -4,9 +4,17 @@ import { connect } from 'react-redux';
 import NodeList from 'components/NodeList';
 import NodeVersionList from 'components/NodeVersionList';
 import NodeVersionDisplay from 'components/NodeVersionDisplay';
-import { fetchNodeVersions, fetchNodeVersion } from 'actions/nodes';
+import {
+    fetchNodeVersions,
+    fetchNodeVersion,
+    fetchChildren,
+    toggleNode,
+    clearChildren } from 'actions/nodes';
 
 const actionCreators = {
+    toggleNode : (node) => toggleNode(node),
+    fetchChildren: (node) => fetchChildren(node.id),
+    clearChildren: (node) => clearChildren(node),
     fetchNodeVersions: (node) => fetchNodeVersions(node),
     fetchNodeVersion: (id, version) => fetchNodeVersion(id, version.id)
 };
@@ -29,6 +37,10 @@ export class HomeView extends React.Component {
         this.state = {};
     }
 
+    componentWillMount() {
+        this.props.actions.fetchChildren({ id: null });
+    }
+
     handleNodeSelected(node) {
         this.props.actions.fetchNodeVersions(node.id);
         this.setState({ selectedNode: node });
@@ -39,6 +51,16 @@ export class HomeView extends React.Component {
         this.setState({ selectedVersion: version });
     }
 
+    handleToggleNode(node) {
+        this.props.actions.toggleNode(node);
+        if (node.expanded) {
+            this.props.actions.clearChildren(node);
+        }
+        else {
+            this.props.actions.fetchChildren(node);
+        }
+    }
+
     render () {
         return (
             <div className='container-fluid'>
@@ -46,7 +68,9 @@ export class HomeView extends React.Component {
                     <div className='col-lg-2 col-md-3 col-node-list'>
                         <NodeList
                             parent={null}
-                            onNodeSelected={this.handleNodeSelected.bind(this)} />
+                            nodeTree={this.props.nodeTree}
+                            onNodeSelected={this.handleNodeSelected.bind(this)}
+                            onToggleNode={this.handleToggleNode.bind(this)} />
                     </div>
                     <div className='col-lg-2 col-md-3 col-node-list'>
                         <NodeVersionList
