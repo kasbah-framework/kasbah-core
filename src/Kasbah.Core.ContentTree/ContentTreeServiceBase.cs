@@ -44,6 +44,8 @@ namespace Kasbah.Core.ContentTree
 
         public abstract Node GetNode(Guid id);
 
+        public abstract Node GetChild(Guid? parent, string alias);
+
         public abstract T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase;
 
         public abstract object GetNodeVersion(Guid id, Guid version, Type type);

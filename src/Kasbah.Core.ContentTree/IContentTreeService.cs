@@ -21,6 +21,8 @@ namespace Kasbah.Core.ContentTree
 
         Node GetNode(Guid id);
 
+        Node GetChild(Guid? parent, string alias);
+
         T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase;
 
         object GetNodeVersion(Guid id, Guid version, Type type);

@@ -88,6 +88,18 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        public override Node GetChild(Guid? parent, string alias)
+        {
+            const string ResourceName = "Sql/GetChild.sql";
+
+            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+
+            using (var connection = GetConnection())
+            {
+                return connection.Query<Node>(sql, new { parent, alias }).First();
+            }
+        }
+
         public override T GetNodeVersion<T>(Guid id, Guid version)
         {
             const string ResourceName = "Sql/GetNodeVersion.sql";
