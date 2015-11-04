@@ -96,7 +96,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             using (var connection = GetConnection())
             {
-                return connection.Query<Node>(sql, new { parent, alias }).First();
+                return connection.Query<Node>(sql, new { parent, alias }).SingleOrDefault();
             }
         }
 
