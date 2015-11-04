@@ -33,6 +33,11 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
             return Enumerable.Empty<Node>();
         }
 
+        public override Node GetChild(Guid? parent, string alias)
+        {
+            return null;
+        }
+
         public override T GetMostRecentlyCreatedNodeVersion<T>(Guid id)
         {
             return default(T);
@@ -44,6 +49,11 @@ namespace Kasbah.Core.ContentTree.Tests.TestImpls
         }
 
         public override T GetNodeVersion<T>(Guid id, Guid version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
             throw new NotImplementedException();
         }
