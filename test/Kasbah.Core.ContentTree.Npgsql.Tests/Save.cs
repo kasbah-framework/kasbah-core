@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Kasbah.Core.ContentTree.Events;
+using Kasbah.Core.ContentTree.Tests.TestImpls;
 using Kasbah.Core.Events;
 using Kasbah.Core.Models;
 using Moq;
@@ -12,6 +14,28 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
     {
         #region Public Methods
 
+        [DbFact]
+        public void Save_AnonymousObject_ItemSaved()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+
+            // Act
+            var id = Guid.NewGuid();
+            var item = new { Value = "test" };
+
+            var savedItem = service.Save(id, node, (object)item);
+
+            var outItem = service.GetNodeVersion(node, id);
+
+            // Assert
+            Assert.NotNull(savedItem);
+            Assert.NotNull(outItem);
+            Assert.Equal(item.Value, outItem["value"]);
+        }
 
         [DbFact]
         public void Save_ExistingItem_ItemUpdated()
@@ -57,6 +81,29 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.NotNull(savedItem);
         }
 
+        [Fact]
+        public void Save_TriggersBeforeAndAfterEvents_EventsTriggered()
+        {
+            // Arrange
+            var eventService = new InProcEventService();
+            var handler = new BasicEventHandler();
+
+            eventService.Register<BeforeItemSaved>(handler);
+            eventService.Register<AfterItemSaved>(handler);
+
+            var service = new ContentTreeService(eventService);
+
+            var node = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+
+            // Act
+            service.Save(Guid.NewGuid(), node, new TestItem());
+
+            // Assert
+            Assert.NotEmpty(handler.HandledEvents);
+
+            Assert.Equal(2, handler.HandledEvents.Count);
+        }
+
         [DbFact]
         public void Save_WithUniqueIds_MultipleVersionCreated()
         {
@@ -80,29 +127,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Assert
             Assert.NotEmpty(versions);
             Assert.Equal(ids, versions.Select(ent => ent.Id));
-        }
-
-        [DbFact]
-        public void Save_AnonymousObject_ItemSaved()
-        {
-            // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
-
-            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-
-            // Act
-            var id = Guid.NewGuid();
-            var item = new { Value = "test" };
-
-            var savedItem = service.Save(id, node, (object)item);
-
-            var outItem = service.GetNodeVersion(node, id);
-
-            // Assert
-            Assert.NotNull(savedItem);
-            Assert.NotNull(outItem);
-            Assert.Equal(item.Value, outItem["value"]);
         }
 
         #endregion
