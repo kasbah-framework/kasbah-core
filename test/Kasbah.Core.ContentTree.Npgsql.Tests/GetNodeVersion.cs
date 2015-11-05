@@ -66,6 +66,28 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.Equal(item.Value, outItem["value"]);
         }
 
+        [DbFact]
+        public void GetNodeVersion_WithoutGenericType_ReturnsValidObject()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var item = new TestItem { Value = Guid.NewGuid().ToString() };
+
+            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var version = service.Save<TestItem>(Guid.NewGuid(), id, item);
+
+            var type = typeof(TestItem);
+
+            // Act
+            var outItem = service.GetNodeVersion(id, version.Id, type) as TestItem;
+
+            // Assert
+            Assert.NotNull(outItem);
+            Assert.Equal(item.Value, outItem.Value);
+        }
+
         #endregion
     }
 }

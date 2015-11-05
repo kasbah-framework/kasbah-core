@@ -12,8 +12,11 @@ New-Item -Type Directory -Force coverage
 
 foreach ($Project in $Projects) {
     if ($Project -eq "") { continue; }
-    $ProjectPath = $ProjectRoot + "\\" + $Project + "\\bin\\debug\\dnx451"
-    $TestPath = $TestRoot + "\\" + $Project + ".Tests"
+
+    dnu build ("$ProjectRoot" + "$Project" + "\\project.json")
+
+    $ProjectPath = $ProjectRoot + $Project + "\\bin\\debug\\dnx451"
+    $TestPath = $TestRoot + $Project + ".Tests"
 
     &$OpenCover -target:"$DNX" -targetargs:"--lib $ProjectPath -p $TestPath test" -output:"coverage\\$Project.coverage.xml" -filter:+[$Project]* -register
 }
