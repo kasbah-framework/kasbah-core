@@ -11,5 +11,6 @@ select
 from
 	node n
 where
-	n.parent_id = :parent
+	((:parent is not null and n.parent_id = :parent)
+    or (:parent is null and n.parent_id is null))
     and n.alias = :alias;

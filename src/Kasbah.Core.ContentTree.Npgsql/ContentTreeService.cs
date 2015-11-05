@@ -100,21 +100,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        public T GetMostRecentlyCreatedNodeVersion<T>(Guid id)
-            where T : ItemBase
-        {
-            const string ResourceName = "Sql/GetMostRecentlyCreatedNodeVersion.sql";
-
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-
-            using (var connection = GetConnection())
-            {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
-
-                return data.Select(ent => Deserialise<T>(ent.Data)).First();
-            }
-        }
-
         public Node GetNode(Guid id)
         {
             const string ResourceName = "Sql/GetNode.sql";
@@ -123,7 +108,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             using (var connection = GetConnection())
             {
-                return connection.Query<Node>(sql, new { id }).First();
+                return connection.Query<Node>(sql, new { id }).Single();
             }
         }
 

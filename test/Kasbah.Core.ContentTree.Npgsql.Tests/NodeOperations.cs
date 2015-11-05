@@ -53,36 +53,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         [DbFact]
-        public void GetMostRecentlyCreatedVersion_WhenMultipleVersionsExist_ReturnsLatestVersion()
-        {
-            // TODO: this assertion could be cleaner
-
-            // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
-
-            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-
-            // Act
-            var ids = new[] { Guid.NewGuid(), Guid.NewGuid() };
-            var item = new TestItem { Value = Guid.NewGuid().ToString() };
-            var values = new Dictionary<Guid, string>();
-
-            foreach (var id in ids)
-            {
-                values[id] = Guid.NewGuid().ToString();
-
-                service.Save(id, node, new TestItem { Value = values[id] });
-                Thread.Sleep(5);
-            }
-
-            var latest = service.GetMostRecentlyCreatedNodeVersion<TestItem>(node);
-
-            // Assert
-            Assert.Equal(latest.Value, values[ids.Last()]);
-        }
-
-        [DbFact]
         public void NpgsqlContentTree_CreateNode_NodeCreated()
         {
             // Arrange
