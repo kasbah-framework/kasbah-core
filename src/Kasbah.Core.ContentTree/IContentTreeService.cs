@@ -15,13 +15,11 @@ namespace Kasbah.Core.ContentTree
 
         IEnumerable<NodeVersion> GetAllNodeVersions(Guid id);
 
+        Node GetChild(Guid? parent, string alias);
+
         IEnumerable<Node> GetChildren(Guid? id);
 
-        T GetMostRecentlyCreatedNodeVersion<T>(Guid id) where T : ItemBase;
-
         Node GetNode(Guid id);
-
-        Node GetChild(Guid? parent, string alias);
 
         T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase;
 
@@ -32,6 +30,8 @@ namespace Kasbah.Core.ContentTree
         void MoveNode(Guid id, Guid? parent);
 
         NodeVersion Save<T>(Guid id, Guid nodeId, T item) where T : ItemBase;
+
+        void SetActiveNodeVersion(Guid id, Guid version);
 
         #endregion
     }

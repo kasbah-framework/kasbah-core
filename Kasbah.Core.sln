@@ -17,8 +17,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Tests", "test\K
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Events.Tests", "test\Kasbah.Core.Events.Tests\Kasbah.Core.Events.Tests.xproj", "{29BE5EA4-3B13-4E65-80E0-BC62E4FF479B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentTree.Tests", "test\Kasbah.Core.ContentTree.Tests\Kasbah.Core.ContentTree.Tests.xproj", "{D0D642CC-DD60-4FF8-B572-C48BD56234A9}"
-EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentTree.Npgsql.Tests", "test\Kasbah.Core.ContentTree.Npgsql.Tests\Kasbah.Core.ContentTree.Npgsql.Tests.xproj", "{C6886520-FC7E-4C05-B3A5-2251228B8FEB}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Admin", "src\Kasbah.Core.Admin\Kasbah.Core.Admin.xproj", "{ACAD4D10-84EC-4B1E-B718-2F36B3B32E75}"
@@ -53,10 +51,6 @@ Global
 		{29BE5EA4-3B13-4E65-80E0-BC62E4FF479B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29BE5EA4-3B13-4E65-80E0-BC62E4FF479B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29BE5EA4-3B13-4E65-80E0-BC62E4FF479B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0D642CC-DD60-4FF8-B572-C48BD56234A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0D642CC-DD60-4FF8-B572-C48BD56234A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0D642CC-DD60-4FF8-B572-C48BD56234A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0D642CC-DD60-4FF8-B572-C48BD56234A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6886520-FC7E-4C05-B3A5-2251228B8FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6886520-FC7E-4C05-B3A5-2251228B8FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6886520-FC7E-4C05-B3A5-2251228B8FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,7 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7A8E6BB0-AA2F-4934-A1C3-AA0DE302B6DD} = {F9027D4E-7E6A-4654-8FEF-EA8064CA6E47}
 		{29BE5EA4-3B13-4E65-80E0-BC62E4FF479B} = {F9027D4E-7E6A-4654-8FEF-EA8064CA6E47}
-		{D0D642CC-DD60-4FF8-B572-C48BD56234A9} = {F9027D4E-7E6A-4654-8FEF-EA8064CA6E47}
 		{C6886520-FC7E-4C05-B3A5-2251228B8FEB} = {F9027D4E-7E6A-4654-8FEF-EA8064CA6E47}
 	EndGlobalSection
 EndGlobal

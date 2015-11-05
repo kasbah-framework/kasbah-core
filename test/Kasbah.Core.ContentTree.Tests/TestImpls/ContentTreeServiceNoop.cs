@@ -1,76 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Kasbah.Core.ContentTree.Models;
-using Kasbah.Core.Events;
+using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree.Tests.TestImpls
 {
-    internal class ContentTreeServiceNoop : ContentTreeServiceBase
+    internal class ContentTreeServiceNoop : IContentTreeService
     {
-        #region Public Constructors
+        #region Public Methods
 
-        public ContentTreeServiceNoop(IEventService eventService) : base(eventService)
-        {
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        public override T GetActiveNodeVersion<T>(Guid id)
-        {
-            return default(T);
-        }
-
-        public override IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
+        public Guid CreateNode<T>(Guid? parent, string alias) where T : ItemBase
         {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<Node> GetChildren(Guid? id)
-        {
-            return Enumerable.Empty<Node>();
-        }
-
-        public override Node GetChild(Guid? parent, string alias)
-        {
-            return null;
-        }
-
-        public override T GetMostRecentlyCreatedNodeVersion<T>(Guid id)
-        {
-            return default(T);
-        }
-
-        public override Node GetNode(Guid id)
+        public T GetActiveNodeVersion<T>(Guid id) where T : ItemBase
         {
             throw new NotImplementedException();
         }
 
-        public override T GetNodeVersion<T>(Guid id, Guid version)
+        public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public override IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
+        public Node GetChild(Guid? parent, string alias)
         {
             throw new NotImplementedException();
         }
 
-        public override object GetNodeVersion(Guid id, Guid version, Type type)
+        public IEnumerable<Node> GetChildren(Guid? id)
         {
             throw new NotImplementedException();
         }
 
-        protected override Guid InternalCreateNode<T>(Guid? parent, string alias)
+        public Node GetNode(Guid id)
         {
-            return Guid.Empty;
+            throw new NotImplementedException();
         }
 
-        protected override NodeVersion InternalSave<T>(Guid id, Guid nodeId, T item)
+        public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        public object GetNodeVersion(Guid id, Guid version, Type type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MoveNode(Guid id, Guid? parent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public NodeVersion Save<T>(Guid id, Guid nodeId, T item) where T : ItemBase
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetActiveNodeVersion(Guid id, Guid version)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

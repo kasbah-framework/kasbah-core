@@ -44,18 +44,38 @@ namespace Kasbah.Core.Events.Tests
             // Arrange
             var service = new InProcEventService();
             var handler = new EventHandler();
-            var @event1 = new TestEvent();
-            var @event2 = new TestEvent();
+            var event1 = new TestEvent();
+            var event2 = new TestEvent();
 
             service.Register<TestEvent>(handler);
 
             // Act
-            service.Emit(@event1);
-            service.Emit(@event2);
+            service.Emit(event1);
+            service.Emit(event2);
 
             // Assert
-            Assert.Contains(@event1, handler.HandledEvents);
-            Assert.Contains(@event2, handler.HandledEvents);
+            Assert.Contains(event1, handler.HandledEvents);
+            Assert.Contains(event2, handler.HandledEvents);
+        }
+
+        [Fact]
+        public void Emit_TwoHandlers_BothHandlersCalled()
+        {
+            // Arrange
+            var service = new InProcEventService();
+            var handler1 = new EventHandler();
+            var handler2 = new EventHandler();
+            var @event = new TestEvent();
+
+            service.Register<TestEvent>(handler1);
+            service.Register<TestEvent>(handler2);
+
+            // Act
+            service.Emit(@event);
+
+            // Assert
+            Assert.Contains(@event, handler1.HandledEvents);
+            Assert.Contains(@event, handler2.HandledEvents);
         }
 
         [Fact]
@@ -97,27 +117,31 @@ namespace Kasbah.Core.Events.Tests
         }
 
         #endregion
-    }
 
-    internal class EventHandler : IEventHandler
-    {
-        #region Public Fields
+        #region Internal Classes
 
-        public ICollection<EventBase> HandledEvents = new List<EventBase>();
-
-        #endregion
-
-        #region Public Methods
-
-        public void HandleEvent<T>(T @event) where T : EventBase
+        internal class EventHandler : IEventHandler
         {
-            HandledEvents.Add(@event);
+            #region Public Fields
+
+            public ICollection<EventBase> HandledEvents = new List<EventBase>();
+
+            #endregion
+
+            #region Public Methods
+
+            public void HandleEvent<T>(T @event) where T : EventBase
+            {
+                HandledEvents.Add(@event);
+            }
+
+            #endregion
+        }
+
+        internal class TestEvent : EventBase
+        {
         }
 
         #endregion
-    }
-
-    internal class TestEvent : EventBase
-    {
     }
 }

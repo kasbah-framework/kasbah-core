@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Kasbah.Core.ContentTree.Events;
+using Kasbah.Core.ContentTree.Tests.TestImpls;
 using Kasbah.Core.Events;
 using Kasbah.Core.Models;
 using Moq;
@@ -161,6 +163,28 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Assert
             Assert.NotEmpty(versions);
             Assert.Equal(ids, versions.Select(ent => ent.Id));
+        }
+
+
+
+        [DbFact]
+        public void CreateNode_TriggersBeforeAndAfterCreateEvents_EventsTriggered()
+        {
+            // Arrange
+            var eventService = new InProcEventService();
+            var handler = new BasicEventHandler();
+
+            eventService.Register<BeforeNodeCreated>(handler);
+            eventService.Register<AfterNodeCreated>(handler);
+
+            var service = new ContentTreeService(eventService);
+
+            // Act
+            service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+
+            // Assert
+            Assert.NotEmpty(handler.HandledEvents);
+            Assert.Equal(2, handler.HandledEvents.Count);
         }
 
         #endregion
