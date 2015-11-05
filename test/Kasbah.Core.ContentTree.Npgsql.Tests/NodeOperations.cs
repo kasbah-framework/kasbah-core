@@ -49,6 +49,57 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         [DbFact]
+        public void CreateNode_WeaklyTyped_NodeCreated()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            // Act
+            var id = service.CreateNode(null, Guid.NewGuid().ToString(), nameof(CreateNode_WeaklyTyped_NodeCreated));
+
+            // Assert
+            Assert.NotEqual(Guid.Empty, id);
+        }
+
+        [DbFact]
+        public void GetActiveNodeVersion_WithActiveVersion_ReturnsCorrectVersion()
+        {
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var inItem = new TestItem { Value = Guid.NewGuid().ToString() };
+
+            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var version = service.Save(Guid.NewGuid(), id, inItem);
+
+            service.SetActiveNodeVersion(id, version.Id);
+
+            // Act
+            var activeVersion = service.GetActiveNodeVersion<TestItem>(id);
+
+            // Assert
+            Assert.NotNull(activeVersion);
+            Assert.Equal(inItem.Value, activeVersion.Value);
+        }
+
+        [DbFact]
+        public void GetActiveNodeVersion_WithNoActiveVersion_ReturnsNull()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+
+            // Act
+            var version = service.GetActiveNodeVersion<TestItem>(id);
+
+            // Assert
+            Assert.Null(version);
+        }
+
+        [DbFact]
         public void GetChildren_WhereNodeHasChildren_ReturnsChildNodes()
         {
             // Arrange
@@ -152,6 +203,42 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Assert
             Assert.NotEmpty(versions);
             Assert.Equal(ids, versions.Select(ent => ent.Id));
+        }
+
+        [DbFact]
+        public void SetActiveNodeVersion_WithExistingVersion_ActiveVersionUpdated()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var version = service.Save(Guid.NewGuid(), id, new TestItem());
+
+            // Act
+            service.SetActiveNodeVersion(id, version.Id);
+
+            var node = service.GetNode(id);
+
+            // Assert
+            Assert.Equal(node.ActiveVersionId, version.Id);
+        }
+
+        [DbFact]
+        public void SetActiveNodeVersion_WithNonExistantVersion_ExceptionThrown()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var version = service.Save(Guid.NewGuid(), id, new TestItem());
+
+            // Act & Assert
+            Assert.Throws<global::Npgsql.NpgsqlException>(() =>
+            {
+                service.SetActiveNodeVersion(id, Guid.Empty);
+            });
         }
 
         #endregion

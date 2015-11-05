@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.Models;
 using Microsoft.AspNet.Mvc;
 
 namespace Kasbah.Core.Admin
@@ -35,6 +36,11 @@ namespace Kasbah.Core.Admin
         public IEnumerable<NodeVersion> GetVersions(Guid id)
         {
             return _contentTreeService.GetAllNodeVersions(id);
+        }
+
+        public NodeVersion CreateNodeVersion(Guid id)
+        {
+            return _contentTreeService.Save<ItemBase>(Guid.NewGuid(), id, null);
         }
 
         #endregion
