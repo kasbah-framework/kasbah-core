@@ -5,8 +5,9 @@ $DNX = "C:\\Users\\Brendan\\.dnx\\runtimes\\dnx-clr-win-x86.1.0.0-beta8\\bin\\dn
 $ProjectRoot = "C:\\dev\\personal\\kasbah-core\\src\\"
 $TestRoot = "C:\\dev\\personal\\kasbah-core\\test\\"
 
-[string[]] $Projects = "Kasbah.Core", "Kasbah.Core.ContentTree", "Kasbah.Core.ContentTree.Npgsql", "Kasbah.Core.Events", ""
+[string[]] $Projects = "Kasbah.Core", "Kasbah.Core.ContentTree.Npgsql", "Kasbah.Core.Events", ""
 
+Remove-Item -Force -Confirm:$false -Recurse coverage
 New-Item -Type Directory -Force coverage
 
 foreach ($Project in $Projects) {

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Kasbah.Core.ContentTree.Events;
@@ -14,6 +13,40 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
     public class NodeOperations
     {
         #region Public Methods
+
+        [DbFact]
+        public void CreateNewNode_WithCorrectProperties_NodeCreated()
+        {
+            // Arrange
+            var eventService = Mock.Of<IEventService>();
+            var service = new ContentTreeService(eventService);
+
+            // Act
+            var id = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+
+            // Assert
+            Assert.NotEqual(Guid.Empty, id);
+        }
+
+        [DbFact]
+        public void CreateNode_TriggersBeforeAndAfterCreateEvents_EventsTriggered()
+        {
+            // Arrange
+            var eventService = new InProcEventService();
+            var handler = new BasicEventHandler();
+
+            eventService.Register<BeforeNodeCreated>(handler);
+            eventService.Register<AfterNodeCreated>(handler);
+
+            var service = new ContentTreeService(eventService);
+
+            // Act
+            service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+
+            // Assert
+            Assert.NotEmpty(handler.HandledEvents);
+            Assert.Equal(2, handler.HandledEvents.Count);
+        }
 
         [DbFact]
         public void GetChildren_WhereNodeHasChildren_ReturnsChildNodes()
@@ -53,21 +86,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         [DbFact]
-        public void NpgsqlContentTree_CreateNode_NodeCreated()
-        {
-            // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
-
-            // Act
-            var id = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-
-            // Assert
-            Assert.NotEqual(Guid.Empty, id);
-        }
-
-        [DbFact]
-        public void NpgsqlContentTree_SaveExistingItem_ItemUpdated()
+        public void Save_ExistingItem_ItemUpdated()
         {
             // Arrange
             var eventService = Mock.Of<IEventService>();
@@ -92,7 +111,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         [DbFact]
-        public void NpgsqlContentTree_SaveNewItem_ItemSaved()
+        public void Save_NewItem_ItemSaved()
         {
             // Arrange
             var eventService = Mock.Of<IEventService>();
@@ -133,28 +152,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Assert
             Assert.NotEmpty(versions);
             Assert.Equal(ids, versions.Select(ent => ent.Id));
-        }
-
-
-
-        [DbFact]
-        public void CreateNode_TriggersBeforeAndAfterCreateEvents_EventsTriggered()
-        {
-            // Arrange
-            var eventService = new InProcEventService();
-            var handler = new BasicEventHandler();
-
-            eventService.Register<BeforeNodeCreated>(handler);
-            eventService.Register<AfterNodeCreated>(handler);
-
-            var service = new ContentTreeService(eventService);
-
-            // Act
-            service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-
-            // Assert
-            Assert.NotEmpty(handler.HandledEvents);
-            Assert.Equal(2, handler.HandledEvents.Count);
         }
 
         #endregion
