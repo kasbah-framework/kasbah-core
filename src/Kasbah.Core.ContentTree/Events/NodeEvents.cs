@@ -5,11 +5,13 @@ namespace Kasbah.Core.ContentTree.Events
 {
     public class AfterNodeCreated : NodeEventBase { }
 
-    public class AfterNodeMoved : EventBase<Node> { }
+    public class AfterNodeMoved : NodeEventBase { }
 
     public class BeforeNodeCreated : NodeEventBase { }
 
-    public class BeforeNodeMoved : EventBase<Node> { }
+    public class BeforeNodeMoved : NodeEventBase { }
+
+    public class NodeActiveVersionSet : NodeEventBase { }
 
     public abstract class NodeEventBase : EventBase<Node> { }
 }

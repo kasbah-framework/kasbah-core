@@ -81,7 +81,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.NotNull(savedItem);
         }
 
-        [Fact]
+        [DbFact]
         public void Save_TriggersBeforeAndAfterEvents_EventsTriggered()
         {
             // Arrange
