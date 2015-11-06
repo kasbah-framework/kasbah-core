@@ -23,14 +23,26 @@ export default class NodeList extends React.Component {
                 node={ent}
                 nodeTree={this.props.nodeTree}
                 onToggle={this.props.onToggleNode}
-                onSelect={this.props.onNodeSelected} />
+                onSelect={this.props.onNodeSelected}
+                onCreate={this.props.onCreateNode} />
         ));
+    }
+
+    _renderCreateButton() {
+        return (
+            <li>
+                <button onClick={this.props.onCreateNode.bind(this, this.props.parent)}>
+                    <i className='fa fa-file-o' />
+                    <span>Add node here</span>
+                </button>
+            </li>);
     }
 
     render() {
         return (
             <ul className='node-list'>
                 {this._renderChildren()}
+                {this._renderCreateButton()}
             </ul>
         );
     }

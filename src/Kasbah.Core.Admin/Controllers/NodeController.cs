@@ -38,9 +38,17 @@ namespace Kasbah.Core.Admin
             return _contentTreeService.GetAllNodeVersions(id);
         }
 
+        [HttpPost, Route("api/node/{id}/version")]
         public NodeVersion CreateNodeVersion(Guid id)
         {
             return _contentTreeService.Save<ItemBase>(Guid.NewGuid(), id, null);
+        }
+
+
+        [HttpPost, Route("api/node")]
+        public Guid CreateNode([FromBody]CreateNodeRequest request)
+        {
+            return _contentTreeService.CreateNode(request.Parent, request.Alias, request.Type);
         }
 
         #endregion
@@ -50,5 +58,14 @@ namespace Kasbah.Core.Admin
         readonly IContentTreeService _contentTreeService;
 
         #endregion
+    }
+
+    public class CreateNodeRequest
+    {
+        public Guid? Parent { get; set; }
+
+        public string Alias { get; set; }
+
+        public string Type { get; set; }
     }
 }

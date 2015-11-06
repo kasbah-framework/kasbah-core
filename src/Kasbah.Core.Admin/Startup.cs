@@ -15,7 +15,7 @@ namespace Kasbah.Core.Admin
         {
             loggerFactory.AddConsole();
 
-            app.UseCors("allowSingleOrigin");
+            app.UseCors("default");
 
             app.UseDeveloperExceptionPage();
 
@@ -24,8 +24,17 @@ namespace Kasbah.Core.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
-                    options.AddPolicy("allowSingleOrigin", builder => builder.WithOrigins("http://localhost:3000")));
+            {
+                options.AddPolicy("default", builder => {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
+
+                options.DefaultPolicyName = "default";
+            });
 
             services.AddMvc((options) =>
             {

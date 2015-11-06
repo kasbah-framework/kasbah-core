@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
+const API_BASE = 'http://localhost:5004';
+
 export const REQUEST_NODES = 'REQUEST_NODES';
 function requestNodes(parent) {
     return {
@@ -24,7 +26,7 @@ function receiveNodes(parent, data) {
 export function fetchChildren(parent) {
     return dispatch => {
         dispatch(requestNodes(parent))
-            return fetch(`http://localhost:5004/api/children?id=${parent}`)
+            return fetch(`${API_BASE}/api/children?id=${parent}`)
                 .then(response => response.json())
                 .then(json => dispatch(receiveNodes(parent, json)))
     }
@@ -79,7 +81,7 @@ function receiveNodeVersions(node, data) {
 export function fetchNodeVersions(node) {
     return dispatch => {
         dispatch(requestNodeVersions(node))
-            return fetch(`http://localhost:5004/api/versions/${node}`)
+            return fetch(`${API_BASE}/api/versions/${node}`)
                 .then(response => response.json())
                 .then(json => dispatch(receiveNodeVersions(node, json)))
     }
@@ -112,7 +114,7 @@ function receiveNodeVersion(id, version, data) {
 export function fetchNodeVersion(id, version) {
     return dispatch => {
         dispatch(requestNodeVersions(id, version))
-            return fetch(`http://localhost:5004/api/version/${id}/${version}`)
+            return fetch(`${API_BASE}/api/version/${id}/${version}`)
                 .then(response => response.json())
                 .then(json => dispatch(receiveNodeVersion(id, version, json)))
     }
@@ -134,5 +136,64 @@ export const UPDATE_ITEM = 'UPDATE_ITEM';
 export function updateItem(node, version, field, value) {
     return dispatch => {
         dispatch(notifyUpdateItem(node, version, field, value));
+    }
+}
+
+export const NODE_CREATED = 'NODE_CREATED';
+function notifyNodeCreated(id) {
+    return {
+        type: NODE_CREATED,
+        payload: {
+            id
+        }
+    }
+}
+
+export function createNode(parent, alias, type) {
+    const options = {
+        method: 'POST',
+        body: JSON.stringify({ parent, alias, type }),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+    return dispatch => {
+            return fetch(`${API_BASE}/api/node`, options)
+                .then(response => response.json())
+                .then(json => {
+                    dispatch(notifyNodeCreated(json));
+                    dispatch(fetchChildren(parent));
+                })
+    }
+}
+
+
+export const NODE_VERSION_CREATED = 'NODE_VERSION_CREATED';
+function notifyNodeVersionCreated(node, id) {
+    return {
+        type: NODE_VERSION_CREATED,
+        payload: {
+            id
+        }
+    }
+}
+
+export function createNodeVersion(node) {
+    const options = {
+        method: 'POST',
+        body: JSON.stringify({}),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+    return dispatch => {
+            return fetch(`${API_BASE}/api/node/${node}/version`, options)
+                .then(response => response.json())
+                .then(json => {
+                    dispatch(notifyNodeVersionCreated(json));
+                    dispatch(fetchNodeVersions(node));
+                })
     }
 }

@@ -7,10 +7,7 @@ export default class NodeVersionList extends React.Component {
             return null;
         }
 
-        const versions = this.props.versions[this.props.selectedNode.id];
-        if (versions == null || versions.length == 0) {
-            return null;
-        }
+        const versions = this.props.versions[this.props.selectedNode.id] || [];
 
         return (
             <div className='node-version-list'>
@@ -23,6 +20,12 @@ export default class NodeVersionList extends React.Component {
                             </button>
                         </li>
                     )}
+                    <li>
+                        <button onClick={this.props.onCreateNodeVersion.bind(this, this.props.selectedNode)}>
+                            <i className='fa fa-file-o' />
+                            Create new version
+                        </button>
+                    </li>
                 </ul>
             </div>
         );

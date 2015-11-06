@@ -10,15 +10,19 @@ import {
     fetchChildren,
     toggleNode,
     clearChildren,
-    updateItem } from 'actions/nodes';
+    updateItem,
+    createNode,
+    createNodeVersion } from 'actions/nodes';
 
 const actionCreators = {
-    toggleNode : (node) => toggleNode(node),
+    toggleNode: (node) => toggleNode(node),
     fetchChildren: (node) => fetchChildren(node.id),
     clearChildren: (node) => clearChildren(node),
     fetchNodeVersions: (node) => fetchNodeVersions(node),
     fetchNodeVersion: (id, version) => fetchNodeVersion(id, version.id),
-    updateItem: (node, version, field, value) => updateItem(node, version, field, value)
+    updateItem: (node, version, field, value) => updateItem(node, version, field, value),
+    createNode: (parent, alias, type) => createNode(parent, alias, type),
+    createNodeVersion: (node) => createNodeVersion(node)
 };
 
 const mapStateToProps = (state) => ({
@@ -68,6 +72,17 @@ export class HomeView extends React.Component {
         this.props.actions.updateItem(this.state.selectedNode.id, this.state.selectedVersion.id, field, event.target.value);
     }
 
+    handleCreateNode(parent) {
+        const alias = prompt('alias'),
+            type = prompt('type');
+
+        this.props.actions.createNode(parent, alias, type);
+    }
+
+    handleCreateNodeVersion(node) {
+        this.props.actions.createNodeVersion(node.id);
+    }
+
     render () {
         return (
             <div className='container-fluid'>
@@ -77,13 +92,15 @@ export class HomeView extends React.Component {
                             parent={null}
                             nodeTree={this.props.nodeTree}
                             onNodeSelected={this.handleNodeSelected.bind(this)}
-                            onToggleNode={this.handleToggleNode.bind(this)} />
+                            onToggleNode={this.handleToggleNode.bind(this)}
+                            onCreateNode={this.handleCreateNode.bind(this)} />
                     </div>
                     <div className='col-lg-2 col-md-3 col-node-list'>
                         <NodeVersionList
                             selectedNode={this.state.selectedNode}
                             versions={this.props.nodeTree.versions}
-                            onVersionSelected={this.handleVersionSelected.bind(this)} />
+                            onVersionSelected={this.handleVersionSelected.bind(this)}
+                            onCreateNodeVersion={this.handleCreateNodeVersion.bind(this)} />
                     </div>
                     <div className='col-lg-8 col-md-6'>
                         <NodeVersionDisplay
