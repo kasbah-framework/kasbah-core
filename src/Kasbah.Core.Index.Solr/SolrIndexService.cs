@@ -60,9 +60,15 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        public IEnumerable<IndexItem> Query(string query)
+        public IEnumerable<IDictionary<string, object>> Query(string query)
         {
-            return null;
+            using (var connection = GetConnection())
+            {
+                var solrQuery = string.Join(" ", query.Split(' ', '-').Select(ent => $"_text_:{ent}"));
+                var response = connection.Select(solrQuery);
+
+                return response.Response.Documents.Select(ent => SolrUtil.ConverFromSolr(ent));
+            }
         }
 
         public void HandleEvent<T>(T @event) where T : EventBase
@@ -153,7 +159,6 @@ namespace Kasbah.Core.Index.Solr
             using (var connection = GetConnection())
             {
                 connection.Delete(id);
-                connection.Commit();
             }
         }
 

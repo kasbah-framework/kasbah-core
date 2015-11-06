@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Kasbah.Core.Index.Models;
 
 namespace Kasbah.Core.Index
 {
@@ -11,6 +10,6 @@ namespace Kasbah.Core.Index
 
         void Unregister<T>(IIndexHandler handler);
 
-        IEnumerable<IndexItem> Query(string query);
+        IEnumerable<IDictionary<string, object>> Query(string query);
     }
 }

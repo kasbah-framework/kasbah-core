@@ -26,11 +26,11 @@ namespace Kasbah.Core.Index.Solr.Tests
 
             // Assert
             Assert.NotNull(solrDict);
-            Assert.True(solrDict.ContainsKey("a_i"), "integer");
-            Assert.True(solrDict.ContainsKey("b_t"), "string");
-            Assert.True(solrDict.ContainsKey("c_dt"), "datetime");
-            Assert.True(solrDict.ContainsKey("d_d"), "double");
-            Assert.True(solrDict.ContainsKey("e_b"), "boolean");
+            Assert.True(solrDict.ContainsKey("A_i"), "integer");
+            Assert.True(solrDict.ContainsKey("B_t"), "string");
+            Assert.True(solrDict.ContainsKey("C_dt"), "datetime");
+            Assert.True(solrDict.ContainsKey("D_d"), "double");
+            Assert.True(solrDict.ContainsKey("E_b"), "boolean");
         }
     }
 }

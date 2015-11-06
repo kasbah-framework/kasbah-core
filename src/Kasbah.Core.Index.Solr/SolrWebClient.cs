@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net;
 using Kasbah.Core.Index.Solr.Requests;
 using Newtonsoft.Json;
@@ -8,7 +9,10 @@ namespace Kasbah.Core.Index.Solr
 {
     public class SolrWebClient : WebClient
     {
-        readonly Uri _updateUri = new Uri("/solr/kasbah/update?wt=json", UriKind.Relative);
+        const string CoreName = "kasbah";
+
+        readonly Uri _updateUri = new Uri($"/solr/{CoreName}/update?wt=json", UriKind.Relative);
+        readonly Uri _selectUri = new Uri($"/solr/{CoreName}/select", UriKind.Relative);
 
         public SolrWebClient(Uri baseUri)
         {
@@ -18,7 +22,7 @@ namespace Kasbah.Core.Index.Solr
         public BaseResponse SubmitRequest(Uri uri, BaseRequest request)
         {
             Headers.Set("Content-Type", "application/json");
-            
+
             var data = JsonConvert.SerializeObject(request);
 
             try
@@ -49,7 +53,7 @@ namespace Kasbah.Core.Index.Solr
         {
             data["id"] = id;
 
-            var request = new AddRequest
+            var request = new AddRequestWithCommit
             {
                 Add = new Add
                 {
@@ -60,8 +64,20 @@ namespace Kasbah.Core.Index.Solr
             SubmitUpdate(request);
         }
 
+        public SelectResponse Select(string query)
+        {
+            var baseUri = new Uri(new Uri(BaseAddress), _selectUri);
+            var uriBuilder = new UriBuilder(baseUri);
+
+            uriBuilder.Query = $"wt=json&q={query}";
+
+            var data = DownloadString(uriBuilder.Uri);
+
+            return JsonConvert.DeserializeObject<SelectResponse>(data);
+        }
+
         public void Delete(Guid id)
-            => SubmitUpdate(new DeleteRequest { Delete = new Delete { Id = id.ToString() } });
+            => SubmitUpdate(new DeleteRequestWithCommit { Delete = new Delete { Id = id.ToString() } });
 
         public void Commit() => SubmitUpdate(new CommitRequest());
     }

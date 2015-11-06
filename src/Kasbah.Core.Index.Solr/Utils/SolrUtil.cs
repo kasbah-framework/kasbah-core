@@ -9,22 +9,29 @@ namespace Kasbah.Core.Index.Solr
     {
         static CamelCasePropertyNamesContractResolver _nameResolver = new CamelCasePropertyNamesContractResolver();
 
+        public static IDictionary<string, object> ConverFromSolr(IDictionary<string, object> input)
+        {
+            // TODO: fix this
+            return input
+                .Select(ProcessValueFromSolr)
+                .ToLookup(ent => ent.Key, ent => ent.Value)
+                .ToDictionary(ent => ent.Key, ent => ent.First());
+        }
+
         public static IDictionary<string, object> ConvertToSolr(IDictionary<string, object> input)
         {
             return input
-                .Select(ProcessValue)
+                .Select(ProcessValueToSolr)
                 .ToDictionary(ent => ent.Key, ent => ent.Value);
         }
 
-        static KeyValuePair<string, object> ProcessValue(KeyValuePair<string, object> kvp)
+        static KeyValuePair<string, object> ProcessValueToSolr(KeyValuePair<string, object> kvp)
         {
             var key = kvp.Key;
             var value = kvp.Value;
 
             if (key != "id")
             {
-                key = _nameResolver.GetResolvedPropertyName(key);
-
                 if (value is int)
                 {
                     key = key + "_i";
@@ -52,6 +59,46 @@ namespace Kasbah.Core.Index.Solr
                 }
             }
 
+            return new KeyValuePair<string, object>(key, value);
+        }
+
+        static KeyValuePair<string, object> ProcessValueFromSolr(KeyValuePair<string, object> kvp)
+        {
+            var key = kvp.Key;
+            var value = kvp.Value;
+
+            if (key != "id")
+            {
+                if (key.EndsWith("_i"))
+                {
+                    key = key.Substring(key.Length - 2);
+                    value = Convert.ToInt32(value);
+                }
+                else if (key.EndsWith("_t"))
+                {
+                    key = key.Substring(key.Length - 2);
+                    value = Convert.ToString(value);
+                }
+                else if (key.EndsWith("_dt"))
+                {
+                    key = key.Substring(key.Length - 3);
+                    value = Convert.ToDateTime(value);
+                }
+                else if (key.EndsWith("_d"))
+                {
+                    key = key.Substring(key.Length - 2);
+                    value = Convert.ToDouble(value);
+                }
+                else if (key.EndsWith("_b"))
+                {
+                    key = key.Substring(key.Length - 2);
+                    value = Convert.ToBoolean(value);
+                }
+                else if (key.EndsWith("_s"))
+                {
+                    key = key.Substring(key.Length - 2);
+                }
+            }
 
             return new KeyValuePair<string, object>(key, value);
         }

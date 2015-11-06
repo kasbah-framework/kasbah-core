@@ -26,6 +26,12 @@ namespace Kasbah.Core.Index.Solr.Requests
         public Add Add { get; set; }
     }
 
+    public class AddRequestWithCommit : AddRequest
+    {
+        [JsonProperty("commit")]
+        public object Commit { get; set; } = new object();
+    }
+
     public class BaseRequest { }
 
     public class BaseResponse
@@ -49,6 +55,12 @@ namespace Kasbah.Core.Index.Solr.Requests
         public Delete Delete { get; set; }
     }
 
+    public class DeleteRequestWithCommit : DeleteRequest
+    {
+        [JsonProperty("commit")]
+        public object Commit { get; set; } = new object();
+    }
+
     public class Delete
     {
         [JsonProperty("id")]
@@ -59,5 +71,23 @@ namespace Kasbah.Core.Index.Solr.Requests
     {
         [JsonProperty("commit")]
         public object Commit { get; set; } = new object();
+    }
+
+    public class SelectResponse : BaseResponse
+    {
+        [JsonProperty("response")]
+        public SelectResponseBody Response { get; set; }
+    }
+
+    public class SelectResponseBody
+    {
+        [JsonProperty("numFound")]
+        public int TotalCount { get; set; }
+
+        [JsonProperty("start")]
+        public int Offset { get; set; }
+
+        [JsonProperty("docs")]
+        public IEnumerable<IDictionary<string, object>> Documents { get; set; }
     }
 }
