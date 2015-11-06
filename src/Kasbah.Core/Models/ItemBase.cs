@@ -1,6 +1,6 @@
 namespace Kasbah.Core.Models
 {
-    public class EmptyItem : ItemBase
+    public sealed class EmptyItem : ItemBase
     {
     }
 
