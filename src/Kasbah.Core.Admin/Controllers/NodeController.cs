@@ -29,7 +29,7 @@ namespace Kasbah.Core.Admin
         [Route("api/version/{id}/{version}")]
         public IDictionary<string, object> GetVersion(Guid id, Guid version)
         {
-            return _contentTreeService.GetNodeVersion(id, version);
+            return _contentTreeService.GetNodeVersion(id, version) ?? new Dictionary<string, object>();
         }
 
         [Route("api/versions/{id}")]
@@ -49,6 +49,18 @@ namespace Kasbah.Core.Admin
         public Guid CreateNode([FromBody]CreateNodeRequest request)
         {
             return _contentTreeService.CreateNode(request.Parent, request.Alias, request.Type);
+        }
+
+        [HttpPost, Route("api/node/{id}/set-active/{version}")]
+        public void SetActiveVersion(Guid id, Guid version)
+        {
+            _contentTreeService.SetActiveNodeVersion(id, version);
+        }
+
+        [HttpPost, Route("api/save/{node}/{version}")]
+        public void Save(Guid node, Guid version, [FromBody]IDictionary<string, object> values)
+        {
+            _contentTreeService.Save(version, node, (object)values);
         }
 
         #endregion

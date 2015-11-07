@@ -6,7 +6,8 @@ import {
     CLEAR_CHILDREN,
     RECEIVE_NODE_VERSIONS,
     RECEIVE_NODE_VERSION,
-    UPDATE_ITEM } from 'actions/nodes';
+    UPDATE_ITEM,
+    NODE_VERSION_ADD_FIELD } from 'actions/nodes';
 
 function clone(obj) {
     return JSON.parse(JSON.stringify(obj));
@@ -61,6 +62,13 @@ export default createReducer(initialState, {
         let ret = clone(state);
 
         ret.items[payload.node][payload.version][payload.field] = payload.value;
+
+        return ret;
+    },
+    [NODE_VERSION_ADD_FIELD]: (state, payload) => {
+        let ret = clone(state);
+
+        ret.items[payload.node][payload.version][payload.name] = null;
 
         return ret;
     }

@@ -113,10 +113,11 @@ function receiveNodeVersion(id, version, data) {
 
 export function fetchNodeVersion(id, version) {
     return dispatch => {
-        dispatch(requestNodeVersions(id, version))
-            return fetch(`${API_BASE}/api/version/${id}/${version}`)
-                .then(response => response.json())
-                .then(json => dispatch(receiveNodeVersion(id, version, json)))
+        dispatch(requestNodeVersions(id, version));
+
+        return fetch(`${API_BASE}/api/version/${id}/${version}`)
+            .then(response => response.json())
+            .then(json => dispatch(receiveNodeVersion(id, version, json)))
     }
 }
 
@@ -189,11 +190,60 @@ export function createNodeVersion(node) {
         }
     };
     return dispatch => {
-            return fetch(`${API_BASE}/api/node/${node}/version`, options)
-                .then(response => response.json())
-                .then(json => {
-                    dispatch(notifyNodeVersionCreated(json));
-                    dispatch(fetchNodeVersions(node));
-                })
+        return fetch(`${API_BASE}/api/node/${node}/version`, options)
+            .then(response => response.json())
+            .then(json => {
+                dispatch(notifyNodeVersionCreated(json));
+                dispatch(fetchNodeVersions(node));
+            });
+    }
+}
+
+export const NODE_VERSION_ADD_FIELD = 'NODE_VERSION_ADD_FIELD';
+export function addField(node, version, name) {
+    return dispatch => dispatch({
+        type: NODE_VERSION_ADD_FIELD,
+        payload: {
+            node,
+            version,
+            name
+        }
+    });
+}
+
+export function setActiveVersion(id, version) {
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+
+    return dispatch => {
+        return fetch(`${API_BASE}/api/node/${id}/set-active/${version}`, options)
+            .then(response => response.json())
+            .then(json => {
+                // dispatch(notifyNodeVersionCreated(json));
+            });
+    }
+}
+
+export function save(node, version, values) {
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(values),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    };
+
+    return dispatch => {
+        return fetch(`${API_BASE}/api/save/${node}/${version}`, options)
+            .then(response => response.json())
+            .then(json => {
+
+            });
     }
 }

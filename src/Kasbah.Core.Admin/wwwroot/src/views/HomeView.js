@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import NodeList from 'components/NodeList';
+import NodeDetail from 'components/NodeDetail';
 import NodeVersionList from 'components/NodeVersionList';
 import NodeVersionDisplay from 'components/NodeVersionDisplay';
 import {
@@ -12,7 +13,10 @@ import {
     clearChildren,
     updateItem,
     createNode,
-    createNodeVersion } from 'actions/nodes';
+    createNodeVersion,
+    addField,
+    save,
+    setActiveVersion } from 'actions/nodes';
 
 const actionCreators = {
     toggleNode: (node) => toggleNode(node),
@@ -22,7 +26,10 @@ const actionCreators = {
     fetchNodeVersion: (id, version) => fetchNodeVersion(id, version.id),
     updateItem: (node, version, field, value) => updateItem(node, version, field, value),
     createNode: (parent, alias, type) => createNode(parent, alias, type),
-    createNodeVersion: (node) => createNodeVersion(node)
+    createNodeVersion: (node) => createNodeVersion(node),
+    addField: (node, version, name) => addField(node, version, name),
+    save: (node, version, values) => save(node, version, values),
+    setActiveVersion: (node, version) => setActiveVersion(node, version)
 };
 
 const mapStateToProps = (state) => ({
@@ -76,11 +83,30 @@ export class HomeView extends React.Component {
         const alias = prompt('alias'),
             type = prompt('type');
 
-        this.props.actions.createNode(parent, alias, type);
+        if (alias && type) {
+            this.props.actions.createNode(parent, alias, type);
+        }
     }
 
     handleCreateNodeVersion(node) {
         this.props.actions.createNodeVersion(node.id);
+    }
+
+    handlAddField() {
+        const name = prompt('name');
+
+        if (name) {
+            this.props.actions.addField(this.state.selectedNode.id, this.state.selectedVersion.id, name);
+        }
+    }
+
+    handleSetActive() {
+        this.props.actions.setActiveVersion(this.state.selectedNode.id, this.state.selectedVersion.id);
+    }
+
+    handleSave() {
+        const values = this.props.nodeTree.items[this.state.selectedNode.id][this.state.selectedVersion.id];
+        this.props.actions.save(this.state.selectedNode.id, this.state.selectedVersion.id, values)
     }
 
     render () {
@@ -97,17 +123,22 @@ export class HomeView extends React.Component {
                     </div>
                     <div className='col-lg-2 col-md-3 col-node-list'>
                         <NodeVersionList
-                            selectedNode={this.state.selectedNode}
+                            node={this.state.selectedNode}
                             versions={this.props.nodeTree.versions}
                             onVersionSelected={this.handleVersionSelected.bind(this)}
                             onCreateNodeVersion={this.handleCreateNodeVersion.bind(this)} />
+                        <NodeDetail
+                            node={this.state.selectedNode} />
                     </div>
                     <div className='col-lg-8 col-md-6'>
                         <NodeVersionDisplay
                             selectedNode={this.state.selectedNode}
                             selectedVersion={this.state.selectedVersion}
                             items={this.props.nodeTree.items}
-                            onChange={this.handleFieldChange.bind(this)} />
+                            onChange={this.handleFieldChange.bind(this)}
+                            onAddField={this.handlAddField.bind(this)}
+                            onSave={this.handleSave.bind(this)}
+                            onSetActive={this.handleSetActive.bind(this)} />
                     </div>
                 </div>
             </div>

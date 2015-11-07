@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 class FieldEditor extends React.Component {
     static propTypes = {
@@ -10,16 +11,15 @@ class FieldEditor extends React.Component {
     render() {
         return (
             <div className='form-group'>
-                <dt htmlFor={this.props.field}>
+                <label htmlFor={this.props.field}>
                     {this.props.field}
-                </dt>
-                <dd>
-                    <input
-                        id={this.props.field}
-                        type='text'
-                        value={this.props.value}
-                        onChange={this.props.onChange.bind(this, this.props.field)} />
-                </dd>
+                </label>
+                <input
+                    className='form-control'
+                    id={this.props.field}
+                    type='text'
+                    value={this.props.value}
+                    onChange={this.props.onChange.bind(this, this.props.field)} />
             </div>
         );
     }
@@ -31,16 +31,19 @@ export default class NodeVersionDisplay extends React.Component {
 
         return (
             <div>
-                <dl>
+                <p>Node version <strong>{this.props.selectedVersion.id}</strong> {moment.utc(this.props.selectedVersion.modified).format()}</p>
+                <div>
                     {fields.map(f =>
                         <FieldEditor
                             key={f}
                             field={f}
                             value={obj[f]}
                             onChange={this.props.onChange} />)}
-                </dl>
+                    <button className='btn btn-sm' onClick={this.props.onAddField}>Add field</button>
+                </div>
                 <pre>{JSON.stringify(obj)}</pre>
-                <button className='btn btn-primary'>Save</button>
+                <button className='btn btn-primary' onClick={this.props.onSave}>Save</button>
+                <button className='btn btn-success' onClick={this.props.onSetActive}>Set active</button>
             </div>
         );
     }
