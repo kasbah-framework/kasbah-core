@@ -11,11 +11,9 @@ namespace Kasbah.Core.Index.Solr
 
         public static IDictionary<string, object> ConverFromSolr(IDictionary<string, object> input)
         {
-            // TODO: fix this
             return input
                 .Select(ProcessValueFromSolr)
-                .ToLookup(ent => ent.Key, ent => ent.Value)
-                .ToDictionary(ent => ent.Key, ent => ent.First());
+                .ToDictionary(ent => ent.Key, ent => ent.Value);
         }
 
         public static IDictionary<string, object> ConvertToSolr(IDictionary<string, object> input)
@@ -53,6 +51,10 @@ namespace Kasbah.Core.Index.Solr
                 {
                     key = key + "_b";
                 }
+                else if (value is Guid)
+                {
+                    key = key + "_guid_s";
+                }
                 else
                 {
                     key = key + "_s";
@@ -71,32 +73,37 @@ namespace Kasbah.Core.Index.Solr
             {
                 if (key.EndsWith("_i"))
                 {
-                    key = key.Substring(key.Length - 2);
+                    key = key.Substring(0, key.Length - 2);
                     value = Convert.ToInt32(value);
                 }
                 else if (key.EndsWith("_t"))
                 {
-                    key = key.Substring(key.Length - 2);
+                    key = key.Substring(0, key.Length - 2);
                     value = Convert.ToString(value);
                 }
                 else if (key.EndsWith("_dt"))
                 {
-                    key = key.Substring(key.Length - 3);
+                    key = key.Substring(0, key.Length - 3);
                     value = Convert.ToDateTime(value);
                 }
                 else if (key.EndsWith("_d"))
                 {
-                    key = key.Substring(key.Length - 2);
+                    key = key.Substring(0, key.Length - 2);
                     value = Convert.ToDouble(value);
                 }
                 else if (key.EndsWith("_b"))
                 {
-                    key = key.Substring(key.Length - 2);
+                    key = key.Substring(0, key.Length - 2);
                     value = Convert.ToBoolean(value);
+                }
+                else if (key.EndsWith("_guid_s"))
+                {
+                    key = key.Substring(0, key.Length - 7);
+                    value = Guid.Parse(value as string);
                 }
                 else if (key.EndsWith("_s"))
                 {
-                    key = key.Substring(key.Length - 2);
+                    key = key.Substring(0, key.Length - 2);
                 }
             }
 

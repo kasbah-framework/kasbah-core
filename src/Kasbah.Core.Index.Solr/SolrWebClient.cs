@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Net;
-using Kasbah.Core.Index.Solr.Requests;
 using Newtonsoft.Json;
 
 namespace Kasbah.Core.Index.Solr
@@ -77,8 +75,19 @@ namespace Kasbah.Core.Index.Solr
         }
 
         public void Delete(Guid id)
-            => SubmitUpdate(new DeleteRequestWithCommit { Delete = new Delete { Id = id.ToString() } });
+        {
+            var request = new DeleteRequestWithCommit
+            {
+                Delete = new Delete
+                {
+                    Id = id.ToString()
+                }
+            };
 
-        public void Commit() => SubmitUpdate(new CommitRequest());
+            SubmitUpdate(request);
+        }
+
+        public void Commit()
+            => SubmitUpdate(new CommitRequest());
     }
 }
