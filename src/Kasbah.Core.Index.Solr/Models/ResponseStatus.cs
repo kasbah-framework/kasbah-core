@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Kasbah.Core.Index.Solr
+namespace Kasbah.Core.Index.Solr.Models
 {
     public class ResponseStatus
     {

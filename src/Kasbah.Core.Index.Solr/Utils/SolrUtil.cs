@@ -32,32 +32,33 @@ namespace Kasbah.Core.Index.Solr
             {
                 if (value is int)
                 {
-                    key = key + "_i";
+                    key = key + TypeSuffixes.Int;
                 }
                 else if (value is string)
                 {
-                    key = key + "_t";
+                    key = key + TypeSuffixes.String;
                 }
                 else if (value is DateTime)
                 {
-                    key = key + "_dt";
+                    key = key + TypeSuffixes.DateTime;
                     value = $"{value:o}";
                 }
                 else if (value is double)
                 {
-                    key = key + "_d";
+                    key = key + TypeSuffixes.Double;
                 }
                 else if (value is bool)
                 {
-                    key = key + "_b";
+                    key = key + TypeSuffixes.Bool;
                 }
                 else if (value is Guid)
                 {
-                    key = key + "_guid_s";
+                    key = key + TypeSuffixes.Guid;
+                    value = value.ToString();
                 }
                 else
                 {
-                    key = key + "_s";
+                    key = key + TypeSuffixes.General;
                 }
             }
 
@@ -71,43 +72,54 @@ namespace Kasbah.Core.Index.Solr
 
             if (key != "id")
             {
-                if (key.EndsWith("_i"))
+                if (key.EndsWith(TypeSuffixes.Int))
                 {
-                    key = key.Substring(0, key.Length - 2);
+                    key = key.Substring(0, key.Length - TypeSuffixes.Int.Length);
                     value = Convert.ToInt32(value);
                 }
-                else if (key.EndsWith("_t"))
+                else if (key.EndsWith(TypeSuffixes.String))
                 {
-                    key = key.Substring(0, key.Length - 2);
+                    key = key.Substring(0, key.Length - TypeSuffixes.String.Length);
                     value = Convert.ToString(value);
                 }
-                else if (key.EndsWith("_dt"))
+                else if (key.EndsWith(TypeSuffixes.DateTime))
                 {
-                    key = key.Substring(0, key.Length - 3);
+                    key = key.Substring(0, key.Length - TypeSuffixes.DateTime.Length);
                     value = Convert.ToDateTime(value);
                 }
-                else if (key.EndsWith("_d"))
+                else if (key.EndsWith(TypeSuffixes.Double))
                 {
-                    key = key.Substring(0, key.Length - 2);
+                    key = key.Substring(0, key.Length - TypeSuffixes.Double.Length);
                     value = Convert.ToDouble(value);
                 }
-                else if (key.EndsWith("_b"))
+                else if (key.EndsWith(TypeSuffixes.Bool))
                 {
-                    key = key.Substring(0, key.Length - 2);
+                    key = key.Substring(0, key.Length - TypeSuffixes.Bool.Length);
                     value = Convert.ToBoolean(value);
                 }
-                else if (key.EndsWith("_guid_s"))
+                else if (key.EndsWith(TypeSuffixes.Guid))
                 {
-                    key = key.Substring(0, key.Length - 7);
+                    key = key.Substring(0, key.Length - TypeSuffixes.Guid.Length);
                     value = Guid.Parse(value as string);
                 }
-                else if (key.EndsWith("_s"))
+                else if (key.EndsWith(TypeSuffixes.General))
                 {
-                    key = key.Substring(0, key.Length - 2);
+                    key = key.Substring(0, key.Length - TypeSuffixes.General.Length);
                 }
             }
 
             return new KeyValuePair<string, object>(key, value);
+        }
+
+        static class TypeSuffixes
+        {
+            public const string Int = "_i";
+            public const string String = "_t";
+            public const string DateTime = "_dt";
+            public const string Double = "_d";
+            public const string Bool = "_b";
+            public const string Guid = "_guid_s";
+            public const string General = "_s";
         }
     }
 }

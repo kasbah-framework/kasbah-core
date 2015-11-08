@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Kasbah.Core.Index.Solr
+namespace Kasbah.Core.Index.Solr.Models
 {
     public class Add
     {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using Newtonsoft.Json;
+using Kasbah.Core.Index.Solr.Models;
 
 namespace Kasbah.Core.Index.Solr
 {
