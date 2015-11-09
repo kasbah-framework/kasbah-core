@@ -1,6 +1,21 @@
-# Kasbah Core Admin
+# Kasbah.Core.Admin
 
-See ~/docker/README.md about getting the kasbah/dev container running.
+This module provides an administrative interface to the core services.
+
+ 1. The content tree
+ 1. The document index
+ 1. The event bus
+
+## Dependencies
+
+ * `Kasbah.Core`
+ * `Kasbah.Core.Events (+ .Redis)`
+ * `Kasbah.Core.ContentTree (+ .Npgsql)`
+ * `Kasbah.Core.Index (+ .Solr)`
+
+## Usage
+
+See `~/docker/README.md` about getting the kasbah/dev container running.
 
 Startup the back-end from the project root.  This will run the API on port 5004 (by default).
 

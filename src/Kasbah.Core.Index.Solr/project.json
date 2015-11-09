@@ -9,8 +9,6 @@
   "dependencies": {
     "Kasbah.Core": "",
     "Kasbah.Core.Index": "",
-    "Kasbah.Core.Events": "",
-    "Kasbah.Core.ContentTree": "",
     "Newtonsoft.Json": "8.0.1-beta1"
   },
 

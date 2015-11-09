@@ -1,5 +1,5 @@
 {
-    "projects": [ "src", "test", "lib" ],
+    "projects": [ "src", "test", "lib/StackExchange.Redis/StackExchange.Redis/StackExchange" ],
     "sdk": {
         "version": "1.0.0-beta8",
         "runtime": "clr",
