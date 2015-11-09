@@ -1,3 +1,11 @@
+# this assumes that you have the required services running under docker as detailed in docker/README.md
+# running on the default docker-machine
+
+IP=$(docker-machine ip default)
+SOLR="http://$IP:50003"
+DB="Server=$IP;Port=50001;Database=postgres;User Id=postgres;Password="
+REDIS="$IP:50002"
+
 case "$1" in
     core)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Tests/project.json test"
