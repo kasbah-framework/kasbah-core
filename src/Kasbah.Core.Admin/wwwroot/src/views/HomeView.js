@@ -127,6 +127,7 @@ export class HomeView extends React.Component {
                             versions={this.props.nodeTree.versions}
                             onVersionSelected={this.handleVersionSelected.bind(this)}
                             onCreateNodeVersion={this.handleCreateNodeVersion.bind(this)} />
+                        <hr />
                         <NodeDetail
                             node={this.state.selectedNode} />
                     </div>

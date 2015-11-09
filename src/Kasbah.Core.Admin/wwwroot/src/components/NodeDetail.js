@@ -12,25 +12,27 @@ export default class NodeDetail extends React.Component {
         }
 
         return (
-            <div>
-                <p>Node <strong>{this.props.node.alias}</strong></p>
-                <dl>
-                    <dt>Type</dt>
-                    <dd><abbr title={this.props.node.type}>{friendlyType(this.props.node.type)}</abbr></dd>
+            <dl>
+                <dt>Alias</dt>
+                <dd>{this.props.node.alias}</dd>
 
-                    <dt>Has children</dt>
-                    <dd>{this.props.node.hasChildren ? 'yes' : 'no'}</dd>
+                <dt>Type</dt>
+                <dd>
+                    <abbr title={this.props.node.type}>{friendlyType(this.props.node.type)}</abbr><br />
+                    <small>{this.props.node.type}</small>
+                </dd>
 
-                    <dt>Parent</dt>
-                    <dd>{this.props.node.parent || 'null'}</dd>
+                <dt>Has children</dt>
+                <dd>{this.props.node.hasChildren ? 'yes' : 'no'}</dd>
 
-                    <dt>Id</dt>
-                    <dd>{this.props.node.id}</dd>
+                <dt>Parent</dt>
+                <dd>{this.props.node.parent || 'null'}</dd>
 
-                    <dt>Raw</dt>
-                    <dd><pre>{JSON.stringify(this.props.node)}</pre></dd>
-                </dl>
-            </div>
-        );
+                <dt>Id</dt>
+                <dd>{this.props.node.id}</dd>
+
+                <dt>Raw</dt>
+                <dd><pre>{JSON.stringify(this.props.node)}</pre></dd>
+            </dl> );
     }
 }

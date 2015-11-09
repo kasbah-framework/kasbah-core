@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Models;
-using Kasbah.Core.Index;
 using Kasbah.Core.Models;
 using Microsoft.AspNet.Mvc;
 
@@ -12,7 +11,7 @@ namespace Kasbah.Core.Admin
     {
         #region Public Constructors
 
-        public NodeController(IContentTreeService contentTreeService)
+        public NodeController(ContentTreeService contentTreeService)
         {
             _contentTreeService = contentTreeService;
         }
@@ -68,7 +67,7 @@ namespace Kasbah.Core.Admin
 
         #region Private Fields
 
-        readonly IContentTreeService _contentTreeService;
+        readonly ContentTreeService _contentTreeService;
 
         #endregion
     }
