@@ -11,7 +11,7 @@ namespace Kasbah.Core.Index
 {
     public class IndexService
     {
-        public IndexService(IIndexProvider indexProvider, IEventService eventService, IContentTreeService contentTreeService)
+        public IndexService(IIndexProvider indexProvider, IEventService eventService, ContentTreeService contentTreeService)
         {
             _indexProvider = indexProvider;
             _eventService = eventService;
@@ -100,7 +100,7 @@ namespace Kasbah.Core.Index
 
         readonly IIndexProvider _indexProvider;
         readonly IEventService _eventService;
-        readonly IContentTreeService _contentTreeService;
+        readonly ContentTreeService _contentTreeService;
         readonly IDictionary<Type, ICollection<IIndexHandler>> _handlers;
         readonly object _lockObj = new object();
         readonly ContentTreeEventHandler _contentTreeEventHandler;

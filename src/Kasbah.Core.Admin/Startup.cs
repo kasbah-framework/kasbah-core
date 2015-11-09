@@ -43,8 +43,11 @@ namespace Kasbah.Core.Admin
                 formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            services.AddSingleton<ContentTree.IContentTreeService, ContentTree.Npgsql.ContentTreeService>();
+            services.AddSingleton<ContentTree.IContentTreeProvider, ContentTree.Npgsql.NpgsqlContentTreeProvider>();
+            services.AddSingleton<ContentTree.ContentTreeService>();
+
             services.AddSingleton<Events.IEventService, Events.InProcEventService>();
+
             services.AddSingleton<Index.IIndexProvider, Index.Solr.SolrIndexProvider>();
             services.AddSingleton<Index.IndexService>();
         }

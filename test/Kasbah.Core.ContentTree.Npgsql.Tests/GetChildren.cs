@@ -14,31 +14,38 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetChildren_WhereNodeHasChildren_ReturnsChildNodes()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
-            var parentNode = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+            var parentNode = Guid.NewGuid();
+            service.CreateNode(parentNode, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
 
             // Act
-            var createdChildNodes = new[] {
-                service.CreateNode<EmptyItem>(parentNode, Guid.NewGuid().ToString()),
-                service.CreateNode<EmptyItem>(parentNode, Guid.NewGuid().ToString())
+            var createdChildNodeIds = new[] {
+                Guid.NewGuid(),
+                Guid.NewGuid(),
             };
+
+            foreach (var id in createdChildNodeIds)
+            {
+                service.CreateNode(id, parentNode, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+            }
 
             var actualChildNodes = service.GetChildren(parentNode);
 
             // Assert
             Assert.NotEmpty(actualChildNodes);
-            Assert.Contains(createdChildNodes[0], actualChildNodes.Select(ent => ent.Id));
-            Assert.Contains(createdChildNodes[1], actualChildNodes.Select(ent => ent.Id));
+            Assert.Contains(createdChildNodeIds[0], actualChildNodes.Select(ent => ent.Id));
+            Assert.Contains(createdChildNodeIds[1], actualChildNodes.Select(ent => ent.Id));
         }
 
         [DbFact]
         public void GetChildren_WhereNodeHasNoChildren_ReturnsNoChildNodes()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
-            var parentNode = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+            var parentNode = Guid.NewGuid();
+            service.CreateNode(parentNode, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
 
             // Act
             var childNodes = service.GetChildren(parentNode);

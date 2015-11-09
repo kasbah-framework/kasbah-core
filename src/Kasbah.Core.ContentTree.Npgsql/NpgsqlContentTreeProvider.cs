@@ -13,44 +13,20 @@ using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
-    public class ContentTreeService : IContentTreeService
+    public class NpgsqlContentTreeProvider : IContentTreeProvider
     {
-        #region Public Constructors
-
-        public ContentTreeService(IEventService eventService)
-        {
-            _eventService = eventService;
-        }
-
-        #endregion
-
         #region Public Methods
 
-        public Guid CreateNode<T>(Guid? parent, string alias) where T : ItemBase
+        public void CreateNode(Guid id, Guid? parent, string alias, string type)
         {
-            return CreateNode(parent, alias, TypeUtil.TypeName<T>());
-        }
-
-        public Guid CreateNode(Guid? parent, string alias, string type)
-        {
-            var id = Guid.NewGuid();
-
-            var node = new Node { Id = id, Parent = parent, Alias = alias, Type = type };
-
-            _eventService.Emit(new BeforeNodeCreated { Data = node });
-
             const string ResourceName = "Sql/CreateNode.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
                 connection.Execute(sql, new { id, parent, alias, type });
             }
-
-            _eventService.Emit(new AfterNodeCreated { Data = node });
-
-            return id;
         }
 
         public T GetActiveNodeVersion<T>(Guid id)
@@ -58,7 +34,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/GetActiveNodeVersion.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -72,7 +48,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/GetAllNodeVersions.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -84,7 +60,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/GetChild.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -96,7 +72,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/GetChildren.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -108,7 +84,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/GetNode.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -116,17 +92,11 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        public T GetNodeVersion<T>(Guid id, Guid version)
-            where T : ItemBase
-        {
-            return GetNodeVersion(id, version, typeof(T)) as T;
-        }
-
         public object GetNodeVersion(Guid id, Guid version, Type type)
         {
             const string ResourceName = "Sql/GetNodeVersion.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -140,7 +110,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/GetNodeVersion.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
@@ -152,19 +122,13 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public void MoveNode(Guid id, Guid? parent)
         {
-            var node = new Node { Id = id, Parent = parent };
-
             const string ResourceName = "Sql/MoveNode.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
-
-            _eventService.Emit(new BeforeNodeMoved { Data = node });
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
                 connection.Execute(sql, new { id, parent });
-
-                _eventService.Emit(new AfterNodeMoved { Data = node });
             }
         }
 
@@ -177,18 +141,12 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/Save.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
             var data = Serialise(item);
-
-            _eventService.Emit(new BeforeItemSaved { Data = item as ItemBase, Node = node });
 
             using (var connection = GetConnection())
             {
-                var ret = connection.Query<NodeVersion>(sql, new { id, node, data }).SingleOrDefault();
-
-                _eventService.Emit(new AfterItemSaved { Data = item as ItemBase, Node = node });
-
-                return ret;
+                return connection.Query<NodeVersion>(sql, new { id, node, data }).SingleOrDefault();
             }
         }
 
@@ -196,21 +154,12 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             const string ResourceName = "Sql/SetActiveNodeVersion.sql";
 
-            var sql = ResourceUtil.Get<ContentTreeService>(ResourceName);
+            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
 
             using (var connection = GetConnection())
             {
                 connection.Execute(sql, new { id, version });
             }
-
-            _eventService.Emit<NodeActiveVersionSet>(new NodeActiveVersionSet
-            {
-                Data = new Node
-                {
-                    Id = id,
-                    ActiveVersionId = version
-                }
-            });
         }
 
         #endregion
@@ -228,12 +177,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             return new NpgsqlConnection(connectionString);
         }
-
-        #endregion
-
-        #region Private Fields
-
-        IEventService _eventService;
 
         #endregion
     }

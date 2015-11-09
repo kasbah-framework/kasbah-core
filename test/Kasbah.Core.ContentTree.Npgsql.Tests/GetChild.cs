@@ -14,12 +14,15 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetChild_WhereChildExists_ReturnsChildNode()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
             var alias = Guid.NewGuid().ToString();
 
-            var parentNode = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-            var childNode = service.CreateNode<EmptyItem>(parentNode, alias);
+            var parentNode = Guid.NewGuid();
+            service.CreateNode(parentNode, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
+            var childNode = Guid.NewGuid();
+            service.CreateNode(childNode, parentNode, alias, typeof(EmptyItem).FullName);
 
             // Act
             var outChildNode = service.GetChild(parentNode, alias);
@@ -33,9 +36,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetChild_WhereNoChildExists_ReturnsNull()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
-            var parentNode = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+            var parentNode = Guid.NewGuid();
+            service.CreateNode(parentNode, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
 
             // Act
             var childNode = service.GetChild(parentNode, Guid.NewGuid().ToString());

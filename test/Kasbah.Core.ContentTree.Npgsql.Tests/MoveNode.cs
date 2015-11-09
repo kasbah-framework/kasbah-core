@@ -14,11 +14,16 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void MoveNode_WhenTargetExists_NodeMoved()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
-            var originalParent = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-            var node = service.CreateNode<EmptyItem>(originalParent, Guid.NewGuid().ToString());
-            var targetParent = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+            var originalParent = Guid.NewGuid();
+            service.CreateNode(originalParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
+            var node = Guid.NewGuid();
+            service.CreateNode(node, originalParent, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
+            var targetParent = Guid.NewGuid();
+            service.CreateNode(targetParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
 
             // Act
             service.MoveNode(node, targetParent);
@@ -33,10 +38,14 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void MoveNode_WhenTargetDoesNotExist_ExceptionThrown()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
-            var originalParent = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
-            var node = service.CreateNode<EmptyItem>(originalParent, Guid.NewGuid().ToString());
+            var originalParent = Guid.NewGuid();
+            service.CreateNode(originalParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
+            var node = Guid.NewGuid();
+            service.CreateNode(node, originalParent, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
 
             // Act & Assert
             Assert.Throws<global::Npgsql.NpgsqlException>(() =>

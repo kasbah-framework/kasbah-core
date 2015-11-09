@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using Kasbah.Core.ContentTree.Events;
-using Kasbah.Core.ContentTree.Tests.TestImpls;
 using Kasbah.Core.Events;
 using Kasbah.Core.Models;
 using Moq;
@@ -18,10 +17,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_AnonymousObject_ItemSaved()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
-            var node = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+            var node = Guid.NewGuid();
+            service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
 
             // Act
             var id = Guid.NewGuid();
@@ -41,10 +40,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_ExistingItem_ItemUpdated()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
-            var node = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var node = Guid.NewGuid();
+            service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
 
             // Act
             var id = Guid.NewGuid();
@@ -66,10 +65,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_NewItem_ItemSaved()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
-            var node = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var node = Guid.NewGuid();
+            service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
 
             // Act
             var id = Guid.NewGuid();
@@ -82,36 +81,13 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         [DbFact]
-        public void Save_TriggersBeforeAndAfterEvents_EventsTriggered()
-        {
-            // Arrange
-            var eventService = new InProcEventService();
-            var handler = new BasicEventHandler();
-
-            eventService.Register<BeforeItemSaved>(handler);
-            eventService.Register<AfterItemSaved>(handler);
-
-            var service = new ContentTreeService(eventService);
-
-            var node = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
-
-            // Act
-            service.Save(Guid.NewGuid(), node, new TestItem());
-
-            // Assert
-            Assert.NotEmpty(handler.HandledEvents);
-
-            Assert.Equal(2, handler.HandledEvents.Count);
-        }
-
-        [DbFact]
         public void Save_WithUniqueIds_MultipleVersionCreated()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
-            var node = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var node = Guid.NewGuid();
+            service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
 
             // Act
             var ids = new[] { Guid.NewGuid(), Guid.NewGuid() };

@@ -13,7 +13,7 @@ namespace Kasbah.Core.Index
 {
     class ContentTreeEventHandler : IEventHandler
     {
-        public ContentTreeEventHandler(IndexService indexService, IContentTreeService contentTreeService)
+        public ContentTreeEventHandler(IndexService indexService, ContentTreeService contentTreeService)
         {
             _indexService = indexService;
             _contentTreeService = contentTreeService;
@@ -44,6 +44,6 @@ namespace Kasbah.Core.Index
         }
 
         readonly IndexService _indexService;
-        readonly IContentTreeService _contentTreeService;
+        readonly ContentTreeService _contentTreeService;
     }
 }

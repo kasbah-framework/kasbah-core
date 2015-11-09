@@ -8,9 +8,9 @@ case "$1" in
     events-redis)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Events.Redis.Tests/project.json test"
         ;;
-#    content-tree)
-#        nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Tests/project.json test"
-#        ;;
+    content-tree)
+        nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Tests/project.json test"
+        ;;
     content-tree-npgsql)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Npgsql.Tests/project.json test"
         ;;
@@ -24,6 +24,7 @@ case "$1" in
         dnx -p test/Kasbah.Core.Tests/project.json test
         dnx -p test/Kasbah.Core.Events.Tests/project.json test
         dnx -p test/Kasbah.Core.Events.Redis.Tests/project.json test
+        dnx -p test/Kasbah.Core.ContentTree.Tests/project.json test
         dnx -p test/Kasbah.Core.ContentTree.Npgsql.Tests/project.json test
         dnx -p test/Kasbah.Core.Index.Tests/project.json test
         dnx -p test/Kasbah.Core.Index.Solr.Tests/project.json test
@@ -32,7 +33,7 @@ case "$1" in
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Tests/project.json test" & PID_1=$!
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Events.Tests/project.json test" & PID_2=$!
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Events.Redis.Tests/project.json test" & PID_3=$!
-#        nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Tests/project.json test" & PID_4=$!
+        nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Tests/project.json test" & PID_4=$!
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.ContentTree.Npgsql.Tests/project.json test" & PID_5=$!
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Index.Tests/project.json test" & PID_6=$!
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Index.Solr.Tests/project.json test" & PID_7=$!

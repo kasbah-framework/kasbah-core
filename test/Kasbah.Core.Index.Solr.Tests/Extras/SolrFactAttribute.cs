@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Kasbah.Core.ContentTree.Npgsql.Tests
+namespace Kasbah.Core.Index.Solr.Tests
 {
     public class SolrFactAttribute : FactAttribute
     {
@@ -24,7 +24,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public SolrDbFactAttribute()
         {
             Skip = null;
-            
+
             if (Environment.GetEnvironmentVariable("SOLR") == null)
             {
                 Skip = "Solr";

@@ -14,9 +14,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetNode_WhereNodeExists_ReturnsCorrectNode()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
-            var id = service.CreateNode<EmptyItem>(null, Guid.NewGuid().ToString());
+            var id = Guid.NewGuid();
+            service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
 
             // Act
             var node = service.GetNode(id);
@@ -30,7 +31,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetNode_WhereNodeDoesNotExists_ReturnsNull()
         {
             // Arrange
-            var service = new ContentTreeService(Mock.Of<IEventService>());
+            var service = new NpgsqlContentTreeProvider();
 
             // Act
             var node = service.GetNode(Guid.Empty);

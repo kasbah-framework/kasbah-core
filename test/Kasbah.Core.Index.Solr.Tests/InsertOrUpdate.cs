@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Kasbah.Core.ContentTree.Npgsql.Tests;
 using Kasbah.Core.Models;
 using Xunit;
+using Moq;
 
 namespace Kasbah.Core.Index.Solr.Tests
 {
@@ -15,7 +15,8 @@ namespace Kasbah.Core.Index.Solr.Tests
         {
             // Arrange
             var eventService = new Kasbah.Core.Events.InProcEventService();
-            var contentTreeService = new Kasbah.Core.ContentTree.Npgsql.ContentTreeService(eventService);
+            var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider();
+            var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider, eventService);
             var provider = new SolrIndexProvider();
             var service = new IndexService(provider, eventService, contentTreeService);
 

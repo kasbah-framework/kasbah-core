@@ -13,16 +13,17 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetNodeVersion_WhereVersionExists_ReturnsCorrectVersion()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
             var item = new TestItem { Value = Guid.NewGuid().ToString() };
 
-            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var id = Guid.NewGuid();
+            service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
+
             var version = service.Save<TestItem>(Guid.NewGuid(), id, item);
 
             // Act
-            var outItem = service.GetNodeVersion<TestItem>(id, version.Id);
+            var outItem = service.GetNodeVersion(id, version.Id, typeof(TestItem)) as TestItem;
 
             // Assert
             Assert.NotNull(outItem);
@@ -33,13 +34,13 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetNodeVersion_WhereVersionDoesNotExist_ReturnsNull()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
-            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var id = Guid.NewGuid();
+            service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
 
             // Act
-            var outItem = service.GetNodeVersion<TestItem>(id, Guid.Empty);
+            var outItem = service.GetNodeVersion(id, Guid.Empty, typeof(TestItem)) as TestItem;
 
             // Assert
             Assert.Null(outItem);
@@ -49,12 +50,12 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetNodeVersion_WithoutType_ReturnsValidDictionary()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
             var item = new TestItem { Value = Guid.NewGuid().ToString() };
 
-            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var id = Guid.NewGuid();
+            service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
             var version = service.Save<TestItem>(Guid.NewGuid(), id, item);
 
             // Act
@@ -64,28 +65,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             Assert.NotNull(outItem);
             Assert.True(outItem.ContainsKey("value"));
             Assert.Equal(item.Value, outItem["value"]);
-        }
-
-        [DbFact]
-        public void GetNodeVersion_WithoutGenericType_ReturnsValidObject()
-        {
-            // Arrange
-            var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
-
-            var item = new TestItem { Value = Guid.NewGuid().ToString() };
-
-            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
-            var version = service.Save<TestItem>(Guid.NewGuid(), id, item);
-
-            var type = typeof(TestItem);
-
-            // Act
-            var outItem = service.GetNodeVersion(id, version.Id, type) as TestItem;
-
-            // Assert
-            Assert.NotNull(outItem);
-            Assert.Equal(item.Value, outItem.Value);
         }
 
         #endregion

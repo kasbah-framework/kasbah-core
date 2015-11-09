@@ -13,11 +13,12 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetActiveNodeVersion_WithActiveVersion_ReturnsCorrectVersion()
         {
             var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
             var inItem = new TestItem { Value = Guid.NewGuid().ToString() };
 
-            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var id = Guid.NewGuid();
+            service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
             var version = service.Save(Guid.NewGuid(), id, inItem);
 
             service.SetActiveNodeVersion(id, version.Id);
@@ -35,9 +36,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         {
             // Arrange
             var eventService = Mock.Of<IEventService>();
-            var service = new ContentTreeService(eventService);
+            var service = new NpgsqlContentTreeProvider();
 
-            var id = service.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            var id = Guid.NewGuid();
+            service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
 
             // Act
             var version = service.GetActiveNodeVersion<TestItem>(id);
