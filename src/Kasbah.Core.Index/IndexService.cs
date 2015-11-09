@@ -19,11 +19,9 @@ namespace Kasbah.Core.Index
 
             _handlers = new Dictionary<Type, ICollection<IIndexHandler>>();
 
-            _contentTreeEventHandler = new ContentTreeEventHandler(this, _contentTreeService);
+            _contentTreeEventHandler = new ContentTreeEventHandler(this, _indexProvider, _contentTreeService);
 
-            eventService.Register<AfterNodeCreated>(_contentTreeEventHandler);
             eventService.Register<AfterItemSaved>(_contentTreeEventHandler);
-            eventService.Register<AfterNodeMoved>(_contentTreeEventHandler);
             eventService.Register<NodeActiveVersionSet>(_contentTreeEventHandler);
         }
 
@@ -76,7 +74,15 @@ namespace Kasbah.Core.Index
 
         public IDictionary<string, object> HandlePreIndex(object item, Type type)
         {
-            var indexObject = SerialisationUtil.Serialise(item);
+            var indexObject = default(IDictionary<string, object>);
+            if (item is IDictionary<string, object>)
+            {
+                indexObject = item as IDictionary<string, object>;
+            }
+            else
+            {
+                indexObject = SerialisationUtil.Serialise(item);
+            }
 
             if (_handlers.ContainsKey(type))
             {
@@ -97,6 +103,8 @@ namespace Kasbah.Core.Index
         {
             return _indexProvider.Query(query);
         }
+
+        public void Noop() {}
 
         readonly IIndexProvider _indexProvider;
         readonly IEventService _eventService;

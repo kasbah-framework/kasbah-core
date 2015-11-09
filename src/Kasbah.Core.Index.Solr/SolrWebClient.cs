@@ -48,10 +48,8 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        public void InsertOrUpdate(Guid id, IDictionary<string, object> data)
+        public void InsertOrUpdate(IDictionary<string, object> data)
         {
-            data["id"] = id;
-
             var request = new AddRequestWithCommit
             {
                 Add = new Add

@@ -45,7 +45,7 @@ namespace Kasbah.Core.Index.Solr
 
             using (var connection = GetConnection())
             {
-                connection.InsertOrUpdate((Guid)value["id"], value);
+                connection.InsertOrUpdate(value);
             }
         }
 

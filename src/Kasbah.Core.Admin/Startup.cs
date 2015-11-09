@@ -20,11 +20,12 @@ namespace Kasbah.Core.Admin
             app.UseDeveloperExceptionPage();
 
             app.UseMvcWithDefaultRoute();
+
+            app.ApplicationServices.GetService<Index.IndexService>().Noop();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddCors(options =>
             {
                 options.AddPolicy("default", builder => {

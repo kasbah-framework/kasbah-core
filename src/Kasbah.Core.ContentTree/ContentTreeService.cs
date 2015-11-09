@@ -94,11 +94,11 @@ namespace Kasbah.Core.ContentTree
 
         public NodeVersion Save(Guid id, Guid node, object item)
         {
-            _eventService.Emit(new BeforeItemSaved { Data = item as ItemBase, Node = node });
+            _eventService.Emit(new BeforeItemSaved { Data = item, Node = node, Version = id });
 
             var ret =  _contentTreeProvider.Save(id, node, item);
-            
-            _eventService.Emit(new AfterItemSaved { Data = item as ItemBase, Node = node });
+
+            _eventService.Emit(new AfterItemSaved { Data = item, Node = node, Version = id });
 
             return ret;
         }
