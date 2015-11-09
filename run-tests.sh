@@ -20,6 +20,14 @@ case "$1" in
     index-solr)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Index.Solr.Tests/project.json test"
         ;;
+    no-watch)
+        dnx -p test/Kasbah.Core.Tests/project.json test
+        dnx -p test/Kasbah.Core.Events.Tests/project.json test
+        dnx -p test/Kasbah.Core.Events.Redis.Tests/project.json test
+        dnx -p test/Kasbah.Core.ContentTree.Npgsql.Tests/project.json test
+        dnx -p test/Kasbah.Core.Index.Tests/project.json test
+        dnx -p test/Kasbah.Core.Index.Solr.Tests/project.json test
+        ;;
     *)
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Tests/project.json test" & PID_1=$!
         nodemon -e cs,sql,json --exec "dnx -p test/Kasbah.Core.Events.Tests/project.json test" & PID_2=$!
