@@ -1,0 +1,3 @@
+[submodule "lib/StackExchange.Redis"]
+	path = lib/StackExchange.Redis
+	url = git@github.com:brendanmckenzie/StackExchange.Redis.git

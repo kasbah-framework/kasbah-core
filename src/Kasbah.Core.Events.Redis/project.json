@@ -1,18 +1,21 @@
 {
   "version": "1.0.0-*",
   "description": "Provides a messaging system for inter-system communication",
-  "authors": [ "Brendan McKenzie" ],
-  "tags": [ "kasbah" ],
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
   "projectUrl": "http://www.kasbah.io/",
   "licenseUrl": "",
-
   "dependencies": {
     "Kasbah.Core": "",
-    "Kasbah.Core.Events": ""
+    "Kasbah.Core.Events": "",
+    "Newtonsoft.Json": "8.0.1-beta1",
+    "Redis": ""
   },
-
   "frameworks": {
-    "dnx451": { }
+    "dnx451": {}
   }
 }
-

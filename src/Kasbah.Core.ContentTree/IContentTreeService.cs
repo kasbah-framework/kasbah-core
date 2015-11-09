@@ -5,6 +5,9 @@ using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree
 {
+    // TODO: convert this to a concrete implementation
+    // and provide IContentTreeProvider classes for
+    // accessing underlying data source
     public interface IContentTreeService
     {
         #region Public Methods

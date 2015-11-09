@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.Index;
 using Kasbah.Core.Models;
 using Microsoft.AspNet.Mvc;
 

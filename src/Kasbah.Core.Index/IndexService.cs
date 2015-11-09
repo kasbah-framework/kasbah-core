@@ -93,7 +93,7 @@ namespace Kasbah.Core.Index
             return indexObject;
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(string query)
+        public IEnumerable<IDictionary<string, object>> Query(object query)
         {
             return _indexProvider.Query(query);
         }

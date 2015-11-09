@@ -61,21 +61,30 @@ namespace Kasbah.Core.Index.Solr
         {
             if (query == null) { throw new ArgumentNullException(nameof(query)); }
 
-            var type = query.GetType();
-            var props = type.GetProperties();
-
-            var ret = new Dictionary<string, object>() as IDictionary<string, object>;
-
-            foreach (var prop in props)
+            if (query is string)
             {
-                var value = prop.GetValue(query);
+                var terms = (query as string).Split(' ', '-');
 
-                ret.Add(prop.Name, value);
+                return string.Join(" ", terms.Select(s => $"_text_:\"{s}\""));
             }
+            else
+            {
+                var type = query.GetType();
+                var props = type.GetProperties();
 
-            ret = SolrUtil.ConvertToSolr(ret);
+                var ret = new Dictionary<string, object>() as IDictionary<string, object>;
 
-            return string.Join(" ", ret.Select(ent => $"{ent.Key}:{ent.Value}"));
+                foreach (var prop in props)
+                {
+                    var value = prop.GetValue(query);
+
+                    ret.Add(prop.Name, value);
+                }
+
+                ret = SolrUtil.ConvertToSolr(ret);
+
+                return string.Join(" ", ret.Select(ent => $"{ent.Key}:\"{ent.Value}\""));
+            }
         }
 
         #endregion

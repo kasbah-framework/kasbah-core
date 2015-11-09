@@ -45,6 +45,8 @@ namespace Kasbah.Core.Admin
 
             services.AddSingleton<ContentTree.IContentTreeService, ContentTree.Npgsql.ContentTreeService>();
             services.AddSingleton<Events.IEventService, Events.InProcEventService>();
+            services.AddSingleton<Index.IIndexProvider, Index.Solr.SolrIndexProvider>();
+            services.AddSingleton<Index.IndexService>();
         }
 
         #endregion
