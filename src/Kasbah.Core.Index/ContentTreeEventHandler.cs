@@ -39,6 +39,8 @@ namespace Kasbah.Core.Index
                 {
                     item = _contentTreeService.GetNodeVersion(node.Id, version.Value);
                 }
+
+                // TODO: set other to active = false
             }
 
             if (item != null && node != null)

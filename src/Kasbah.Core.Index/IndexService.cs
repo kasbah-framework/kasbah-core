@@ -84,7 +84,7 @@ namespace Kasbah.Core.Index
                 indexObject = SerialisationUtil.Serialise(item);
             }
 
-            if (_handlers.ContainsKey(type))
+            if (type != null && _handlers.ContainsKey(type))
             {
                 foreach (var handler in _handlers[type].OrderBy(ent => ent.Priority))
                 {

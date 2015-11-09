@@ -10,6 +10,8 @@ namespace Kasbah.Core.Utils
 
         public static Type TypeFromName(string name)
         {
+            if (name == null) { return null; }
+            
             return _types.SingleOrDefault(ent => ent.AssemblyQualifiedName == name)
                 ?? Type.GetType(name);
         }
