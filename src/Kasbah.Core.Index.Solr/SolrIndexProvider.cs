@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Kasbah.Core.Models;
 
 namespace Kasbah.Core.Index.Solr
 {
@@ -17,6 +18,21 @@ namespace Kasbah.Core.Index.Solr
                 var response = connection.Select(ParseQuery(query));
 
                 return response.Response.Documents.Select(SolrUtil.ConverFromSolr);
+            }
+        }
+
+        public IEnumerable<T> Query<T>(object query)
+            where T : ItemBase, new()
+        {
+            using (var connection = GetConnection())
+            {
+                var solrQuery = ParseQuery(query);
+
+                var response = connection.Select(ParseQuery(query));
+
+                return response.Response.Documents
+                    .Select(SolrUtil.ConverFromSolr)
+                    .Select(ent => ent.ToObject<T>());
             }
         }
 

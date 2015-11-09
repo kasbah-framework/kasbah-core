@@ -6,4 +6,3 @@ This module provides the Postgresql implementation of the content tree data stor
 
  * `Kasbah.Core`
  * `Kasbah.Core.ContentTree`
- * `Kasbah.Core.Events`
