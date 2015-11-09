@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dapper;
-using Kasbah.Core.ContentTree.Events;
 using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.ContentTree.Npgsql.Models;
-using Kasbah.Core.Events;
 using Kasbah.Core.Models;
-using Kasbah.Core.Utils;
 using Npgsql;
 using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
 
@@ -19,116 +14,80 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public void CreateNode(Guid id, Guid? parent, string alias, string type)
         {
-            const string ResourceName = "Sql/CreateNode.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                connection.Execute(sql, new { id, parent, alias, type });
+                connection.ExecuteFromResource("CreateNode", new { id, parent, alias, type });
             }
         }
 
         public T GetActiveNodeVersion<T>(Guid id)
-                    where T : ItemBase
+            where T : ItemBase
         {
-            const string ResourceName = "Sql/GetActiveNodeVersion.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id });
+                var data = connection.QuerySingleFromResource<NpgsqlNodeVersion>("GetActiveNodeVersion", new { id });
 
-                return data.Select(ent => Deserialise<T>(ent.Data)).SingleOrDefault();
+                return data == null ? null : Deserialise<T>(data.Data);
             }
         }
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
-            const string ResourceName = "Sql/GetAllNodeVersions.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                return connection.Query<NpgsqlNodeVersion>(sql, new { id });
+                return connection.QueryFromResource<NpgsqlNodeVersion>("GetAllNodeVersions", new { id });
             }
         }
 
         public Node GetChild(Guid? parent, string alias)
         {
-            const string ResourceName = "Sql/GetChild.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                return connection.Query<Node>(sql, new { parent, alias }).SingleOrDefault();
+                return connection.QuerySingleFromResource<Node>("GetChild", new { parent, alias });
             }
         }
 
         public IEnumerable<Node> GetChildren(Guid? id)
         {
-            const string ResourceName = "Sql/GetChildren.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                return connection.Query<Node>(sql, new { id });
+                return connection.QueryFromResource<Node>("GetChildren", new { id });
             }
         }
 
         public Node GetNode(Guid id)
         {
-            const string ResourceName = "Sql/GetNode.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                return connection.Query<Node>(sql, new { id }).SingleOrDefault();
+                return connection.QuerySingleFromResource<Node>("GetNode", new { id });
             }
         }
 
         public object GetNodeVersion(Guid id, Guid version, Type type)
         {
-            const string ResourceName = "Sql/GetNodeVersion.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id, version });
+                var data = connection.QuerySingleFromResource<NpgsqlNodeVersion>("GetNodeVersion", new { id, version });
 
-                return data.Select(ent => Deserialise(ent.Data, type)).SingleOrDefault();
+                return data == null ? null : Deserialise(data.Data, type);
             }
         }
 
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
-            const string ResourceName = "Sql/GetNodeVersion.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                var data = connection.Query<NpgsqlNodeVersion>(sql, new { id, version });
+                var data = connection.QuerySingleFromResource<NpgsqlNodeVersion>("GetNodeVersion", new { id, version });
 
-                return data.Select(ent => DeserialiseAnonymous(ent.Data)).SingleOrDefault();
+                return data == null ? null : DeserialiseAnonymous(data.Data);
             }
         }
 
         public void MoveNode(Guid id, Guid? parent)
         {
-            const string ResourceName = "Sql/MoveNode.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                connection.Execute(sql, new { id, parent });
+                connection.ExecuteFromResource("MoveNode", new { id, parent });
             }
         }
 
@@ -139,26 +98,19 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public NodeVersion Save(Guid id, Guid node, object item)
         {
-            const string ResourceName = "Sql/Save.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
             var data = Serialise(item);
 
             using (var connection = GetConnection())
             {
-                return connection.Query<NodeVersion>(sql, new { id, node, data }).SingleOrDefault();
+                return connection.QuerySingleFromResource<NodeVersion>("Save", new { id, node, data });
             }
         }
 
         public void SetActiveNodeVersion(Guid id, Guid version)
         {
-            const string ResourceName = "Sql/SetActiveNodeVersion.sql";
-
-            var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>(ResourceName);
-
             using (var connection = GetConnection())
             {
-                connection.Execute(sql, new { id, version });
+                connection.ExecuteFromResource("SetActiveNodeVersion", new { id, version });
             }
         }
 
