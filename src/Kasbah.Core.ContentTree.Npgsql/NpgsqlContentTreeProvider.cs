@@ -106,7 +106,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
-        public void SetActiveNodeVersion(Guid id, Guid version)
+        public void SetActiveNodeVersion(Guid id, Guid? version)
         {
             using (var connection = GetConnection())
             {

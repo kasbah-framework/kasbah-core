@@ -32,7 +32,7 @@ export default class NodeDetail extends React.Component {
                 <dd>{this.props.node.id}</dd>
 
                 <dt>Raw</dt>
-                <dd><pre>{JSON.stringify(this.props.node)}</pre></dd>
+                <dd><pre>{JSON.stringify(this.props.node, undefined, 2)}</pre></dd>
             </dl> );
     }
 }

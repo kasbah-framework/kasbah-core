@@ -29,7 +29,7 @@ namespace Kasbah.Core.ContentTree
 
         NodeVersion Save(Guid id, Guid node, object item);
 
-        void SetActiveNodeVersion(Guid id, Guid version);
+        void SetActiveNodeVersion(Guid id, Guid? version);
 
         #endregion
     }

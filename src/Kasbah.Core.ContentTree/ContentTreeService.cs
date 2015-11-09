@@ -37,14 +37,10 @@ namespace Kasbah.Core.ContentTree
         }
 
         public T GetActiveNodeVersion<T>(Guid id) where T : ItemBase
-        {
-            return _contentTreeProvider.GetActiveNodeVersion<T>(id);
-        }
+            => _contentTreeProvider.GetActiveNodeVersion<T>(id);
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
-        {
-            return _contentTreeProvider.GetAllNodeVersions(id);
-        }
+            => _contentTreeProvider.GetAllNodeVersions(id);
 
         public Node GetChild(Guid? parent, string alias)
         {
@@ -52,29 +48,19 @@ namespace Kasbah.Core.ContentTree
         }
 
         public IEnumerable<Node> GetChildren(Guid? id)
-        {
-            return _contentTreeProvider.GetChildren(id);
-        }
+            => _contentTreeProvider.GetChildren(id);
 
         public Node GetNode(Guid id)
-        {
-            return _contentTreeProvider.GetNode(id);
-        }
+            => _contentTreeProvider.GetNode(id);
 
         public T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase
-        {
-            return GetNodeVersion(id, version) as T;
-        }
+            => GetNodeVersion(id, version) as T;
 
         public object GetNodeVersion(Guid id, Guid version, Type type)
-        {
-            return _contentTreeProvider.GetNodeVersion(id, version, type);
-        }
+            => _contentTreeProvider.GetNodeVersion(id, version, type);
 
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
-        {
-            return _contentTreeProvider.GetNodeVersion(id, version);
-        }
+            => _contentTreeProvider.GetNodeVersion(id, version);
 
         public void MoveNode(Guid id, Guid? parent)
         {
@@ -88,22 +74,20 @@ namespace Kasbah.Core.ContentTree
         }
 
         public NodeVersion Save<T>(Guid id, Guid node, T item) where T : ItemBase
-        {
-            return Save(id, node, (object)item);
-        }
+            => Save(id, node, (object)item);
 
         public NodeVersion Save(Guid id, Guid node, object item)
         {
             _eventService.Emit(new BeforeItemSaved { Data = item, Node = node, Version = id });
 
-            var ret =  _contentTreeProvider.Save(id, node, item);
+            var ret = _contentTreeProvider.Save(id, node, item);
 
             _eventService.Emit(new AfterItemSaved { Data = item, Node = node, Version = id });
 
             return ret;
         }
 
-        public void SetActiveNodeVersion(Guid id, Guid version)
+        public void SetActiveNodeVersion(Guid id, Guid? version)
         {
             _contentTreeProvider.SetActiveNodeVersion(id, version);
 
