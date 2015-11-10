@@ -25,7 +25,7 @@ RUN set -x \
   && apt-get update \
   && apt-get install -y \
     unzip lsof wget \
-    openjdk-8-jre-headless="$JAVA_DEBIAN_VERSION" \
+    openjdk-8-jre-headless \
     ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
   && rm -rf /var/lib/apt/lists/*
 
