@@ -96,7 +96,7 @@ namespace Kasbah.Core.ContentTree
                 Data = new Node
                 {
                     Id = id,
-                    ActiveVersionId = version
+                    ActiveVersion = version
                 }
             });
         }

@@ -25,7 +25,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             var node = service.GetNode(id);
 
             // Assert
-            Assert.Equal(node.ActiveVersionId, version.Id);
+            Assert.Equal(node.ActiveVersion, version.Id);
         }
 
         [DbFact]

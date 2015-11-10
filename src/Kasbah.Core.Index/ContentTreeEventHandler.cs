@@ -34,7 +34,7 @@ namespace Kasbah.Core.Index
             {
                 var _event = (@event as NodeActiveVersionSet);
                 node = _event.Data;
-                version = _event.Data.ActiveVersionId;
+                version = _event.Data.ActiveVersion;
                 if (version.HasValue)
                 {
                     item = _contentTreeService.GetNodeVersion(node.Id, version.Value);
@@ -50,7 +50,7 @@ namespace Kasbah.Core.Index
 
                 indexObject["id"] = version.Value;
 
-                indexObject["_active"] = node.ActiveVersionId == version;
+                indexObject["_active"] = node.ActiveVersion == version;
 
                 var nodeFields = SerialisationUtil.Serialise(node);
                 foreach (var field in nodeFields)

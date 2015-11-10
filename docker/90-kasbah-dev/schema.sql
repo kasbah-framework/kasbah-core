@@ -18,4 +18,4 @@ create table node_version (
 
 create unique index uq_alias on node ( parent_id, alias );
 
-alter table node add active_version_id uuid references node_version ( id );
+alter table node add active_version_id uuid references node_version ( id ) on delete cascade;

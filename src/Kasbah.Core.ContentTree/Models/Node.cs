@@ -7,7 +7,7 @@ namespace Kasbah.Core.ContentTree.Models
         #region Public Properties
 
         public string Alias { get; set; }
-        public Guid? ActiveVersionId { get; set; }
+        public Guid? ActiveVersion { get; set; }
         public bool HasChildren { get; set; }
         public Guid Id { get; set; }
 
