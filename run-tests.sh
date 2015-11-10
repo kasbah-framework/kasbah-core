@@ -1,12 +1,12 @@
 # this assumes that you have the required services running under docker as detailed in docker/README.md
 # running on the default docker-machine
 
-IP=$(docker-machine ip default)
+if [ -z "$DB" ]; then
+    IP=$(docker-machine ip default)
+    DB="Server=$IP;Port=50001;Database=postgres;User Id=postgres;Password="
+fi
 if [ -z "$SOLR" ]; then
     SOLR="http://$IP:50003"
-fi
-if [ -z "$DB" ]; then
-    DB="Server=$IP;Port=50001;Database=postgres;User Id=postgres;Password="
 fi
 if [ -z "$REDIS" ]; then
     REDIS="$IP:50002"
