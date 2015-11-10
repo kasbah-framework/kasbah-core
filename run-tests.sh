@@ -2,9 +2,15 @@
 # running on the default docker-machine
 
 IP=$(docker-machine ip default)
-SOLR="http://$IP:50003"
-DB="Server=$IP;Port=50001;Database=postgres;User Id=postgres;Password="
-REDIS="$IP:50002"
+if [ -z "$SOLR" ]; then
+    SOLR="http://$IP:50003"
+fi
+if [ -z "$DB" ]; then
+    DB="Server=$IP;Port=50001;Database=postgres;User Id=postgres;Password="
+fi
+if [ -z "$REDIS" ]; then
+    REDIS="$IP:50002"
+fi
 
 case "$1" in
     core)
