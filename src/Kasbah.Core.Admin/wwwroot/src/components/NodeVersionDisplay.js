@@ -9,17 +9,31 @@ class FieldEditor extends React.Component {
     }
 
     render() {
-        return (
-            <div className='form-group'>
-                <label htmlFor={this.props.field}>
-                    {this.props.field}
-                </label>
+        let editor = null;
+        if (this.props.field == 'body')
+        {
+            editor = (
+                <textarea
+                    className='form-control'
+                    id={this.props.field}
+                    value={this.props.value}
+                    onChange={this.props.onChange.bind(this, this.props.field)} /> );
+        }
+        else {
+            editor = (
                 <input
                     className='form-control'
                     id={this.props.field}
                     type='text'
                     value={this.props.value}
-                    onChange={this.props.onChange.bind(this, this.props.field)} />
+                    onChange={this.props.onChange.bind(this, this.props.field)} />);
+        }
+        return (
+            <div className='form-group'>
+                <label htmlFor={this.props.field}>
+                    {this.props.field}
+                </label>
+                {editor}
             </div>
         );
     }
