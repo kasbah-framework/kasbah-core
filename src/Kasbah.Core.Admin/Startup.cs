@@ -1,5 +1,6 @@
 using System.Linq;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc.Formatters;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
