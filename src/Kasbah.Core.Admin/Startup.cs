@@ -12,7 +12,7 @@ namespace Kasbah.Core.Admin
     {
         #region Public Methods
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment hostingEnv)
         {
             loggerFactory.AddConsole();
 
