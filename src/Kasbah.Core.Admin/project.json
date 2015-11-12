@@ -33,5 +33,5 @@
     "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://*:5004",
     "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://*:5004"
   },
-  "webroot": "wwwroot"
+  "webroot": "wwwroot/dist"
 }

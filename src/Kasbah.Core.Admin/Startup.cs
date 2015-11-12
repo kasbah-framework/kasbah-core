@@ -22,6 +22,8 @@ namespace Kasbah.Core.Admin
             app.UseMvcWithDefaultRoute();
 
             app.ApplicationServices.GetService<Index.IndexService>().Noop();
+
+            app.UseHtml5UrlMode(hostingEnv, loggerFactory, "dist", "/index.html");
         }
 
         public void ConfigureServices(IServiceCollection services)
