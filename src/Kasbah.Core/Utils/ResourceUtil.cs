@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace Kasbah.Core.Utils
 {
@@ -11,10 +12,12 @@ namespace Kasbah.Core.Utils
         {
             if (name == null) { throw new ArgumentNullException(nameof(name)); }
 
-            name = name.Replace('/', '.');
-            name = typeof(TAssembly).Assembly.GetName().Name + '.' + name;
+            var assembly = typeof(TAssembly).GetTypeInfo().Assembly;
 
-            using (var stream = typeof(TAssembly).Assembly.GetManifestResourceStream(name))
+            name = name.Replace('/', '.');
+            name = assembly.GetName().Name + '.' + name;
+
+            using (var stream = assembly.GetManifestResourceStream(name))
             {
                 if (stream == null)
                 {
