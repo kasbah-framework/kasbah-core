@@ -11,7 +11,7 @@
   "licenseUrl": "",
   "dependencies": {
     "xunit": "2.1.0",
-    "xunit.runner.dnx": "2.1.0-beta6-build191",
+    "xunit.runner.dnx": "2.1.0-rc1-*",
     "Kasbah.Core": "",
     "Kasbah.Core.ContentTree.Npgsql": "",
     "Kasbah.Core.Events": "",
@@ -20,7 +20,8 @@
     "Moq": "4.2.1510.2205"
   },
   "frameworks": {
-    "dnx451": {}
+    "dnx451": {},
+    "dnxcore50": {}
   },
   "commands": {
     "test": "xunit.runner.dnx"

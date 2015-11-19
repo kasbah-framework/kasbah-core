@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kasbah.Core.Index.Attributes;
+using System.Reflection;
 
 namespace Kasbah.Core.Index.Utils
 {
@@ -14,9 +15,9 @@ namespace Kasbah.Core.Index.Utils
         {
             if (input == null) { throw new ArgumentNullException(nameof(input)); }
 
-            var type = input.GetType();
-            var properties = type.GetProperties()
-                .Where(ent => !ent.GetCustomAttributes(typeof(IndexIgnoreAttribute), true).Any());
+            var typeInfo = input.GetType().GetTypeInfo();
+            var properties = typeInfo.DeclaredProperties
+                .Where(ent => !ent.CustomAttributes.Any(attr => attr.GetType() == typeof(IndexIgnoreAttribute)));
 
             return properties.ToDictionary(ent => ent.Name, ent => ent.GetValue(input, null));
         }
