@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kasbah.Core.Index.Attributes;
 using System.Reflection;
+using Kasbah.Core.Index.Attributes;
 
 namespace Kasbah.Core.Index.Utils
 {
@@ -16,10 +16,18 @@ namespace Kasbah.Core.Index.Utils
             if (input == null) { throw new ArgumentNullException(nameof(input)); }
 
             var typeInfo = input.GetType().GetTypeInfo();
-            var properties = typeInfo.DeclaredProperties
-                .Where(ent => !ent.CustomAttributes.Any(attr => attr.GetType() == typeof(IndexIgnoreAttribute)));
+            if (!_propertyCache.ContainsKey(typeInfo))
+            {
+                // Get only the properties that aren't ignored
+                _propertyCache[typeInfo] = typeInfo.DeclaredProperties
+                    .Where(ent => !ent.CustomAttributes
+                        .Select(attr => attr.AttributeType)
+                        .Contains(typeof(IndexIgnoreAttribute)));
+            }
 
-            return properties.ToDictionary(ent => ent.Name, ent => ent.GetValue(input, null));
+            return _propertyCache[typeInfo].ToDictionary(ent => ent.Name, ent => ent.GetValue(input, null));
         }
+
+        static IDictionary<TypeInfo, IEnumerable<PropertyInfo>> _propertyCache = new Dictionary<TypeInfo, IEnumerable<PropertyInfo>>();
     }
 }
