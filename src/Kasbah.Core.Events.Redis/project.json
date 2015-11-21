@@ -12,10 +12,11 @@
   "dependencies": {
     "Kasbah.Core": "",
     "Kasbah.Core.Events": "",
-    "Newtonsoft.Json": "8.0.1-beta1",
+    "Newtonsoft.Json": "8.0.1-*",
     "Redis": ""
   },
   "frameworks": {
-    "dnx451": {}
+    "dnx451": {},
+    "dnxcore50": { }
   }
 }

@@ -13,10 +13,7 @@
 
   "frameworks": {
     "dnx451": { },
-    "dnxcore50": {
-      "dependencies": {
-      }
-    }
+    "dnxcore50": { }
   }
 }
 
