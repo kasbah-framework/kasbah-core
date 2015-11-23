@@ -7,6 +7,7 @@
   "licenseUrl": "",
 
   "dependencies": {
+    "Microsoft.Extensions.Logging": "1.0.0-*"
   },
 
   "frameworks": {

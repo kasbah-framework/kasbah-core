@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using Newtonsoft.Json;
 using Kasbah.Core.Index.Solr.Models;
+using System.IO;
 
 namespace Kasbah.Core.Index.Solr
 {
@@ -20,14 +21,44 @@ namespace Kasbah.Core.Index.Solr
         public string UploadString(Uri uri, string data)
         {
             var request = HttpWebRequest.Create(uri);
-                request.Method = "POST";
-                request.ContentType = ContentType;
-            return null;
+            request.Method = "POST";
+            request.ContentType = ContentType;
+
+            using (var stream = request.GetRequestStreamAsync().Result)
+            {
+                var bytes = System.Text.Encoding.UTF8.GetBytes(data);
+                stream.Write(bytes, 0, bytes.Length);
+            }
+
+            using (var response = request.GetResponseAsync().Result)
+            {
+                var realResponse = response as HttpWebResponse;
+                using (var stream = realResponse.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
         }
 
         public string DownloadString(Uri uri)
         {
-            return null;
+            var request = HttpWebRequest.Create(uri);
+            request.Method = "GET";
+
+            using (var response = request.GetResponseAsync().Result)
+            {
+                var realResponse = response as HttpWebResponse;
+                using (var stream = realResponse.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
         }
 
         public void Dispose()
@@ -104,8 +135,6 @@ namespace Kasbah.Core.Index.Solr
             uriBuilder.Query = $"wt=json&q={query}";
 
             var data = DownloadString(uriBuilder.Uri);
-
-            if (data == null) { return null; }
 
             return JsonConvert.DeserializeObject<SelectResponse>(data);
         }

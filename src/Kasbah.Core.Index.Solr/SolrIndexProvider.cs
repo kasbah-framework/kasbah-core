@@ -25,14 +25,12 @@ namespace Kasbah.Core.Index.Solr
         public IEnumerable<T> Query<T>(object query)
             where T : ItemBase, new()
         {
-            return Enumerable.Empty<T>();
             if (query == null) { throw new ArgumentNullException(nameof(query)); }
 
             using (var connection = GetConnection())
             {
                 var solrQuery = ParseQuery(query);
 
-                if (solrQuery == null) throw new ArgumentNullException(nameof(solrQuery));
                 var response = connection.Select(solrQuery);
 
                 if (response == null || response.Response == null)
