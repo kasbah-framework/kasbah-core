@@ -10,20 +10,22 @@ namespace Kasbah.Core.Index.Solr
         public static T ToObject<T>(this IDictionary<string, object> source)
             where T : ItemBase, new()
         {
-            var someObject = new T();
-            var someObjectType = someObject.GetType();
-
-            foreach (KeyValuePair<string, object> item in source)
+            var ret = new T();
+            var typeInfo = typeof(T).GetTypeInfo();
+            
+            foreach (var item in source)
             {
-                someObjectType.GetProperty(item.Key)?.SetValue(someObject, item.Value, null);
+                typeInfo.DeclaredProperties
+                    .SingleOrDefault(e => e.Name == item.Key)?
+                    .SetValue(ret, item.Value, null);
             }
 
-            return someObject;
+            return ret;
         }
 
-        public static IDictionary<string, object> AsDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        public static IDictionary<string, object> AsDictionary(this object source)
         {
-            return source.GetType().GetProperties(bindingAttr).ToDictionary
+            return source.GetType().GetTypeInfo().DeclaredProperties.ToDictionary
             (
                 propInfo => propInfo.Name,
                 propInfo => propInfo.GetValue(source, null)

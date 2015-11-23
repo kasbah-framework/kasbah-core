@@ -2,8 +2,8 @@ using System.Linq;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc.Formatters;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Extension.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.Admin

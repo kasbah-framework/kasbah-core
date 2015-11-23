@@ -6,6 +6,41 @@ using Kasbah.Core.Index.Solr.Models;
 
 namespace Kasbah.Core.Index.Solr
 {
+
+    public class WebClient : IDisposable
+    {
+        public string BaseAddress { get; set; }
+
+        public string ContentType { get; set; }
+
+        public WebClient()
+        {
+        }
+
+        public string UploadString(Uri uri, string data)
+        {
+            var request = HttpWebRequest.Create(uri);
+                request.Method = "POST";
+                request.ContentType = ContentType;
+            return null;
+        }
+
+        public string DownloadString(Uri uri)
+        {
+            return null;
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    public class WebException : Exception
+    {
+
+    }
+
+
     public class SolrWebClient : WebClient
     {
         const string CoreName = "kasbah";
@@ -20,7 +55,7 @@ namespace Kasbah.Core.Index.Solr
 
         public BaseResponse SubmitRequest(Uri uri, BaseRequest request)
         {
-            Headers.Set("Content-Type", "application/json");
+            ContentType = "application/json";
 
             var data = JsonConvert.SerializeObject(request);
 
@@ -69,6 +104,8 @@ namespace Kasbah.Core.Index.Solr
             uriBuilder.Query = $"wt=json&q={query}";
 
             var data = DownloadString(uriBuilder.Uri);
+
+            if (data == null) { return null; }
 
             return JsonConvert.DeserializeObject<SelectResponse>(data);
         }

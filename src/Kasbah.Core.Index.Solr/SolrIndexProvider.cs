@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Kasbah.Core.Models;
+using System.Reflection;
 
 namespace Kasbah.Core.Index.Solr
 {
@@ -24,11 +25,20 @@ namespace Kasbah.Core.Index.Solr
         public IEnumerable<T> Query<T>(object query)
             where T : ItemBase, new()
         {
+            return Enumerable.Empty<T>();
+            if (query == null) { throw new ArgumentNullException(nameof(query)); }
+
             using (var connection = GetConnection())
             {
                 var solrQuery = ParseQuery(query);
 
-                var response = connection.Select(ParseQuery(query));
+                if (solrQuery == null) throw new ArgumentNullException(nameof(solrQuery));
+                var response = connection.Select(solrQuery);
+
+                if (response == null || response.Response == null)
+                {
+                    return Enumerable.Empty<T>();
+                }
 
                 return response.Response.Documents
                     .Select(SolrUtil.ConverFromSolr)
@@ -85,8 +95,8 @@ namespace Kasbah.Core.Index.Solr
             }
             else
             {
-                var type = query.GetType();
-                var props = type.GetProperties();
+                var typeInfo = query.GetType().GetTypeInfo();
+                var props = typeInfo.DeclaredProperties;
 
                 var ret = new Dictionary<string, object>() as IDictionary<string, object>;
 
