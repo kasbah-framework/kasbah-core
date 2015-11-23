@@ -36,16 +36,11 @@ namespace Kasbah.Core.ContentTree
             return id;
         }
 
-        public T GetActiveNodeVersion<T>(Guid id) where T : ItemBase
-            => _contentTreeProvider.GetActiveNodeVersion<T>(id);
-
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
             => _contentTreeProvider.GetAllNodeVersions(id);
 
         public Node GetChild(Guid? parent, string alias)
-        {
-            return _contentTreeProvider.GetChild(parent, alias);
-        }
+            =>  _contentTreeProvider.GetChild(parent, alias);
 
         public IEnumerable<Node> GetChildren(Guid? id)
             => _contentTreeProvider.GetChildren(id);

@@ -39,14 +39,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
             _connection.ExecuteFromResource("CreateNode", new { id, parent, alias, type });
         }
 
-        public T GetActiveNodeVersion<T>(Guid id)
-            where T : ItemBase
-        {
-            var data = _connection.QuerySingleFromResource<NpgsqlNodeVersion>("GetActiveNodeVersion", new { id });
-
-            return data == null ? null : Deserialise<T>(data.Data);
-        }
-
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
             return _connection.QueryFromResource<NpgsqlNodeVersion>("GetAllNodeVersions", new { id });

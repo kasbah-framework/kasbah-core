@@ -11,8 +11,6 @@ namespace Kasbah.Core.ContentTree
 
         void CreateNode(Guid id, Guid? parent, string alias, string type);
 
-        T GetActiveNodeVersion<T>(Guid id) where T : ItemBase;
-
         IEnumerable<NodeVersion> GetAllNodeVersions(Guid id);
 
         Node GetChild(Guid? parent, string alias);
