@@ -97,7 +97,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public void Dispose()
         {
-            ((IDisposable)_connection).Dispose();
         }
 
         #endregion

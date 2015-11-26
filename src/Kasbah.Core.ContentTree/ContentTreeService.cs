@@ -49,7 +49,7 @@ namespace Kasbah.Core.ContentTree
             => _contentTreeProvider.GetNode(id);
 
         public T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase
-            => GetNodeVersion(id, version) as T;
+            => GetNodeVersion(id, version, typeof(T)) as T;
 
         public object GetNodeVersion(Guid id, Guid version, Type type)
             => _contentTreeProvider.GetNodeVersion(id, version, type);
