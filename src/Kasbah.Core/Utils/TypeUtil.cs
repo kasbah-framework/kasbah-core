@@ -8,10 +8,15 @@ namespace Kasbah.Core.Utils
     {
         #region Public Methods
 
+        public static void Register<T>()
+        {
+            _types.Add(typeof(T));
+        }
+
         public static Type TypeFromName(string name)
         {
             if (name == null) { return null; }
-            
+
             return _types.SingleOrDefault(ent => ent.AssemblyQualifiedName == name)
                 ?? Type.GetType(name);
         }
@@ -19,11 +24,6 @@ namespace Kasbah.Core.Utils
         public static string TypeName<T>()
         {
             return typeof(T).AssemblyQualifiedName;
-        }
-
-        public static void Register<T>()
-        {
-            _types.Add(typeof(T));
         }
 
         static ICollection<Type> _types = new List<Type>();

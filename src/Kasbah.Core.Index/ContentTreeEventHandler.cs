@@ -1,9 +1,8 @@
 using System;
-using Kasbah.Core.Events;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Events;
 using Kasbah.Core.ContentTree.Models;
-using Kasbah.Core.Models;
+using Kasbah.Core.Events;
 using Kasbah.Core.Index.Utils;
 using Kasbah.Core.Utils;
 
@@ -11,12 +10,18 @@ namespace Kasbah.Core.Index
 {
     class ContentTreeEventHandler : IEventHandler
     {
+        #region Public Constructors
+
         public ContentTreeEventHandler(IndexService indexService, IIndexProvider indexProvider, ContentTreeService contentTreeService)
         {
             _indexService = indexService;
             _indexProvider = indexProvider;
             _contentTreeService = contentTreeService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void HandleEvent<T>(T @event) where T : EventBase
         {
@@ -62,8 +67,14 @@ namespace Kasbah.Core.Index
             }
         }
 
-        readonly IndexService _indexService;
+        #endregion
+
+        #region Private Fields
+
         readonly ContentTreeService _contentTreeService;
         readonly IIndexProvider _indexProvider;
+        readonly IndexService _indexService;
+
+        #endregion
     }
 }

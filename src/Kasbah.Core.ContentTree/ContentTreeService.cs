@@ -9,11 +9,17 @@ namespace Kasbah.Core.ContentTree
 {
     public class ContentTreeService
     {
+        #region Public Constructors
+
         public ContentTreeService(IContentTreeProvider contentTreeProvider, IEventService eventService)
         {
             _contentTreeProvider = contentTreeProvider;
             _eventService = eventService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public Guid CreateNode<T>(Guid? parent, string alias) where T : ItemBase
             => CreateNode(parent, alias, typeof(T));
@@ -40,7 +46,7 @@ namespace Kasbah.Core.ContentTree
             => _contentTreeProvider.GetAllNodeVersions(id);
 
         public Node GetChild(Guid? parent, string alias)
-            =>  _contentTreeProvider.GetChild(parent, alias);
+            => _contentTreeProvider.GetChild(parent, alias);
 
         public IEnumerable<Node> GetChildren(Guid? id)
             => _contentTreeProvider.GetChildren(id);
@@ -96,7 +102,13 @@ namespace Kasbah.Core.ContentTree
             });
         }
 
+        #endregion
+
+        #region Private Fields
+
         readonly IContentTreeProvider _contentTreeProvider;
         readonly IEventService _eventService;
+
+        #endregion
     }
 }

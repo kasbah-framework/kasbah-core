@@ -4,8 +4,12 @@ using Kasbah.Core.Models;
 
 namespace Kasbah.Core.Index
 {
-   public interface IIndexProvider
+    public interface IIndexProvider
     {
+        #region Public Methods
+
+        void Delete(Guid id);
+
         IEnumerable<IDictionary<string, object>> Query(object query);
 
         IEnumerable<T> Query<T>(object query)
@@ -13,6 +17,6 @@ namespace Kasbah.Core.Index
 
         void Store(IDictionary<string, object> value);
 
-        void Delete(Guid id);
+        #endregion
     }
 }

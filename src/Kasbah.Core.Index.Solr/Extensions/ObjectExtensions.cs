@@ -7,12 +7,23 @@ namespace Kasbah.Core.Index.Solr
 {
     public static class ObjectExtensions
     {
+        #region Public Methods
+
+        public static IDictionary<string, object> AsDictionary(this object source)
+        {
+            return source.GetType().GetTypeInfo().DeclaredProperties.ToDictionary
+            (
+                propInfo => propInfo.Name,
+                propInfo => propInfo.GetValue(source, null)
+            );
+        }
+
         public static T ToObject<T>(this IDictionary<string, object> source)
-            where T : ItemBase, new()
+                    where T : ItemBase, new()
         {
             var ret = new T();
             var typeInfo = typeof(T).GetTypeInfo();
-            
+
             foreach (var item in source)
             {
                 typeInfo.DeclaredProperties
@@ -23,13 +34,6 @@ namespace Kasbah.Core.Index.Solr
             return ret;
         }
 
-        public static IDictionary<string, object> AsDictionary(this object source)
-        {
-            return source.GetType().GetTypeInfo().DeclaredProperties.ToDictionary
-            (
-                propInfo => propInfo.Name,
-                propInfo => propInfo.GetValue(source, null)
-            );
-        }
+        #endregion
     }
 }

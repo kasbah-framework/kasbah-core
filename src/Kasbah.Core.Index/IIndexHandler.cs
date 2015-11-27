@@ -5,8 +5,16 @@ namespace Kasbah.Core.Index
 {
     public interface IIndexHandler
     {
-        IDictionary<string, object> AddCustomFields(ItemBase item);
+        #region Public Properties
 
         int Priority { get; }
+
+        #endregion
+
+        #region Public Methods
+
+        IDictionary<string, object> AddCustomFields(ItemBase item);
+
+        #endregion
     }
 }

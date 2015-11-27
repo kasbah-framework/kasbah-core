@@ -1,13 +1,15 @@
-using Npgsql;
-using Dapper;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 using Kasbah.Core.Utils;
+using Npgsql;
 
 namespace Kasbah.Core.ContentTree.Npgsql
 {
     public static class NpgsqlConnectionExtensions
     {
+        #region Public Methods
+
         public static void ExecuteFromResource(this NpgsqlConnection connection, string resourceName, object parameters = null)
         {
             var sql = ResourceUtil.Get<NpgsqlContentTreeProvider>($"Sql/{resourceName}.sql");
@@ -26,5 +28,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             return QueryFromResource<T>(connection, resourceName, parameters).SingleOrDefault();
         }
+
+        #endregion
     }
 }

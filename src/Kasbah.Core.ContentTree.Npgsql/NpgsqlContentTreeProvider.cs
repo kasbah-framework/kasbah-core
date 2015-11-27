@@ -18,6 +18,8 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         #endregion
 
+        #region Public Constructors
+
         public NpgsqlContentTreeProvider(ILoggerFactory loggerFactory)
         {
             _log = loggerFactory.CreateLogger<NpgsqlContentTreeProvider>();
@@ -32,11 +34,17 @@ namespace Kasbah.Core.ContentTree.Npgsql
             _connection = new NpgsqlConnection(connectionString);
         }
 
+        #endregion
+
         #region Public Methods
 
         public void CreateNode(Guid id, Guid? parent, string alias, string type)
         {
             _connection.ExecuteFromResource("CreateNode", new { id, parent, alias, type });
+        }
+
+        public void Dispose()
+        {
         }
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
@@ -93,10 +101,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
         public void SetActiveNodeVersion(Guid id, Guid? version)
         {
             _connection.ExecuteFromResource("SetActiveNodeVersion", new { id, version });
-        }
-
-        public void Dispose()
-        {
         }
 
         #endregion

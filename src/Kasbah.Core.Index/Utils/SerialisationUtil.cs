@@ -11,6 +11,8 @@ namespace Kasbah.Core.Index.Utils
     /// </summary>
     public static class SerialisationUtil
     {
+        #region Public Methods
+
         public static IDictionary<string, object> Serialise(object input)
         {
             if (input == null) { throw new ArgumentNullException(nameof(input)); }
@@ -28,6 +30,12 @@ namespace Kasbah.Core.Index.Utils
             return _propertyCache[typeInfo].ToDictionary(ent => ent.Name, ent => ent.GetValue(input, null));
         }
 
+        #endregion
+
+        #region Private Fields
+
         static IDictionary<TypeInfo, IEnumerable<PropertyInfo>> _propertyCache = new Dictionary<TypeInfo, IEnumerable<PropertyInfo>>();
+
+        #endregion
     }
 }

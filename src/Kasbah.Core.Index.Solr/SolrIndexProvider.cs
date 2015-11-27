@@ -1,14 +1,22 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Kasbah.Core.Models;
 using System.Reflection;
+using Kasbah.Core.Models;
 
 namespace Kasbah.Core.Index.Solr
 {
     public class SolrIndexProvider : IIndexProvider
     {
         #region Public Methods
+
+        public void Delete(Guid id)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Delete(id);
+            }
+        }
 
         public IEnumerable<IDictionary<string, object>> Query(object query)
         {
@@ -54,14 +62,6 @@ namespace Kasbah.Core.Index.Solr
             using (var connection = GetConnection())
             {
                 connection.InsertOrUpdate(value);
-            }
-        }
-
-        public void Delete(Guid id)
-        {
-            using (var connection = GetConnection())
-            {
-                connection.Delete(id);
             }
         }
 

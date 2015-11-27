@@ -1,87 +1,64 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
-using Newtonsoft.Json;
-using Kasbah.Core.Index.Solr.Models;
 using System.IO;
+using System.Net;
+using Kasbah.Core.Index.Solr.Models;
+using Newtonsoft.Json;
 
 namespace Kasbah.Core.Index.Solr
 {
-
-    public class WebClient : IDisposable
-    {
-        public string BaseAddress { get; set; }
-
-        public string ContentType { get; set; }
-
-        public WebClient()
-        {
-        }
-
-        public string UploadString(Uri uri, string data)
-        {
-            var request = HttpWebRequest.Create(uri);
-            request.Method = "POST";
-            request.ContentType = ContentType;
-
-            using (var stream = request.GetRequestStreamAsync().Result)
-            {
-                var bytes = System.Text.Encoding.UTF8.GetBytes(data);
-                stream.Write(bytes, 0, bytes.Length);
-            }
-
-            using (var response = request.GetResponseAsync().Result)
-            {
-                var realResponse = response as HttpWebResponse;
-                using (var stream = realResponse.GetResponseStream())
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-            }
-        }
-
-        public string DownloadString(Uri uri)
-        {
-            var request = HttpWebRequest.Create(uri);
-            request.Method = "GET";
-
-            using (var response = request.GetResponseAsync().Result)
-            {
-                var realResponse = response as HttpWebResponse;
-                using (var stream = realResponse.GetResponseStream())
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-        }
-    }
-
-    public class WebException : Exception
-    {
-
-    }
-
-
     public class SolrWebClient : WebClient
     {
-        const string CoreName = "kasbah";
-
-        readonly Uri _updateUri = new Uri($"/solr/{CoreName}/update?wt=json", UriKind.Relative);
-        readonly Uri _selectUri = new Uri($"/solr/{CoreName}/select", UriKind.Relative);
+        #region Public Constructors
 
         public SolrWebClient(Uri baseUri)
         {
             BaseAddress = baseUri.ToString();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Commit()
+            => SubmitUpdate(new CommitRequest());
+
+        public void Delete(Guid id)
+        {
+            var request = new DeleteRequestWithCommit
+            {
+                Delete = new Delete
+                {
+                    Id = id.ToString()
+                }
+            };
+
+            SubmitUpdate(request);
+        }
+
+        public void InsertOrUpdate(IDictionary<string, object> data)
+        {
+            var request = new AddRequestWithCommit
+            {
+                Add = new Add
+                {
+                    Document = SolrUtil.ConvertToSolr(data)
+                }
+            };
+
+            SubmitUpdate(request);
+        }
+
+        public SelectResponse Select(string query)
+        {
+            var baseUri = new Uri(new Uri(BaseAddress), _selectUri);
+            var uriBuilder = new UriBuilder(baseUri);
+
+            uriBuilder.Query = $"wt=json&q={query}";
+
+            var data = DownloadString(uriBuilder.Uri);
+
+            return JsonConvert.DeserializeObject<SelectResponse>(data);
         }
 
         public BaseResponse SubmitRequest(Uri uri, BaseRequest request)
@@ -114,45 +91,89 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        public void InsertOrUpdate(IDictionary<string, object> data)
+        #endregion
+
+        #region Private Fields
+
+        const string CoreName = "kasbah";
+
+        readonly Uri _selectUri = new Uri($"/solr/{CoreName}/select", UriKind.Relative);
+        readonly Uri _updateUri = new Uri($"/solr/{CoreName}/update?wt=json", UriKind.Relative);
+
+        #endregion
+    }
+
+    public class WebClient : IDisposable
+    {
+        #region Public Constructors
+
+        public WebClient()
         {
-            var request = new AddRequestWithCommit
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public string BaseAddress { get; set; }
+
+        public string ContentType { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Dispose()
+        {
+        }
+
+        public string DownloadString(Uri uri)
+        {
+            var request = HttpWebRequest.Create(uri);
+            request.Method = "GET";
+
+            using (var response = request.GetResponseAsync().Result)
             {
-                Add = new Add
+                var realResponse = response as HttpWebResponse;
+                using (var stream = realResponse.GetResponseStream())
                 {
-                    Document = SolrUtil.ConvertToSolr(data)
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
-            };
-
-            SubmitUpdate(request);
+            }
         }
 
-        public SelectResponse Select(string query)
+        public string UploadString(Uri uri, string data)
         {
-            var baseUri = new Uri(new Uri(BaseAddress), _selectUri);
-            var uriBuilder = new UriBuilder(baseUri);
+            var request = HttpWebRequest.Create(uri);
+            request.Method = "POST";
+            request.ContentType = ContentType;
 
-            uriBuilder.Query = $"wt=json&q={query}";
-
-            var data = DownloadString(uriBuilder.Uri);
-
-            return JsonConvert.DeserializeObject<SelectResponse>(data);
-        }
-
-        public void Delete(Guid id)
-        {
-            var request = new DeleteRequestWithCommit
+            using (var stream = request.GetRequestStreamAsync().Result)
             {
-                Delete = new Delete
-                {
-                    Id = id.ToString()
-                }
-            };
+                var bytes = System.Text.Encoding.UTF8.GetBytes(data);
+                stream.Write(bytes, 0, bytes.Length);
+            }
 
-            SubmitUpdate(request);
+            using (var response = request.GetResponseAsync().Result)
+            {
+                var realResponse = response as HttpWebResponse;
+                using (var stream = realResponse.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
         }
 
-        public void Commit()
-            => SubmitUpdate(new CommitRequest());
+        #endregion
+    }
+
+    public class WebException : Exception
+    {
     }
 }

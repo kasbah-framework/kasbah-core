@@ -7,7 +7,7 @@ namespace Kasbah.Core.Index.Solr
 {
     public static class SolrUtil
     {
-        static CamelCasePropertyNamesContractResolver _nameResolver = new CamelCasePropertyNamesContractResolver();
+        #region Public Methods
 
         public static IDictionary<string, object> ConverFromSolr(IDictionary<string, object> input)
         {
@@ -23,47 +23,15 @@ namespace Kasbah.Core.Index.Solr
                 .ToDictionary(ent => ent.Key, ent => ent.Value);
         }
 
-        static KeyValuePair<string, object> ProcessValueToSolr(KeyValuePair<string, object> kvp)
-        {
-            var key = kvp.Key;
-            var value = kvp.Value;
+        #endregion
 
-            if (key != "id")
-            {
-                if (value is int)
-                {
-                    key = key + TypeSuffixes.Int;
-                }
-                else if (value is string)
-                {
-                    key = key + TypeSuffixes.String;
-                }
-                else if (value is DateTime)
-                {
-                    key = key + TypeSuffixes.DateTime;
-                    value = $"{value:o}";
-                }
-                else if (value is double)
-                {
-                    key = key + TypeSuffixes.Double;
-                }
-                else if (value is bool)
-                {
-                    key = key + TypeSuffixes.Bool;
-                }
-                else if (value is Guid)
-                {
-                    key = key + TypeSuffixes.Guid;
-                    value = value.ToString();
-                }
-                else
-                {
-                    key = key + TypeSuffixes.General;
-                }
-            }
+        #region Private Fields
 
-            return new KeyValuePair<string, object>(key, value);
-        }
+        static CamelCasePropertyNamesContractResolver _nameResolver = new CamelCasePropertyNamesContractResolver();
+
+        #endregion
+
+        #region Private Methods
 
         static KeyValuePair<string, object> ProcessValueFromSolr(KeyValuePair<string, object> kvp)
         {
@@ -111,15 +79,67 @@ namespace Kasbah.Core.Index.Solr
             return new KeyValuePair<string, object>(key, value);
         }
 
+        static KeyValuePair<string, object> ProcessValueToSolr(KeyValuePair<string, object> kvp)
+        {
+            var key = kvp.Key;
+            var value = kvp.Value;
+
+            if (key != "id")
+            {
+                if (value is int)
+                {
+                    key = key + TypeSuffixes.Int;
+                }
+                else if (value is string)
+                {
+                    key = key + TypeSuffixes.String;
+                }
+                else if (value is DateTime)
+                {
+                    key = key + TypeSuffixes.DateTime;
+                    value = $"{value:o}";
+                }
+                else if (value is double)
+                {
+                    key = key + TypeSuffixes.Double;
+                }
+                else if (value is bool)
+                {
+                    key = key + TypeSuffixes.Bool;
+                }
+                else if (value is Guid)
+                {
+                    key = key + TypeSuffixes.Guid;
+                    value = value.ToString();
+                }
+                else
+                {
+                    key = key + TypeSuffixes.General;
+                }
+            }
+
+            return new KeyValuePair<string, object>(key, value);
+        }
+
+        #endregion
+
+        #region Private Classes
+
         static class TypeSuffixes
         {
-            public const string Int = "_i";
-            public const string String = "_t";
+            #region Public Fields
+
+            public const string Bool = "_b";
             public const string DateTime = "_dt";
             public const string Double = "_d";
-            public const string Bool = "_b";
-            public const string Guid = "_guid_s";
             public const string General = "_s";
+            public const string Guid = "_guid_s";
+            public const string Int = "_i";
+            public const string String = "_t";
+
+            #endregion
         }
+
+        #endregion
     }
 }
