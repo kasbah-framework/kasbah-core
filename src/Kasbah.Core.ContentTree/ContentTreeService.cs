@@ -110,5 +110,20 @@ namespace Kasbah.Core.ContentTree
         readonly IEventService _eventService;
 
         #endregion
+
+
+        public Guid GetOrCreate(Guid? parent, string alias, Type type)
+        {
+            var ret = GetChild(parent, alias);
+            if (ret == null)
+            {
+                return CreateNode(parent, alias, type);
+            }
+
+            return ret.Id;
+        }
+
+        public Guid GetOrCreate<T>(Guid? parent, string alias) where T : ItemBase
+            => GetOrCreate(parent, alias, typeof(T));
     }
 }
