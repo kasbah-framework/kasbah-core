@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using Kasbah.Core.Events;
 using Kasbah.Core.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -10,11 +10,12 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
     public class Npgsql_GetChildren
     {
         #region Public Methods
+
         [DbFact]
         public void GetChildren_WhereNodeHasChildren_ReturnsChildNodes()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var parentNode = Guid.NewGuid();
             service.CreateNode(parentNode, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
@@ -42,7 +43,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void GetChildren_WhereNodeHasNoChildren_ReturnsNoChildNodes()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var parentNode = Guid.NewGuid();
             service.CreateNode(parentNode, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);

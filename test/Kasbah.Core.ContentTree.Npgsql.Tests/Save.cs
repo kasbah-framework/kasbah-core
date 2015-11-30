@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading;
-using Kasbah.Core.ContentTree.Events;
-using Kasbah.Core.Events;
 using Kasbah.Core.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -17,7 +16,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_AnonymousObject_ItemSaved()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var node = Guid.NewGuid();
             service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
@@ -40,7 +39,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_ExistingItem_ItemUpdated()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var node = Guid.NewGuid();
             service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
@@ -65,7 +64,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_NewItem_ItemSaved()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var node = Guid.NewGuid();
             service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
@@ -84,7 +83,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void Save_WithUniqueIds_MultipleVersionCreated()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var node = Guid.NewGuid();
             service.CreateNode(node, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);

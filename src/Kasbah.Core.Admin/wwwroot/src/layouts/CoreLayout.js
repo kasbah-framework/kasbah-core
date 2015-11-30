@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from 'components/Navigation';
 import 'styles/core.scss';
-import 'font-awesome/scss/font-awesome.scss';
+// import 'font-awesome/scss/font-awesome.scss';
 
 export default class CoreLayout extends React.Component {
     static propTypes = {

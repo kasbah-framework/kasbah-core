@@ -1,5 +1,5 @@
 using System;
-using Kasbah.Core.Events;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void SetActiveNodeVersion_WithExistingVersion_ActiveVersionUpdated()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var id = Guid.NewGuid();
             service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);
@@ -32,7 +32,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void SetActiveNodeVersion_WithNonExistantVersion_ExceptionThrown()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var id = Guid.NewGuid();
             service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(TestItem).FullName);

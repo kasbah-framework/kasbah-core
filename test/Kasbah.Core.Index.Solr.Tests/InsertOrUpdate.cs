@@ -5,17 +5,20 @@ using System.Threading;
 using Kasbah.Core.Models;
 using Xunit;
 using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace Kasbah.Core.Index.Solr.Tests
 {
     public class InsertOrUpdate
     {
+        #region Public Methods
+
         [SolrDbFact]
         public void ActiveVersionSet_VersionIndexed()
         {
             // Arrange
             var eventService = new Kasbah.Core.Events.InProcEventService();
-            var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider();
+            var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
             var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider, eventService);
             var provider = new SolrIndexProvider();
             var service = new IndexService(provider, eventService, contentTreeService);
@@ -26,6 +29,21 @@ namespace Kasbah.Core.Index.Solr.Tests
 
             // Act
             contentTreeService.SetActiveNodeVersion(node, version.Id);
+
+            // Assert
+        }
+
+        [SolrDbFact]
+        public void Index_RegularObject_SuccessfullyIndexes()
+        {
+            // Arrange
+            var provider = new SolrIndexProvider();
+
+            // Act
+            provider.Store(new Dictionary<string, object> {
+                { "id", Guid.NewGuid() },
+                { "A", 1 }
+            });
 
             // Assert
         }
@@ -54,24 +72,19 @@ namespace Kasbah.Core.Index.Solr.Tests
             Assert.Equal(value, results.First()["Value"]);
         }
 
-        [SolrDbFact]
-        public void Index_RegularObject_SuccessfullyIndexes()
-        {
-            // Arrange
-            var provider = new SolrIndexProvider();
+        #endregion
 
-            // Act
-            provider.Store(new Dictionary<string, object> {
-                { "id", Guid.NewGuid() },
-                { "A", 1 }
-            });
-
-            // Assert
-        }
+        #region Private Classes
 
         class TestItem : ItemBase
         {
+            #region Public Properties
+
             public string Value { get; set; }
+
+            #endregion
         }
+
+        #endregion
     }
 }

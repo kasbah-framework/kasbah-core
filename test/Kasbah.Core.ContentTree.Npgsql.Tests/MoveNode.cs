@@ -1,6 +1,7 @@
 using System;
 using Kasbah.Core.Events;
 using Kasbah.Core.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -14,7 +15,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void MoveNode_WhenTargetExists_NodeMoved()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var originalParent = Guid.NewGuid();
             service.CreateNode(originalParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
@@ -38,7 +39,7 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void MoveNode_WhenTargetDoesNotExist_ExceptionThrown()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var originalParent = Guid.NewGuid();
             service.CreateNode(originalParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);

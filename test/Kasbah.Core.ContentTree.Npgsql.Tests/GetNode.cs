@@ -1,6 +1,6 @@
 using System;
-using Kasbah.Core.Events;
 using Kasbah.Core.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -11,10 +11,23 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         #region Public Methods
 
         [DbFact]
+        public void GetNode_WhereNodeDoesNotExists_ReturnsNull()
+        {
+            // Arrange
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
+
+            // Act
+            var node = service.GetNode(Guid.Empty);
+
+            // Assert
+            Assert.Null(node);
+        }
+
+        [DbFact]
         public void GetNode_WhereNodeExists_ReturnsCorrectNode()
         {
             // Arrange
-            var service = new NpgsqlContentTreeProvider();
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             var id = Guid.NewGuid();
             service.CreateNode(id, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
@@ -25,19 +38,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
             // Assert
             Assert.NotNull(node);
             Assert.Equal(id, node.Id);
-        }
-
-        [DbFact]
-        public void GetNode_WhereNodeDoesNotExists_ReturnsNull()
-        {
-            // Arrange
-            var service = new NpgsqlContentTreeProvider();
-
-            // Act
-            var node = service.GetNode(Guid.Empty);
-
-            // Assert
-            Assert.Null(node);
         }
 
         #endregion
