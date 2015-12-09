@@ -20,7 +20,6 @@
     "Moq": "4.2.1510.2205"
   },
   "frameworks": {
-    "dnx451": {},
     "dnxcore50": {}
   },
   "commands": {
