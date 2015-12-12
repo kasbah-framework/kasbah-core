@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "Implements the content tree operations against the PostgreSQL database provider",
+  "description": "Provides a single interface to access all internal services",
   "authors": [
     "Brendan McKenzie"
   ],
@@ -10,16 +10,13 @@
   "projectUrl": "http://www.kasbah.io/",
   "licenseUrl": "",
   "dependencies": {
+    "Kasbah.Core": "",
     "Kasbah.Core.ContentTree": "",
-    "Npgsql": "3.1.0-*",
-    "Dapper": "1.50.0-*",
-    "Newtonsoft.Json": "8.0.1-*"
+    "Kasbah.Core.Events": "",
+    "Kasbah.Core.Index": ""
   },
   "frameworks": {
     "dnx451": {},
-    "dnxcore50": {}
-  },
-  "resource": [
-    "Sql/**/*.sql"
-  ]
+    "dnxcore50": { }
+  }
 }

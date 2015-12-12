@@ -13,6 +13,7 @@
   },
 
   "frameworks": {
+    "dnx451": {},
     "dnxcore50": {
       "dependencies": {
         "System.Net.Requests": "4.0.10-*"
