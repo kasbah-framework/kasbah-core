@@ -1,22 +1,21 @@
 using System;
 using Kasbah.Core.ContentTree;
-using Kasbah.Core.ContentTree.Events;
+using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
+using Kasbah.Core.Index;
 using Kasbah.Core.Index.Utils;
 using Kasbah.Core.Utils;
 
-// TODO: move this to Kasbah.Core.ContentBroker
-namespace Kasbah.Core.Index
+namespace Kasbah.Core.ContentBroker
 {
     class ContentTreeEventHandler : IEventHandler
     {
         #region Public Constructors
 
-        public ContentTreeEventHandler(IndexService indexService, IIndexProvider indexProvider, ContentTreeService contentTreeService)
+        public ContentTreeEventHandler(IndexService indexService, ContentTreeService contentTreeService)
         {
             _indexService = indexService;
-            _indexProvider = indexProvider;
             _contentTreeService = contentTreeService;
         }
 
@@ -64,7 +63,7 @@ namespace Kasbah.Core.Index
                     indexObject[$"__node_{field.Key}"] = field.Value;
                 }
 
-                _indexProvider.Store(indexObject);
+                _indexService.Store(indexObject);
             }
         }
 
@@ -73,7 +72,6 @@ namespace Kasbah.Core.Index
         #region Private Fields
 
         readonly ContentTreeService _contentTreeService;
-        readonly IIndexProvider _indexProvider;
         readonly IndexService _indexService;
 
         #endregion

@@ -8,7 +8,7 @@ namespace Kasbah.Core
 {
     public partial class ContentBroker
     {
-        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, IEventService eventService)
+        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService)
         {
             _contentTreeService = contentTreeService;
             _indexService = indexService;
@@ -29,6 +29,6 @@ namespace Kasbah.Core
 
         readonly ContentTreeService _contentTreeService;
         readonly IndexService _indexService;
-        readonly IEventService _eventService;
+        readonly EventService _eventService;
     }
 }

@@ -100,6 +100,9 @@ namespace Kasbah.Core.Index
             }
         }
 
+        public void Store(IDictionary<string, object> value)
+            => _indexProvider.Store(value);
+
         #endregion
 
         #region Private Fields

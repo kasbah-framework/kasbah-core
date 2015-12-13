@@ -22,8 +22,6 @@ namespace Kasbah.Core.Admin
 
             app.UseMvcWithDefaultRoute();
 
-            app.ApplicationServices.GetService<Index.IndexService>().Noop();
-
             app.UseHtml5UrlMode(hostingEnv, loggerFactory, "dist", "/index.html");
         }
 
@@ -50,7 +48,7 @@ namespace Kasbah.Core.Admin
             services.AddSingleton<ContentTree.IContentTreeProvider, ContentTree.Npgsql.NpgsqlContentTreeProvider>();
             services.AddSingleton<ContentTree.ContentTreeService>();
 
-            services.AddSingleton<Events.IEventBusProvider, Events.InProcEventBusProvider>();
+            services.AddSingleton<Events.IEventBusProvider, Events.InProc.InProcEventBusProvider>();
             services.AddSingleton<Events.EventService>();
 
             services.AddSingleton<Index.IIndexProvider, Index.Solr.SolrIndexProvider>();

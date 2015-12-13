@@ -1,5 +1,6 @@
 using System;
 using Kasbah.Core.Events;
+using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentBroker.Events
 {
@@ -7,7 +8,7 @@ namespace Kasbah.Core.ContentBroker.Events
 
     public class BeforeItemSaved : ItemEventBase { }
 
-    public abstract class ItemEventBase : EventBase<object>
+    public abstract class ItemEventBase : EventBase<ItemBase>
     {
         #region Public Properties
 

@@ -14,6 +14,7 @@
     "Kasbah.Core.ContentTree": "",
     "Kasbah.Core.ContentTree.Npgsql": "",
     "Kasbah.Core.Events": "",
+    "Kasbah.Core.Events.InProc": "",
     "Kasbah.Core.Index": "",
     "Kasbah.Core.Index.Solr": "",
     "Microsoft.AspNet.Diagnostics": "1.0.0-*",

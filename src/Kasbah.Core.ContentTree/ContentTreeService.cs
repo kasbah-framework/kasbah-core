@@ -97,7 +97,6 @@ namespace Kasbah.Core.ContentTree
         #region Private Fields
 
         readonly IContentTreeProvider _contentTreeProvider;
-        readonly IEventService _eventService;
 
         #endregion
     }
