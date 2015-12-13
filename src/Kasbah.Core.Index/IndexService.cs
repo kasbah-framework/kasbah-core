@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kasbah.Core.ContentTree;
-using Kasbah.Core.ContentTree.Events;
-using Kasbah.Core.Events;
 using Kasbah.Core.Index.Utils;
 using Kasbah.Core.Models;
 
@@ -13,18 +10,11 @@ namespace Kasbah.Core.Index
     {
         #region Public Constructors
 
-        public IndexService(IIndexProvider indexProvider, IEventService eventService, ContentTreeService contentTreeService)
+        public IndexService(IIndexProvider indexProvider)
         {
             _indexProvider = indexProvider;
-            _eventService = eventService;
-            _contentTreeService = contentTreeService;
 
             _handlers = new Dictionary<Type, ICollection<IIndexHandler>>();
-
-            _contentTreeEventHandler = new ContentTreeEventHandler(this, _indexProvider, _contentTreeService);
-
-            eventService.Register<AfterItemSaved>(_contentTreeEventHandler);
-            eventService.Register<NodeActiveVersionSet>(_contentTreeEventHandler);
         }
 
         #endregion
@@ -56,10 +46,6 @@ namespace Kasbah.Core.Index
             }
 
             return indexObject;
-        }
-
-        public void Noop()
-        {
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query)
@@ -118,9 +104,6 @@ namespace Kasbah.Core.Index
 
         #region Private Fields
 
-        readonly ContentTreeEventHandler _contentTreeEventHandler;
-        readonly ContentTreeService _contentTreeService;
-        readonly IEventService _eventService;
         readonly IDictionary<Type, ICollection<IIndexHandler>> _handlers;
         readonly IIndexProvider _indexProvider;
         readonly object _lockObj = new object();

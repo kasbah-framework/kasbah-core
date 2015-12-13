@@ -7,5 +7,3 @@ Other modules will provide the implementation to the abstractions allowing for d
 ## Dependencies
 
  * Kasbah.Core
- * Kasbah.Core.Events
- * Kasbah.Core.ContentTree

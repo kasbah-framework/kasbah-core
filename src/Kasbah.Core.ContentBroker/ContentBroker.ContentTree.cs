@@ -6,7 +6,7 @@ using Kasbah.Core.Utils;
 
 namespace Kasbah.Core
 {
-    // TODO: implement caching
+    // TODO: implement caching and event bussing
     public partial class ContentBroker
     {
         #region Public Methods

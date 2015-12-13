@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kasbah.Core.Events
+namespace Kasbah.Core.Events.InProc
 {
     public class InProcEventService : IEventService
     {

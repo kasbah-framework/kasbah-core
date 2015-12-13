@@ -1,7 +1,7 @@
 using Kasbah.Core.Events;
 using Kasbah.Core.Models;
 
-namespace Kasbah.Core.Index.Events
+namespace Kasbah.Core.ContentBroker.Events
 {
     public class AfterItemIndexed : ItemEventBase { }
 

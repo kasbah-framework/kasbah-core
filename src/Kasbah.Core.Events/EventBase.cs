@@ -8,7 +8,7 @@ namespace Kasbah.Core.Events
     {
         #region Public Properties
 
-        public T Data { get; set; }
+        public T Payload { get; set; }
 
         #endregion
     }

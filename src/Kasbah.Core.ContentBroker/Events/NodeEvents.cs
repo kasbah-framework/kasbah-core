@@ -1,7 +1,7 @@
 using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
 
-namespace Kasbah.Core.ContentTree.Events
+namespace Kasbah.Core.ContentBroker.Events
 {
     public class AfterNodeCreated : NodeEventBase { }
 

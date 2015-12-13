@@ -1,7 +1,7 @@
 using System;
 using Kasbah.Core.Events;
 
-namespace Kasbah.Core.ContentTree.Events
+namespace Kasbah.Core.ContentBroker.Events
 {
     public class AfterItemSaved : ItemEventBase { }
 

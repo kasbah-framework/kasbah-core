@@ -6,6 +6,7 @@ using Kasbah.Core.Events;
 using Kasbah.Core.Index.Utils;
 using Kasbah.Core.Utils;
 
+// TODO: move this to Kasbah.Core.ContentBroker
 namespace Kasbah.Core.Index
 {
     class ContentTreeEventHandler : IEventHandler
