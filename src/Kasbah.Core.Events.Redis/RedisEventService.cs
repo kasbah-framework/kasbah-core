@@ -8,9 +8,9 @@ using StackExchange.Redis;
 
 namespace Kasbah.Core.Events.Redis
 {
-    public class RedisEventService : IEventService
+    public class RedisEventBusProvider : IEventBusProvider
     {
-        public RedisEventService()
+        public RedisEventBusProvider()
         {
             var config = new ConfigurationOptions
             {

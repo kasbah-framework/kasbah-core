@@ -50,7 +50,8 @@ namespace Kasbah.Core.Admin
             services.AddSingleton<ContentTree.IContentTreeProvider, ContentTree.Npgsql.NpgsqlContentTreeProvider>();
             services.AddSingleton<ContentTree.ContentTreeService>();
 
-            services.AddSingleton<Events.IEventService, Events.InProcEventService>();
+            services.AddSingleton<Events.IEventBusProvider, Events.InProcEventBusProvider>();
+            services.AddSingleton<Events.EventService>();
 
             services.AddSingleton<Index.IIndexProvider, Index.Solr.SolrIndexProvider>();
             services.AddSingleton<Index.IndexService>();

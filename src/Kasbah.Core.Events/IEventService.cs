@@ -1,17 +1,24 @@
 namespace Kasbah.Core.Events
 {
-    public interface IEventService
+    public class EventService
     {
-        #region Public Methods
+        public EventService(IEventBusProvider eventBusProvider)
+        {
+            _eventBusProvider = eventBusProvider;
+        }
 
-        void Emit<T>(T @event) where T : EventBase;
+        public void Emit<T>(T @event) where T : EventBase
+            => _eventBusProvider.Emit<T>(@event);
 
-        void Register<T>(IEventHandler handler) where T : EventBase;
+        public void Register<T>(IEventHandler handler) where T : EventBase
+            => _eventBusProvider.Register<T>(handler);
 
-        void Unregister(IEventHandler handler);
+        public void Unregister(IEventHandler handler)
+            => _eventBusProvider.Unregister(handler);
 
-        void Unregister<T>(IEventHandler handler) where T : EventBase;
+        public void Unregister<T>(IEventHandler handler) where T : EventBase
+            => _eventBusProvider.Unregister<T>(handler);
 
-        #endregion
+        readonly IEventBusProvider _eventBusProvider;
     }
 }

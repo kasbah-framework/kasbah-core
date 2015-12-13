@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Kasbah.Core.Events.InProc
 {
-    public class InProcEventService : IEventService
+    public class InProcEventBusProvider : IEventBusProvider
     {
         #region Public Constructors
 
-        public InProcEventService()
+        public InProcEventBusProvider()
         {
             _handlers = new Dictionary<Type, ICollection<IEventHandler>>();
         }
