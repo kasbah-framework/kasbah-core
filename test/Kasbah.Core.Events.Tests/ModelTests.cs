@@ -14,11 +14,11 @@ namespace Kasbah.Core.Events.Tests
             var @event = new TestEvent();
 
             // Act
-            @event.Data = "hello";
+            @event.Payload = "hello";
 
 
             // Assert
-            Assert.Equal("hello", @event.Data);
+            Assert.Equal("hello", @event.Payload);
         }
 
         #endregion

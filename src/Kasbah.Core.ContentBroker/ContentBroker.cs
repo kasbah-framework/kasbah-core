@@ -4,7 +4,7 @@ using Kasbah.Core.Events;
 using Kasbah.Core.ContentTree.Models;
 using System.Collections.Generic;
 
-namespace Kasbah.Core
+namespace Kasbah.Core.ContentBroker
 {
     public partial class ContentBroker
     {

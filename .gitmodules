@@ -4,3 +4,6 @@
 [submodule "lib/npgsql"]
 	path = lib/npgsql
 	url = git@github.com:brendanmckenzie/npgsql.git
+[submodule "lib/StackExchange.Redis2"]
+	path = lib/StackExchange.Redis2
+	url = https://github.com/jeremymeng/StackExchange.Redis.git

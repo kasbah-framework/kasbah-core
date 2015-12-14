@@ -1,5 +1,4 @@
 using System;
-using Kasbah.Core.Events;
 using Kasbah.Core.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -14,7 +13,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         public void CreateNode_WithCorrectProperties_NoExceptionThrown()
         {
             // Arrange
-            var eventService = Mock.Of<IEventService>();
             var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
 
             // Act

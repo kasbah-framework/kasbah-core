@@ -1,5 +1,4 @@
 using System;
-using Kasbah.Core.Events;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

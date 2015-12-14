@@ -13,7 +13,8 @@ namespace Kasbah.Core.Events.Redis.Tests
         public void Emit_HandlerNotRegistered_WontReceiveEvents()
         {
             // Arrange
-            var service = new RedisEventService();
+            var provider = new RedisEventBusProvider();
+            var service = new EventService(provider);
             var handler = new EventHandler();
 
             // Act
@@ -27,7 +28,8 @@ namespace Kasbah.Core.Events.Redis.Tests
         public void Emit_SingleEvent_EventHandled()
         {
             // Arrange
-            var service = new RedisEventService();
+            var provider = new RedisEventBusProvider();
+            var service = new EventService(provider);
             var handler = new EventHandler();
             var @event = new TestEvent();
 
@@ -44,7 +46,8 @@ namespace Kasbah.Core.Events.Redis.Tests
         public void Emit_TwoEvents_EventsHandled()
         {
             // Arrange
-            var service = new RedisEventService();
+            var provider = new RedisEventBusProvider();
+            var service = new EventService(provider);
             var handler = new EventHandler();
             var event1 = new TestEvent();
             var event2 = new TestEvent();
@@ -64,7 +67,8 @@ namespace Kasbah.Core.Events.Redis.Tests
         public void Emit_TwoHandlers_BothHandlersCalled()
         {
             // Arrange
-            var service = new RedisEventService();
+            var provider = new RedisEventBusProvider();
+            var service = new EventService(provider);
             var handler1 = new EventHandler();
             var handler2 = new EventHandler();
             var @event = new TestEvent();
@@ -84,7 +88,8 @@ namespace Kasbah.Core.Events.Redis.Tests
         public void Emit_UnregisteredHandler_NoEventHandled()
         {
             // Arrange
-            var service = new RedisEventService();
+            var provider = new RedisEventBusProvider();
+            var service = new EventService(provider);
             var handler = new EventHandler();
             var @event = new TestEvent();
 
@@ -103,7 +108,8 @@ namespace Kasbah.Core.Events.Redis.Tests
         public void Emit_UnregisteredHandlerAndType_NoEventHandled()
         {
             // Arrange
-            var service = new RedisEventService();
+            var provider = new RedisEventBusProvider();
+            var service = new EventService(provider);
             var handler = new EventHandler();
             var @event = new TestEvent();
 

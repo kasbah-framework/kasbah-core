@@ -12,11 +12,11 @@
   "dependencies": {
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-*",
-    "Kasbah.Core.Events": ""
+    "Kasbah.Core.Events": "",
+    "Moq": "4.2.1510.2205"
   },
   "frameworks": {
-    "dnx451": {},
-    "dnxcore50": {}
+    "dnx451": { }
   },
   "commands": {
     "test": "xunit.runner.dnx"

@@ -13,10 +13,9 @@
     "Kasbah.Core": "",
     "Kasbah.Core.Events": "",
     "Newtonsoft.Json": "8.0.1-*",
-    "Redis": ""
+    "StackExchange.Redis": ""
   },
   "frameworks": {
-    "dnx451": {},
     "dnxcore50": { }
   }
 }

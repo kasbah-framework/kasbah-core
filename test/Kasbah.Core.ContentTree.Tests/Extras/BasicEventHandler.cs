@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
-using Kasbah.Core.Events;
 
 namespace Kasbah.Core.ContentTree.Tests.TestImpls
 {
-    internal class BasicEventHandler : IEventHandler
-    {
-        #region Public Fields
+    //internal class BasicEventHandler : IEventHandler
+    //{
+    //    #region Public Fields
 
-        public ICollection<EventBase> HandledEvents = new List<EventBase>();
+    //    public ICollection<EventBase> HandledEvents = new List<EventBase>();
 
-        #endregion
+    //    #endregion
 
-        #region Public Methods
+    //    #region Public Methods
 
-        public void HandleEvent<T>(T @event) where T : EventBase
-        {
-            HandledEvents.Add(@event);
-        }
+    //    public void HandleEvent<T>(T @event) where T : EventBase
+    //    {
+    //        HandledEvents.Add(@event);
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }

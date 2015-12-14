@@ -4,7 +4,7 @@ using Kasbah.Core.Models;
 using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Utils;
 
-namespace Kasbah.Core
+namespace Kasbah.Core.ContentBroker
 {
     // TODO: implement caching and event bussing
     public partial class ContentBroker

@@ -17,11 +17,10 @@ namespace Kasbah.Core.Index.Solr.Tests
         public void ActiveVersionSet_VersionIndexed()
         {
             // Arrange
-            var eventService = new Kasbah.Core.Events.InProcEventService();
             var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
-            var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider, eventService);
+            var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider);
             var provider = new SolrIndexProvider();
-            var service = new IndexService(provider, eventService, contentTreeService);
+            var service = new IndexService(provider);
 
             var node = contentTreeService.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
 

@@ -1,5 +1,5 @@
 {
-    "projects": [ "src", "test", "lib/StackExchange.Redis/StackExchange.Redis/StackExchange" ],
+    "projects": [ "src", "test", "lib/StackExchange.Redis2/StackExchange.Redis_dnxcore50" ],
     "sdk": {
         "version": "1.0.0-rc1-update1",
         "runtime": "coreclr",

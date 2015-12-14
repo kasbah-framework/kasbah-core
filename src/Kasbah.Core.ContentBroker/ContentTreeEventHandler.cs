@@ -32,14 +32,14 @@ namespace Kasbah.Core.ContentBroker
             {
                 var _event = (@event as AfterItemSaved);
                 node = _contentTreeService.GetNode(_event.Node);
-                item = _event.Data;
+                item = _event.Payload;
                 version = _event.Version;
             }
             else if (typeof(T) == typeof(NodeActiveVersionSet))
             {
                 var _event = (@event as NodeActiveVersionSet);
-                node = _event.Data;
-                version = _event.Data.ActiveVersion;
+                node = _event.Payload;
+                version = _event.Payload.ActiveVersion;
                 if (version.HasValue)
                 {
                     item = _contentTreeService.GetNodeVersion(node.Id, version.Value);
