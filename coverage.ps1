@@ -1,9 +1,9 @@
 $OpenCover = "C:\\apps\\opencover.4.6.210\\OpenCover.Console.exe"
 $ReportGenerator = "C:\\apps\\ReportGenerator_2.3.3.0\\bin\\ReportGenerator.exe"
 
-$DNX = "C:\\Users\\Brendan\\.dnx\\runtimes\\dnx-clr-win-x86.1.0.0-beta8\\bin\\dnx.exe"
-$ProjectRoot = "C:\\dev\\personal\\kasbah-core\\src\\"
-$TestRoot = "C:\\dev\\personal\\kasbah-core\\test\\"
+$DNX = "C:\\Users\\Brendan\\.dnx\\runtimes\\dnx-clr-win-x86.1.0.0-rc1-update1\\bin\\dnx.exe"
+$ProjectRoot = "C:\\dev\\personal\\kasbah\\kasbah-core\\src\\"
+$TestRoot = "C:\\dev\\personal\\kasbah\\kasbah-core\\test\\"
 
 [string[]] $Projects = "Kasbah.Core", "Kasbah.Core.ContentTree.Npgsql", "Kasbah.Core.Events", ""
 
@@ -13,7 +13,7 @@ New-Item -Type Directory -Force coverage
 foreach ($Project in $Projects) {
     if ($Project -eq "") { continue; }
 
-    dnu build ("$ProjectRoot" + "$Project" + "\\project.json")
+    dnu build --quiet ("$ProjectRoot" + "$Project" + "\\project.json")
 
     $ProjectPath = $ProjectRoot + $Project + "\\bin\\debug\\dnx451"
     $TestPath = $TestRoot + $Project + ".Tests"

@@ -33,6 +33,20 @@ namespace Kasbah.Core.Tests
             Assert.Equal(typeof(ExampleType), type);
         }
 
+        [Fact]
+        public void TypeFromName_AfterRegisteringType_ReturnsCorrectType()
+        {
+            // Arrange
+            TypeUtil.Register<ExampleType>();
+
+            // Act
+            var type = TypeUtil.TypeFromName(typeof(ExampleType).AssemblyQualifiedName);
+
+            // Assert
+            Assert.NotNull(type);
+            Assert.Equal(type.AssemblyQualifiedName, typeof(ExampleType).AssemblyQualifiedName);
+        }
+
         #endregion
     }
 
