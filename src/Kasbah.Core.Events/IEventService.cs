@@ -2,10 +2,16 @@ namespace Kasbah.Core.Events
 {
     public class EventService
     {
+        #region Public Constructors
+
         public EventService(IEventBusProvider eventBusProvider)
         {
             _eventBusProvider = eventBusProvider;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void Emit<T>(T @event) where T : EventBase
             => _eventBusProvider.Emit<T>(@event);
@@ -19,6 +25,12 @@ namespace Kasbah.Core.Events
         public void Unregister<T>(IEventHandler handler) where T : EventBase
             => _eventBusProvider.Unregister<T>(handler);
 
+        #endregion
+
+        #region Private Fields
+
         readonly IEventBusProvider _eventBusProvider;
+
+        #endregion
     }
 }

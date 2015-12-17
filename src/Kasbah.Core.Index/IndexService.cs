@@ -69,6 +69,9 @@ namespace Kasbah.Core.Index
             }
         }
 
+        public void Store(IDictionary<string, object> value)
+            => _indexProvider.Store(value);
+
         public void Unregister(IIndexHandler handler)
         {
             lock (_lockObj)
@@ -99,9 +102,6 @@ namespace Kasbah.Core.Index
                 }
             }
         }
-
-        public void Store(IDictionary<string, object> value)
-            => _indexProvider.Store(value);
 
         #endregion
 

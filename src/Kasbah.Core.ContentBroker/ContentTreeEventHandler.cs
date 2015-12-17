@@ -1,6 +1,6 @@
 using System;
-using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentBroker.Events;
+using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;

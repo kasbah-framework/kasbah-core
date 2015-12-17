@@ -56,6 +56,20 @@ namespace Kasbah.Core.ContentTree
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
             => _contentTreeProvider.GetNodeVersion(id, version);
 
+        public Guid GetOrCreate(Guid? parent, string alias, Type type)
+        {
+            var ret = GetChild(parent, alias);
+            if (ret == null)
+            {
+                return CreateNode(parent, alias, type);
+            }
+
+            return ret.Id;
+        }
+
+        public Guid GetOrCreate<T>(Guid? parent, string alias) where T : ItemBase
+            => GetOrCreate(parent, alias, typeof(T));
+
         public void MoveNode(Guid id, Guid? parent)
         {
             var node = new Node { Id = id, Parent = parent };
@@ -77,20 +91,6 @@ namespace Kasbah.Core.ContentTree
         {
             _contentTreeProvider.SetActiveNodeVersion(id, version);
         }
-
-        public Guid GetOrCreate(Guid? parent, string alias, Type type)
-        {
-            var ret = GetChild(parent, alias);
-            if (ret == null)
-            {
-                return CreateNode(parent, alias, type);
-            }
-
-            return ret.Id;
-        }
-
-        public Guid GetOrCreate<T>(Guid? parent, string alias) where T : ItemBase
-            => GetOrCreate(parent, alias, typeof(T));
 
         #endregion
 

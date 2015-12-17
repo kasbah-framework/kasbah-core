@@ -1,19 +1,25 @@
-using Kasbah.Core.ContentTree;
-using Kasbah.Core.Index;
-using Kasbah.Core.Events;
-using Kasbah.Core.ContentTree.Models;
 using System.Collections.Generic;
+using Kasbah.Core.ContentTree;
+using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.Events;
+using Kasbah.Core.Index;
 
 namespace Kasbah.Core.ContentBroker
 {
     public partial class ContentBroker
     {
+        #region Public Constructors
+
         public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService)
         {
             _contentTreeService = contentTreeService;
             _indexService = indexService;
             _eventService = eventService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public Node GetNodeByPath(IEnumerable<string> path)
         {
@@ -27,8 +33,14 @@ namespace Kasbah.Core.ContentBroker
             return ret;
         }
 
+        #endregion
+
+        #region Private Fields
+
         readonly ContentTreeService _contentTreeService;
-        readonly IndexService _indexService;
         readonly EventService _eventService;
+        readonly IndexService _indexService;
+
+        #endregion
     }
 }

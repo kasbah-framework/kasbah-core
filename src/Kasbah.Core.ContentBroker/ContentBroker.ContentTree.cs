@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Kasbah.Core.Models;
 using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.Models;
 using Kasbah.Core.Utils;
 
 namespace Kasbah.Core.ContentBroker
@@ -44,8 +44,14 @@ namespace Kasbah.Core.ContentBroker
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
             => _contentTreeService.GetNodeVersion(id, version);
 
+        public Guid GetOrCreate(Guid? parent, string alias, Type type)
+            => _contentTreeService.GetOrCreate(parent, alias, type);
+
+        public Guid GetOrCreate<T>(Guid? parent, string alias) where T : ItemBase
+            => GetOrCreate(parent, alias, typeof(T));
+
         public void MoveNode(Guid id, Guid? parent)
-            => _contentTreeService.MoveNode(id, parent);
+                            => _contentTreeService.MoveNode(id, parent);
 
         public NodeVersion Save<T>(Guid id, Guid node, T item) where T : ItemBase
             => _contentTreeService.Save(id, node, (object)item);
@@ -55,12 +61,6 @@ namespace Kasbah.Core.ContentBroker
 
         public void SetActiveNodeVersion(Guid id, Guid? version)
             => _contentTreeService.SetActiveNodeVersion(id, version);
-
-        public Guid GetOrCreate(Guid? parent, string alias, Type type)
-            => _contentTreeService.GetOrCreate(parent, alias, type);
-
-        public Guid GetOrCreate<T>(Guid? parent, string alias) where T : ItemBase
-            => GetOrCreate(parent, alias, typeof(T));
 
         #endregion
     }
