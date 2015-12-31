@@ -18,20 +18,9 @@ namespace Kasbah.Core.ContentTree.Npgsql.Utils
 
         #region Public Methods
 
-        public static object Deserialise(string input, Type type)
+        public static IDictionary<string, object> Deserialise(string input)
         {
-            return JsonConvert.DeserializeObject(input, type, _settings);
-        }
-
-        public static T Deserialise<T>(string input)
-            where T : class
-        {
-            return JsonConvert.DeserializeObject<T>(input, _settings);
-        }
-
-        public static IDictionary<string, object> DeserialiseAnonymous(string input)
-        {
-            return Deserialise<Dictionary<string, object>>(input);
+            return JsonConvert.DeserializeObject<IDictionary<string, object>>(input, _settings);
         }
 
         public static string Serialise(object input)

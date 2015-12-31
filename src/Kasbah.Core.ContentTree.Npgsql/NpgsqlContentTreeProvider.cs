@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Kasbah.Core.ContentTree.Models;
-using Kasbah.Core.ContentTree.Npgsql.Models;
-using Kasbah.Core.Models;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
@@ -49,7 +47,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
-            return _connection.QueryFromResource<NpgsqlNodeVersion>("GetAllNodeVersions", new { id });
+            return _connection.QueryFromResource<NodeVersion>("GetAllNodeVersions", new { id });
         }
 
         public Node GetChild(Guid? parent, string alias)
@@ -67,18 +65,11 @@ namespace Kasbah.Core.ContentTree.Npgsql
             return _connection.QuerySingleFromResource<Node>("GetNode", new { id });
         }
 
-        public object GetNodeVersion(Guid id, Guid version, Type type)
-        {
-            var data = _connection.QuerySingleFromResource<NpgsqlNodeVersion>("GetNodeVersion", new { id, version });
-
-            return data == null ? null : Deserialise(data.Data, type);
-        }
-
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
-            var data = _connection.QuerySingleFromResource<NpgsqlNodeVersion>("GetNodeVersion", new { id, version });
+            var data = _connection.QuerySingleFromResource<NodeVersion>("GetNodeVersion", new { id, version });
 
-            return data == null ? null : DeserialiseAnonymous(data.Data);
+            return data == null ? null : Deserialise(data.Data);
         }
 
         public void MoveNode(Guid id, Guid? parent)
@@ -86,12 +77,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             _connection.ExecuteFromResource("MoveNode", new { id, parent });
         }
 
-        public NodeVersion Save<T>(Guid id, Guid node, T item) where T : ItemBase
-        {
-            return Save(id, node, (object)item);
-        }
-
-        public NodeVersion Save(Guid id, Guid node, object item)
+        public NodeVersion Save(Guid id, Guid node, IDictionary<string, object> item)
         {
             var data = Serialise(item);
 

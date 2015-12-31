@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Kasbah.Core.ContentTree.Models
 {
@@ -10,6 +11,7 @@ namespace Kasbah.Core.ContentTree.Models
         public Guid Id { get; set; }
         public DateTime Modified { get; set; }
         public Guid NodeId { get; set; }
+        public string Data { get; set; }
 
         #endregion
     }

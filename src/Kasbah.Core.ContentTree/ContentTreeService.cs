@@ -47,12 +47,6 @@ namespace Kasbah.Core.ContentTree
         public Node GetNode(Guid id)
             => _contentTreeProvider.GetNode(id);
 
-        public T GetNodeVersion<T>(Guid id, Guid version) where T : ItemBase
-            => GetNodeVersion(id, version, typeof(T)) as T;
-
-        public object GetNodeVersion(Guid id, Guid version, Type type)
-            => _contentTreeProvider.GetNodeVersion(id, version, type);
-
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
             => _contentTreeProvider.GetNodeVersion(id, version);
 
@@ -77,20 +71,11 @@ namespace Kasbah.Core.ContentTree
             _contentTreeProvider.MoveNode(id, parent);
         }
 
-        public NodeVersion Save<T>(Guid id, Guid node, T item) where T : ItemBase
-            => Save(id, node, (object)item);
-
-        public NodeVersion Save(Guid id, Guid node, object item)
-        {
-            var ret = _contentTreeProvider.Save(id, node, item);
-
-            return ret;
-        }
+        public NodeVersion Save(Guid id, Guid node, IDictionary<string, object> item)
+            => _contentTreeProvider.Save(id, node, item);
 
         public void SetActiveNodeVersion(Guid id, Guid? version)
-        {
-            _contentTreeProvider.SetActiveNodeVersion(id, version);
-        }
+            => _contentTreeProvider.SetActiveNodeVersion(id, version);
 
         #endregion
 
