@@ -69,6 +69,9 @@ namespace Kasbah.Core.Index
             }
         }
 
+        public void Delete(Guid id)
+            => _indexProvider.Delete(id);
+
         public void Store(IDictionary<string, object> value)
             => _indexProvider.Store(value);
 

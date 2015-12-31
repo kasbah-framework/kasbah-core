@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
@@ -10,6 +11,7 @@ using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentBroker
 {
+    // TODO: implement caching and event bussing
     public partial class ContentBroker
     {
         #region Public Constructors
@@ -36,7 +38,6 @@ namespace Kasbah.Core.ContentBroker
 
             return ret;
         }
-
         public T GetNodeVersion<T>(Guid node, Guid version)
             where T : ItemBase
             => GetNodeVersion(node, version, typeof(T)) as T;
@@ -61,20 +62,50 @@ namespace Kasbah.Core.ContentBroker
         {
             var dict = MapItemToDict(item);
 
-            return InternalSave(node, version, dict);
+            var ret = InternalSave(node, version, dict);
+
+            _eventService.Emit<ItemSaved>(new ItemSaved
+            {
+                Node = node,
+                Version = version,
+                Payload = item as ItemBase
+            });
+
+            return ret;
         }
 
         public void SetActiveNodeVersion(Guid node, Guid? version)
         {
-            // if version == null, clear index/cache
-            // if version != null, write/overwrite index/cache
-
             InternalSetActiveNodeVersion(node, version);
+
+            if (!version.HasValue)
+            {
+                _indexService.Delete(node);
+            }
+            else
+            {
+                var dict = GetNodeVersion(node, version.Value);
+                dict["id"] = node;
+
+                _indexService.Store(dict);
+            }
+
+            _eventService.Emit<NodeActiveVersionSet>(new NodeActiveVersionSet
+            {
+                Payload = node
+            });
         }
 
         public Guid CreateNode(Guid? parent, string alias, string type)
         {
-            return InternalCreateNode(parent, alias, type);
+            var node = InternalCreateNode(parent, alias, type);
+
+            _eventService.Emit<NodeCreated>(new NodeCreated
+            {
+                Payload = node
+            });
+
+            return node;
         }
 
         public Guid CreateNode(Guid? parent, string alias, Type type)
@@ -83,6 +114,12 @@ namespace Kasbah.Core.ContentBroker
         public Guid CreateNode<T>(Guid? parent, string alias)
             where T : ItemBase
             => CreateNode(parent, alias, typeof(T));
+
+
+        public IEnumerable<IDictionary<string, object>> Query(object query)
+        {
+            return _indexService.Query(query);
+        }
 
         #endregion
 
