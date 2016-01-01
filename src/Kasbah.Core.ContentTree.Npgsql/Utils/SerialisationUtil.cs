@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.ContentTree.Npgsql.Utils
 {
@@ -9,9 +7,9 @@ namespace Kasbah.Core.ContentTree.Npgsql.Utils
     {
         #region Private Fields
 
-        static JsonSerializerSettings _settings = new JsonSerializerSettings()
+        static JsonSerializerSettings _settings = new JsonSerializerSettings
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
+            // ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
         #endregion
