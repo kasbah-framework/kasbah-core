@@ -8,6 +8,8 @@ using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Kasbah.Core.ContentBroker
 {
@@ -16,11 +18,12 @@ namespace Kasbah.Core.ContentBroker
     {
         #region Public Constructors
 
-        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService)
+        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, ILoggerFactory loggerFactory)
         {
             _contentTreeService = contentTreeService;
             _indexService = indexService;
             _eventService = eventService;
+            _log = loggerFactory.CreateLogger<ContentBroker>();
         }
 
         #endregion
@@ -129,6 +132,9 @@ namespace Kasbah.Core.ContentBroker
         {
             if (item == null) { return null; }
 
+            if (item is IDictionary<string, object>) { return item as IDictionary<string, object>; }
+            if (item is JObject) { return (item as JObject).ToObject<IDictionary<string, object>>(); }
+
             var dict = GetAllProperties(item.GetType())
                 .ToDictionary(ent => ent.Name, ent => ent.GetValue(item, null));
 
@@ -170,6 +176,7 @@ namespace Kasbah.Core.ContentBroker
         readonly ContentTreeService _contentTreeService;
         readonly EventService _eventService;
         readonly IndexService _indexService;
+        readonly ILogger _log;
 
         #endregion
     }
