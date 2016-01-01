@@ -1,20 +1,21 @@
 {
   "version": "1.0.0-*",
   "description": "Lucene.Net implementation of the Kasbah indexing system",
-  "authors": [ "Brendan McKenzie" ],
-  "tags": [ "kasbah" ],
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
   "projectUrl": "http://www.kasbah.io/",
   "licenseUrl": "",
-
   "dependencies": {
     "Kasbah.Core": "",
     "Kasbah.Core.Index": "",
-    "Newtonsoft.Json": "8.0.1-*"
+    "Newtonsoft.Json": "8.0.1-*",
+    "Lucene.Net": "3.0.3"
   },
-
   "frameworks": {
-    "dnx451": {},
-    "dnxcore50": { }
+    "dnx451": {}
   }
 }
-

@@ -121,6 +121,8 @@ namespace Kasbah.Core.ContentBroker
 
         public IEnumerable<IDictionary<string, object>> Query(object query)
         {
+            // TODO: type mapping
+
             return _indexService.Query(query);
         }
 

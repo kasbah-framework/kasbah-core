@@ -44,7 +44,7 @@ namespace Kasbah.Core.ContentBroker
             => GetOrCreate(parent, alias, typeof(T));
 
         public void MoveNode(Guid id, Guid? parent)
-                            => _contentTreeService.MoveNode(id, parent);
+            => _contentTreeService.MoveNode(id, parent);
 
         #endregion
     }
