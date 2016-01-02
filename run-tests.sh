@@ -2,14 +2,14 @@
 # running on the default docker-machine
 
 if [ -z "$DB" ]; then
-    IP=$(docker-machine ip default)
-    DB="Server=$IP;Port=50001;Database=postgres;User Id=postgres;Password="
+    # IP=$(docker-machine ip default)
+    DB="Server=localhost;Port=5432;Database=mymonthlytee;User Id=vagrant;Password=vagrant"
 fi
 if [ -z "$SOLR" ]; then
-    SOLR="http://$IP:50003"
+    SOLR="http://localhost:8983"
 fi
 if [ -z "$REDIS" ]; then
-    REDIS="$IP:50002"
+    REDIS="localhost:6379"
 fi
 
 case "$1" in

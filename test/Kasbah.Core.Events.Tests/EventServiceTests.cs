@@ -1,18 +1,24 @@
 using System.Collections.Generic;
 using Moq;
 using Xunit;
+using Kasbah.Core.Events.InProc;
 
 namespace Kasbah.Core.Events.Tests
 {
     public class EventServiceTests
     {
+        IEventBusProvider GetProvider()
+        {
+            return new InProcEventBusProvider();
+        }
+
         #region Public Methods
 
         [Fact]
         public void Emit_HandlerNotRegistered_WontReceiveEvents()
         {
             // Arrange
-            var service = new EventService(Mock.Of<IEventBusProvider>());
+            var service = new EventService(GetProvider());
             var handler = new EventHandler();
 
             // Act
@@ -26,7 +32,7 @@ namespace Kasbah.Core.Events.Tests
         public void Emit_SingleEvent_EventHandled()
         {
             // Arrange
-            var service = new EventService(Mock.Of<IEventBusProvider>());
+            var service = new EventService(GetProvider());
             var handler = new EventHandler();
             var @event = new TestEvent();
 
@@ -43,7 +49,7 @@ namespace Kasbah.Core.Events.Tests
         public void Emit_TwoEvents_EventsHandled()
         {
             // Arrange
-            var service = new EventService(Mock.Of<IEventBusProvider>());
+            var service = new EventService(GetProvider());
             var handler = new EventHandler();
             var event1 = new TestEvent();
             var event2 = new TestEvent();
@@ -63,7 +69,7 @@ namespace Kasbah.Core.Events.Tests
         public void Emit_TwoHandlers_BothHandlersCalled()
         {
             // Arrange
-            var service = new EventService(Mock.Of<IEventBusProvider>());
+            var service = new EventService(GetProvider());
             var handler1 = new EventHandler();
             var handler2 = new EventHandler();
             var @event = new TestEvent();
@@ -83,7 +89,7 @@ namespace Kasbah.Core.Events.Tests
         public void Emit_UnregisteredHandler_NoEventHandled()
         {
             // Arrange
-            var service = new EventService(Mock.Of<IEventBusProvider>());
+            var service = new EventService(GetProvider());
             var handler = new EventHandler();
             var @event = new TestEvent();
 
@@ -102,7 +108,7 @@ namespace Kasbah.Core.Events.Tests
         public void Emit_UnregisteredHandlerAndType_NoEventHandled()
         {
             // Arrange
-            var service = new EventService(Mock.Of<IEventBusProvider>());
+            var service = new EventService(GetProvider());
             var handler = new EventHandler();
             var @event = new TestEvent();
 
