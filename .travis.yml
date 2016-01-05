@@ -20,4 +20,4 @@ os:
   - linux
   - osx
 script:
-  - ./build.sh --quiet verify
+  - sh build.sh --quiet verify
