@@ -7,19 +7,19 @@ namespace Kasbah.Core.ContentTree.Tests
     {
         #region Public Methods
 
-        [Fact]
-        public void Deserialise_BasicString_ReturnsString()
-        {
-            // Arrange
-            var input = "'string'";
-            var expected = "string";
+        //[Fact]
+        //public void Deserialise_BasicString_ReturnsString()
+        //{
+        //    // Arrange
+        //    var input = "'string'";
+        //    var expected = "string";
 
-            // Act
-            var output = SerialisationUtil.Deserialise<string>(input);
+        //    // Act
+        //    var output = SerialisationUtil.Deserialise<string>(input);
 
-            // Assert
-            Assert.Equal(expected, output);
-        }
+        //    // Assert
+        //    Assert.Equal(expected, output);
+        //}
 
         [Fact]
         public void Serialise_BasicObject_ReturnsCorrectJson()
@@ -35,19 +35,19 @@ namespace Kasbah.Core.ContentTree.Tests
             Assert.Equal(expected, output);
         }
 
-        [Fact]
-        public void Serialisation_DeserialiseToDictionary_ReturnsValidDictionary()
-        {
-            // Arrange
-            const string Input = "{\"a\":1, \"b\":\"b\"}";
+        //[Fact]
+        //public void Serialisation_DeserialiseToDictionary_ReturnsValidDictionary()
+        //{
+        //    // Arrange
+        //    const string Input = "{\"a\":1, \"b\":\"b\"}";
 
-            // Act
-            var output = SerialisationUtil.DeserialiseAnonymous(Input);
+        //    // Act
+        //    var output = SerialisationUtil.DeserialiseAnonymous(Input);
 
-            // Assert
-            Assert.Equal((long)1, output["a"]);
-            Assert.Equal("b", output["b"]);
-        }
+        //    // Assert
+        //    Assert.Equal((long)1, output["a"]);
+        //    Assert.Equal("b", output["b"]);
+        //}
 
         #endregion
     }

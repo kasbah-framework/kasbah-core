@@ -272,3 +272,6 @@ $RECYCLE.BIN/
 
 # OpenCover
 coverage/
+
+# NuGet
+.nuget/

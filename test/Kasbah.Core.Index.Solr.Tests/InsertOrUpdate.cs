@@ -13,24 +13,24 @@ namespace Kasbah.Core.Index.Solr.Tests
     {
         #region Public Methods
 
-        [SolrDbFact]
-        public void ActiveVersionSet_VersionIndexed()
-        {
-            // Arrange
-            var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
-            var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider);
-            var provider = new SolrIndexProvider();
-            var service = new IndexService(provider);
+        //[SolrDbFact]
+        //public void ActiveVersionSet_VersionIndexed()
+        //{
+        //    // Arrange
+        //    var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
+        //    var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider);
+        //    var provider = new SolrIndexProvider();
+        //    var service = new IndexService(provider);
 
-            var node = contentTreeService.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+        //    var node = contentTreeService.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
 
-            var version = contentTreeService.Save<TestItem>(Guid.NewGuid(), node, new TestItem { Value = Guid.NewGuid().ToString() });
+        //    var version = contentTreeService.Save<TestItem>(Guid.NewGuid(), node, new TestItem { Value = Guid.NewGuid().ToString() });
 
-            // Act
-            contentTreeService.SetActiveNodeVersion(node, version.Id);
+        //    // Act
+        //    contentTreeService.SetActiveNodeVersion(node, version.Id);
 
-            // Assert
-        }
+        //    // Assert
+        //}
 
         [SolrDbFact]
         public void Index_RegularObject_SuccessfullyIndexes()
