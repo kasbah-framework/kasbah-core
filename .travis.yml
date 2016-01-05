@@ -18,6 +18,5 @@ mono:
   - 4.2.1
 os:
   - linux
-  - osx
 script:
   - bash build.sh --quiet verify
