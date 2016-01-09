@@ -50,6 +50,9 @@ namespace Kasbah.Core.ContentTree
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
             => _contentTreeProvider.GetNodeVersion(id, version);
 
+        public NodeVersion GetRawNodeVersion(Guid id, Guid version)
+            => _contentTreeProvider.GetRawNodeVersion(id, version);
+
         public Guid GetOrCreate(Guid? parent, string alias, Type type)
         {
             var ret = GetChild(parent, alias);

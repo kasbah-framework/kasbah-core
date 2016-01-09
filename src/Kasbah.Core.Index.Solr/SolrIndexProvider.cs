@@ -2,11 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace Kasbah.Core.Index.Solr
 {
     public class SolrIndexProvider : IIndexProvider
     {
+        readonly ILoggerFactory _loggerFactory;
+        public SolrIndexProvider(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+        }
+
         #region Public Methods
 
         public void Delete(Guid id)
@@ -17,13 +24,13 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null)
         {
             using (var connection = GetConnection())
             {
                 var solrQuery = ParseQuery(query);
 
-                var response = connection.Select(ParseQuery(query));
+                var response = connection.Select(ParseQuery(query), limit);
 
                 return response.Response.Documents.Select(SolrUtil.ConverFromSolr);
             }
@@ -55,7 +62,7 @@ namespace Kasbah.Core.Index.Solr
                 throw new ArgumentNullException(nameof(connectionString));
             }
 
-            return new SolrWebClient(new Uri(connectionString, UriKind.Absolute));
+            return new SolrWebClient(new Uri(connectionString, UriKind.Absolute), _loggerFactory);
         }
 
         string ParseQuery(object query)

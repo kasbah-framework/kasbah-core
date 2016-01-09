@@ -10,7 +10,15 @@ namespace Kasbah.Core.Utils
 
         public static void Register<T>()
         {
-            _types.Add(typeof(T));
+            Register(typeof(T));
+        }
+
+        public static void Register(Type type)
+        {
+            if (!_types.Contains(type))
+            {
+                _types.Add(type);
+            }
         }
 
         public static Type TypeFromName(string name)

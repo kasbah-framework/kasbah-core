@@ -67,9 +67,14 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
-            var data = _connection.QuerySingleFromResource<NodeVersion>("GetNodeVersion", new { id, version });
+            var data = GetRawNodeVersion(id, version);
 
             return data == null ? null : Deserialise(data.Data);
+        }
+
+        public NodeVersion GetRawNodeVersion(Guid id, Guid version)
+        {
+            return _connection.QuerySingleFromResource<NodeVersion>("GetNodeVersion", new { id, version });
         }
 
         public void MoveNode(Guid id, Guid? parent)

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using Kasbah.Core.Index.Solr.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Kasbah.Core.Index.Solr
@@ -11,9 +13,10 @@ namespace Kasbah.Core.Index.Solr
     {
         #region Public Constructors
 
-        public SolrWebClient(Uri baseUri)
+        public SolrWebClient(Uri baseUri, ILoggerFactory loggerFactory)
         {
             BaseAddress = baseUri.ToString();
+            _log = loggerFactory.CreateLogger<SolrWebClient>();
         }
 
         #endregion
@@ -49,14 +52,20 @@ namespace Kasbah.Core.Index.Solr
             SubmitUpdate(request);
         }
 
-        public SelectResponse Select(string query)
+        public SelectResponse Select(string query, int? rows)
         {
             var baseUri = new Uri(new Uri(BaseAddress), _selectUri);
             var uriBuilder = new UriBuilder(baseUri);
 
             uriBuilder.Query = $"wt=json&q={query}";
+            if (rows.HasValue)
+            {
+                uriBuilder.Query += $"&rows={rows}";
+            }
 
             var data = DownloadString(uriBuilder.Uri);
+
+            _log.LogVerbose($"Select response: {data}");
 
             return JsonConvert.DeserializeObject<SelectResponse>(data);
         }
@@ -67,6 +76,8 @@ namespace Kasbah.Core.Index.Solr
 
             var data = JsonConvert.SerializeObject(request);
 
+            _log.LogVerbose($"SubmitRequest data: {data}");
+
             try
             {
                 var ret = UploadString(uri, data);
@@ -76,6 +87,16 @@ namespace Kasbah.Core.Index.Solr
             catch (WebException ex)
             {
                 throw new Exception($"Invalid request: {uri} -- {data}", ex);
+            }
+            catch (AggregateException ex)
+            {
+                var wex = (ex.InnerExceptions.FirstOrDefault(ent => ent is WebException));
+                if (wex != null)
+                {
+                    throw new Exception($"Invalid request: {uri} -- {data}", ex);
+                }
+
+                throw ex;
             }
         }
 
@@ -99,6 +120,8 @@ namespace Kasbah.Core.Index.Solr
 
         readonly Uri _selectUri = new Uri($"/solr/{CoreName}/select", UriKind.Relative);
         readonly Uri _updateUri = new Uri($"/solr/{CoreName}/update?wt=json", UriKind.Relative);
+
+        readonly ILogger _log;
 
         #endregion
     }

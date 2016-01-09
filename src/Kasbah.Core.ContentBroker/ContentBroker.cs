@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kasbah.Core.Annotations;
 using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.ContentTree.Models;
@@ -10,6 +11,7 @@ using Kasbah.Core.Index;
 using Kasbah.Core.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.ContentBroker
 {
@@ -52,9 +54,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var dict = InternalGetNodeVersion(node, version);
 
-            var item = MapDictToItem(dict, type);
-
-            return item;
+            return MapDictToItem(dict, type);
         }
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)
@@ -64,6 +64,8 @@ namespace Kasbah.Core.ContentBroker
         public NodeVersion Save(Guid node, Guid version, object item)
         {
             var dict = MapItemToDict(item);
+
+            dict["id"] = node;
 
             var ret = InternalSave(node, version, dict);
 
@@ -87,8 +89,13 @@ namespace Kasbah.Core.ContentBroker
             }
             else
             {
+                var nodeItem = GetNode(node);
+                var versionItem = InternalGetRawNodeVersion(node, version.Value);
                 var dict = GetNodeVersion(node, version.Value);
                 dict["id"] = node;
+                dict["__nodeType"] = nodeItem.Type;
+                dict["__modified"] = versionItem.Modified;
+                dict["__created"] = versionItem.Created;
 
                 _indexService.Store(dict);
             }
@@ -126,6 +133,19 @@ namespace Kasbah.Core.ContentBroker
             return _indexService.Query(query);
         }
 
+        public IEnumerable<T> Query<T>(object query)
+            where T : ItemBase
+        {
+            return Query(query, typeof(T)).Cast<T>();
+        }
+
+        public IEnumerable<object> Query(object query, Type type)
+        {
+            var ret = Query(query);
+
+            return ret.Select(ent => MapDictToItem(ent, type));
+        }
+
         #endregion
 
         #region Private Methods
@@ -137,8 +157,11 @@ namespace Kasbah.Core.ContentBroker
             if (item is IDictionary<string, object>) { return item as IDictionary<string, object>; }
             if (item is JObject) { return (item as JObject).ToObject<IDictionary<string, object>>(); }
 
+            var nameResolver = new CamelCasePropertyNamesContractResolver();
+
             var dict = GetAllProperties(item.GetType())
-                .ToDictionary(ent => ent.Name, ent => ent.GetValue(item, null));
+                .ToDictionary(ent => nameResolver.GetResolvedPropertyName(ent.Name),
+                    ent => ent.GetValue(item, null));
 
             // TODO: type mapping
 
@@ -148,11 +171,15 @@ namespace Kasbah.Core.ContentBroker
         object MapDictToItem(IDictionary<string, object> dict, Type type)
         {
             var item = Activator.CreateInstance(type);
+            var nameResolver = new CamelCasePropertyNamesContractResolver();
+            var properties = GetAllProperties(type)
+                .Where(ent => ent.GetAttributeValue<SystemFieldAttribute, bool>(a => a == null));
 
-            foreach (var prop in GetAllProperties(type))
+            foreach (var prop in properties)
             {
+                var name = nameResolver.GetResolvedPropertyName(prop.Name);
                 object val;
-                if (dict.TryGetValue(prop.Name, out val))
+                if (dict.TryGetValue(name, out val))
                 {
                     // TODO: type mapping
                     prop.SetValue(item, val, null);

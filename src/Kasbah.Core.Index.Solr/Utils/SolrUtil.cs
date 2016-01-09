@@ -48,7 +48,9 @@ namespace Kasbah.Core.Index.Solr
                 else if (key.EndsWith(TypeSuffixes.String))
                 {
                     key = key.Substring(0, key.Length - TypeSuffixes.String.Length);
-                    value = Convert.ToString(value);
+                    value = (value as Newtonsoft.Json.Linq.JArray)
+                        .ToObject<IEnumerable<string>>()
+                        .FirstOrDefault();
                 }
                 else if (key.EndsWith(TypeSuffixes.DateTime))
                 {
@@ -97,7 +99,7 @@ namespace Kasbah.Core.Index.Solr
                 else if (value is DateTime)
                 {
                     key = key + TypeSuffixes.DateTime;
-                    value = $"{value:o}";
+                    value = ((DateTime)value).ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
                 }
                 else if (value is double)
                 {

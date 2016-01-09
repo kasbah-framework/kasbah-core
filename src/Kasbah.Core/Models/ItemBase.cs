@@ -1,3 +1,6 @@
+using System;
+using Kasbah.Core.Annotations;
+
 namespace Kasbah.Core.Models
 {
     public sealed class EmptyItem : ItemBase
@@ -6,5 +9,7 @@ namespace Kasbah.Core.Models
 
     public abstract class ItemBase
     {
+        [SystemField]
+        public Guid Id { get; set; }
     }
 }

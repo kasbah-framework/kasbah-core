@@ -21,6 +21,9 @@ namespace Kasbah.Core.ContentBroker
         IDictionary<string, object> InternalGetNodeVersion(Guid id, Guid version)
             => _contentTreeService.GetNodeVersion(id, version);
 
+        NodeVersion InternalGetRawNodeVersion(Guid id, Guid version)
+            => _contentTreeService.GetRawNodeVersion(id, version);
+
         #endregion
 
         #region Public Methods
