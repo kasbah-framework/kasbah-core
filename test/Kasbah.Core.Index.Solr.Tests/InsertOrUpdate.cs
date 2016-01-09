@@ -32,44 +32,44 @@ namespace Kasbah.Core.Index.Solr.Tests
         //    // Assert
         //}
 
-        [SolrDbFact]
-        public void Index_RegularObject_SuccessfullyIndexes()
-        {
-            // Arrange
-            var provider = new SolrIndexProvider();
+        // [SolrDbFact]
+        // public void Index_RegularObject_SuccessfullyIndexes()
+        // {
+        //     // Arrange
+        //     var provider = new SolrIndexProvider();
 
-            // Act
-            provider.Store(new Dictionary<string, object> {
-                { "id", Guid.NewGuid() },
-                { "A", 1 }
-            });
+        //     // Act
+        //     provider.Store(new Dictionary<string, object> {
+        //         { "id", Guid.NewGuid() },
+        //         { "A", 1 }
+        //     });
 
-            // Assert
-        }
+        //     // Assert
+        // }
 
-        [SolrDbFact]
-        public void Query_WhereEntryExists_ReturnsIndexEntry()
-        {
-            // Arrange
-            var provider = new SolrIndexProvider();
+        // [SolrDbFact]
+        // public void Query_WhereEntryExists_ReturnsIndexEntry()
+        // {
+        //     // Arrange
+        //     var provider = new SolrIndexProvider();
 
-            var value = Guid.NewGuid();
+        //     var value = Guid.NewGuid();
 
-            provider.Store(new Dictionary<string, object> {
-                { "id", Guid.NewGuid() },
-                { "A", 1 },
-                { "Value", value }
-            });
+        //     provider.Store(new Dictionary<string, object> {
+        //         { "id", Guid.NewGuid() },
+        //         { "A", 1 },
+        //         { "Value", value }
+        //     });
 
-            // Act
-            Thread.Sleep(1100); // commit timeout 1000ms
+        //     // Act
+        //     Thread.Sleep(1100); // commit timeout 1000ms
 
-            var results = provider.Query(new { Value = value });
+        //     var results = provider.Query(new { Value = value });
 
-            // Assert
-            Assert.NotEmpty(results);
-            Assert.Equal(value, results.First()["Value"]);
-        }
+        //     // Assert
+        //     Assert.NotEmpty(results);
+        //     Assert.Equal(value, results.First()["Value"]);
+        // }
 
         #endregion
 
