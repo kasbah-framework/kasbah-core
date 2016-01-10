@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Kasbah.Core.ContentTree.Models
+namespace Kasbah.Core.Models
 {
     public class NodeVersion
     {

@@ -1,6 +1,6 @@
 using System;
-using Kasbah.Core.Events;
 using Kasbah.Core.Models;
+using Kasbah.Core.Events;
 
 namespace Kasbah.Core.ContentBroker.Events
 {

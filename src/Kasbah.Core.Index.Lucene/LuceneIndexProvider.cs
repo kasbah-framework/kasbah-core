@@ -29,7 +29,7 @@ namespace Kasbah.Core.Index.Lucene
             _indexWriter.DeleteDocuments(new Term("id", id.ToString()));
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null, string sort = null)
         {
             var luceneQuery = ParseQuery(query);
 

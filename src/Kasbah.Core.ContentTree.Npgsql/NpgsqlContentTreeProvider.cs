@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Kasbah.Core.ContentTree.Models;
+using Kasbah.Core.Models;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentTree

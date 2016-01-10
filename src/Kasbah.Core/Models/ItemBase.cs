@@ -11,5 +11,8 @@ namespace Kasbah.Core.Models
     {
         [SystemField]
         public Guid Id { get; set; }
+
+        [SystemField]
+        public Node Node { get; set; }
     }
 }

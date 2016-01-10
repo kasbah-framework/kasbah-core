@@ -1,6 +1,6 @@
 using System;
 
-namespace Kasbah.Core.ContentTree.Models
+namespace Kasbah.Core.Models
 {
     public class Node
     {

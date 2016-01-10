@@ -10,7 +10,7 @@ namespace Kasbah.Core.Index
 
         void Delete(Guid id);
 
-        IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null);
+        IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null, string sort = null);
 
         void Store(IDictionary<string, object> value);
 

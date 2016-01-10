@@ -24,13 +24,13 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null, string sort = null)
         {
             using (var connection = GetConnection())
             {
                 var solrQuery = ParseQuery(query);
 
-                var response = connection.Select(ParseQuery(query), limit);
+                var response = connection.Select(ParseQuery(query), limit, sort);
 
                 return response.Response.Documents.Select(SolrUtil.ConverFromSolr);
             }
@@ -62,7 +62,10 @@ namespace Kasbah.Core.Index.Solr
                 throw new ArgumentNullException(nameof(connectionString));
             }
 
-            return new SolrWebClient(new Uri(connectionString, UriKind.Absolute), _loggerFactory);
+            var baseUri = connectionString.Split(';').First();
+            var coreName = connectionString.Split(';').Last();
+
+            return new SolrWebClient(new Uri(baseUri, UriKind.Absolute), coreName, _loggerFactory);
         }
 
         string ParseQuery(object query)

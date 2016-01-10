@@ -4,11 +4,10 @@ using System.Linq;
 using System.Reflection;
 using Kasbah.Core.Annotations;
 using Kasbah.Core.ContentBroker.Events;
+using Kasbah.Core.Models;
 using Kasbah.Core.ContentTree;
-using Kasbah.Core.ContentTree.Models;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
-using Kasbah.Core.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -126,22 +125,22 @@ namespace Kasbah.Core.ContentBroker
             => CreateNode(parent, alias, typeof(T));
 
 
-        public IEnumerable<IDictionary<string, object>> Query(object query)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
         {
             // TODO: type mapping
 
-            return _indexService.Query(query);
+            return _indexService.Query(query, take, sort);
         }
 
-        public IEnumerable<T> Query<T>(object query)
+        public IEnumerable<T> Query<T>(object query, int? take = null, string sort = null)
             where T : ItemBase
         {
-            return Query(query, typeof(T)).Cast<T>();
+            return Query(query, typeof(T), take, sort).Cast<T>();
         }
 
-        public IEnumerable<object> Query(object query, Type type)
+        public IEnumerable<object> Query(object query, Type type, int? take = null, string sort = null)
         {
-            var ret = Query(query);
+            var ret = Query(query, take, sort);
 
             return ret.Select(ent => MapDictToItem(ent, type));
         }
@@ -160,6 +159,7 @@ namespace Kasbah.Core.ContentBroker
             var nameResolver = new CamelCasePropertyNamesContractResolver();
 
             var dict = GetAllProperties(item.GetType())
+                // .Where(ent => ent.GetAttributeValue<SystemFieldAttribute, bool>(a => a == null))
                 .ToDictionary(ent => nameResolver.GetResolvedPropertyName(ent.Name),
                     ent => ent.GetValue(item, null));
 
@@ -184,6 +184,15 @@ namespace Kasbah.Core.ContentBroker
                     // TODO: type mapping
                     prop.SetValue(item, val, null);
                 }
+            }
+
+            if (dict.ContainsKey("id"))
+            {
+                var id = Guid.Parse(dict["id"] as string);
+
+                // TODO: this needs to be done better.
+                var nodeProperty = type.GetProperty("Node");
+                nodeProperty?.SetValue(item, GetNode(id), null);
             }
 
             return item;

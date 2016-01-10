@@ -48,9 +48,9 @@ namespace Kasbah.Core.Index
             return indexObject;
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null, string sort = null)
         {
-            return _indexProvider.Query(query);
+            return _indexProvider.Query(query, limit, sort);
         }
 
         public void Register<T>(IIndexHandler handler)

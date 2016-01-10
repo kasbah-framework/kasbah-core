@@ -13,9 +13,11 @@ namespace Kasbah.Core.Index.Solr
     {
         #region Public Constructors
 
-        public SolrWebClient(Uri baseUri, ILoggerFactory loggerFactory)
+        public SolrWebClient(Uri baseUri, string coreName, ILoggerFactory loggerFactory)
         {
             BaseAddress = baseUri.ToString();
+
+            _coreName = coreName;
             _log = loggerFactory.CreateLogger<SolrWebClient>();
         }
 
@@ -52,16 +54,24 @@ namespace Kasbah.Core.Index.Solr
             SubmitUpdate(request);
         }
 
-        public SelectResponse Select(string query, int? rows)
+        public SelectResponse Select(string query, int? rows, string sort)
         {
             var baseUri = new Uri(new Uri(BaseAddress), _selectUri);
             var uriBuilder = new UriBuilder(baseUri);
 
-            uriBuilder.Query = $"wt=json&q={query}";
+            var queryString = $"wt=json&q={query}";
             if (rows.HasValue)
             {
-                uriBuilder.Query += $"&rows={rows}";
+                queryString += $"&rows={rows}";
             }
+            if (!string.IsNullOrEmpty(sort))
+            {
+                queryString += $"&sort={sort}";
+            }
+
+            uriBuilder.Query = queryString;
+
+            _log.LogVerbose($"Select request: {uriBuilder.Uri}");
 
             var data = DownloadString(uriBuilder.Uri);
 
@@ -116,10 +126,10 @@ namespace Kasbah.Core.Index.Solr
 
         #region Private Fields
 
-        const string CoreName = "kasbah";
+        readonly string _coreName;
 
-        readonly Uri _selectUri = new Uri($"/solr/{CoreName}/select", UriKind.Relative);
-        readonly Uri _updateUri = new Uri($"/solr/{CoreName}/update?wt=json", UriKind.Relative);
+        Uri _selectUri => new Uri($"/solr/{_coreName}/select", UriKind.Relative);
+        Uri _updateUri => new Uri($"/solr/{_coreName}/update?wt=json", UriKind.Relative);
 
         readonly ILogger _log;
 
