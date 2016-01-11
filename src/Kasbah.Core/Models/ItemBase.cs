@@ -7,7 +7,7 @@ namespace Kasbah.Core.Models
     {
     }
 
-    public abstract class ItemBase
+    public abstract class ItemBase : MarshalByRefObject
     {
         [SystemField]
         public Guid Id { get; set; }

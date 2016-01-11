@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Remoting.Messaging;
+using System.Runtime.Remoting.Proxies;
 using Kasbah.Core.Annotations;
 using Kasbah.Core.Models;
-using Kasbah.Core.Utils;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.ContentBroker
 {
-    public class TypeHandler
+    public static class TypeHandler
     {
-        #region Public Constructors
-
-        public TypeHandler()
-        {
-        }
-
-        #endregion
-
         #region Public Methods
 
-        // TODO: passing in these functions is gross and needs to be replaced.
-        public object MapDictToItem(IDictionary<string, object> dict, Type type, Func<Guid, Node> GetNode, Func<Guid, Guid, Type, object> GetNodeVersion)
+        public static object MapDictToItem(IDictionary<string, object> dict, Type type, ContentBroker contentBroker)
         {
-            var item = Activator.CreateInstance(type);
+            var proxiedItem = new ItemBaseProxy(type, dict, contentBroker).GetTransparentProxy();
+
             var nameResolver = new CamelCasePropertyNamesContractResolver();
             var properties = type.GetAllProperties()
                 .Where(ent => ent.GetAttributeValue<SystemFieldAttribute, bool>(a => a == null));
@@ -36,48 +29,14 @@ namespace Kasbah.Core.ContentBroker
                 object val;
                 if (dict.TryGetValue(name, out val))
                 {
-                    // TODO: type mapping --unit test this and make it better
-                    if (typeof(ItemBase).IsAssignableFrom(prop.PropertyType) && val != null)
-                    {
-                        var reference = Guid.Parse(val.ToString());
-
-                        var refNode = GetNode(reference);
-
-                        if (refNode.ActiveVersion.HasValue)
-                        {
-                            val = GetNodeVersion(refNode.Id, refNode.ActiveVersion.Value, TypeUtil.TypeFromName(refNode.Type));
-                        }
-                        else
-                        {
-                            val = null;
-                        }
-                    }
-                    else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(prop.PropertyType) && val != null)
-                    {
-                        var reference = JsonConvert.DeserializeObject<IEnumerable<Guid>>(val.ToString());
-
-                        var refNodes = reference.Select(GetNode);
-
-                        val = refNodes.Where(ent => ent.ActiveVersion.HasValue).Select(ent => GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
-                    }
-
-                    prop.SetValue(item, val, null);
+                    prop.SetValue(proxiedItem, val, null);
                 }
             }
 
-            if (dict.ContainsKey("id"))
-            {
-                var id = Guid.Parse(dict["id"] as string);
-
-                // TODO: this needs to be done better.
-                var nodeProperty = type.GetProperty("Node");
-                nodeProperty?.SetValue(item, GetNode(id), null);
-            }
-
-            return item;
+            return proxiedItem;
         }
 
-        public IDictionary<string, object> MapItemToDict(object item)
+        public static IDictionary<string, object> MapItemToDict(object item)
         {
             if (item == null) { return null; }
 
@@ -109,5 +68,57 @@ namespace Kasbah.Core.ContentBroker
         }
 
         #endregion
+    }
+
+    public class ItemBaseProxy : RealProxy
+    {
+        readonly object _instance;
+        readonly ContentBroker _contentBroker;
+        readonly IDictionary<string, object> _innerDict;
+
+        public ItemBaseProxy(Type type, IDictionary<string, object> innerDict, ContentBroker contentBroker)
+            : base(type)
+        {
+            _instance = Activator.CreateInstance(type);
+            _innerDict = innerDict;
+            _contentBroker = contentBroker;
+        }
+
+        public override IMessage Invoke(IMessage msg)
+        {
+            var methodCall = (IMethodCallMessage)msg;
+            var method = (MethodInfo)methodCall.MethodBase;
+
+            try
+            {
+                switch (method.Name)
+                {
+                    case "get_Node":
+                    {
+                        var id = Guid.Parse(_innerDict["id"] as string);
+
+                        var result = _contentBroker.GetNode(id);
+
+                        return new ReturnMessage(result, null, 0, methodCall.LogicalCallContext, methodCall);
+                    }
+                    default:
+                    {
+                        var result = method.Invoke(_instance, methodCall.InArgs);
+
+                        return new ReturnMessage(result, null, 0, methodCall.LogicalCallContext, methodCall);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e);
+                if (e is TargetInvocationException && e.InnerException != null)
+                {
+                    return new ReturnMessage(e.InnerException, msg as IMethodCallMessage);
+                }
+
+                return new ReturnMessage(e, msg as IMethodCallMessage);
+            }
+        }
     }
 }

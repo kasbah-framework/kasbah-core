@@ -14,13 +14,12 @@ namespace Kasbah.Core.ContentBroker
     {
         #region Public Constructors
 
-        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, ILoggerFactory loggerFactory, TypeHandler typeHandler)
+        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, ILoggerFactory loggerFactory)
         {
             _contentTreeService = contentTreeService;
             _indexService = indexService;
             _eventService = eventService;
             _log = loggerFactory.CreateLogger<ContentBroker>();
-            _typeHandler = typeHandler;
         }
 
         #endregion
@@ -69,7 +68,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var dict = InternalGetNodeVersion(node, version);
 
-            return _typeHandler.MapDictToItem(dict, type, GetNode, GetNodeVersion);
+            return TypeHandler.MapDictToItem(dict, type, this);
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
@@ -89,7 +88,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var ret = Query(query, take, sort);
 
-            return ret.Select(ent => _typeHandler.MapDictToItem(ent, type, GetNode, GetNodeVersion));
+            return ret.Select(ent => TypeHandler.MapDictToItem(ent, type, this));
         }
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)
@@ -98,7 +97,7 @@ namespace Kasbah.Core.ContentBroker
 
         public NodeVersion Save(Guid node, Guid version, object item)
         {
-            var dict = _typeHandler.MapItemToDict(item);
+            var dict = TypeHandler.MapItemToDict(item);
 
             dict["id"] = node;
 
@@ -149,7 +148,6 @@ namespace Kasbah.Core.ContentBroker
         readonly EventService _eventService;
         readonly IndexService _indexService;
         readonly ILogger _log;
-        readonly TypeHandler _typeHandler;
 
         #endregion
     }
