@@ -15,8 +15,7 @@
     "Kasbah.Core": ""
   },
   "frameworks": {
-    "dnx451": {},
-    "dnxcore50": {}
+    "dnx451": {}
   },
   "commands": {
     "test": "xunit.runner.dnx"

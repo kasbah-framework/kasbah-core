@@ -19,8 +19,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Events.InProc",
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Events.Redis", "src\Kasbah.Core.Events.Redis\Kasbah.Core.Events.Redis.xproj", "{266DA087-3A4C-4AA9-B944-B4D9C97A7203}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "StackExchange.Redis", "lib\StackExchange.Redis2\StackExchange.Redis_dnxcore50\StackExchange.Redis\StackExchange.Redis.xproj", "{86526B5C-1163-4481-A5E2-A303A0BB1535}"
-EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Index.Lucene", "src\Kasbah.Core.Index.Lucene\Kasbah.Core.Index.Lucene.xproj", "{962E84CD-A840-43CA-B11C-5707246B8B4A}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Index.Solr", "src\Kasbah.Core.Index.Solr\Kasbah.Core.Index.Solr.xproj", "{9936BCC3-A32C-4A1B-8A5E-E7F8A40CDA14}"
@@ -83,10 +81,6 @@ Global
 		{266DA087-3A4C-4AA9-B944-B4D9C97A7203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{266DA087-3A4C-4AA9-B944-B4D9C97A7203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{266DA087-3A4C-4AA9-B944-B4D9C97A7203}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86526B5C-1163-4481-A5E2-A303A0BB1535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86526B5C-1163-4481-A5E2-A303A0BB1535}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86526B5C-1163-4481-A5E2-A303A0BB1535}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86526B5C-1163-4481-A5E2-A303A0BB1535}.Release|Any CPU.Build.0 = Release|Any CPU
 		{962E84CD-A840-43CA-B11C-5707246B8B4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{962E84CD-A840-43CA-B11C-5707246B8B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{962E84CD-A840-43CA-B11C-5707246B8B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -132,7 +126,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{86526B5C-1163-4481-A5E2-A303A0BB1535} = {DC4A3071-B8F1-4C80-AF69-8BCBB4263E93}
 		{E47F84B0-2E42-48AF-BBE2-31FB8F26BF46} = {D794AFBE-57D9-4574-BFC4-6EEC917391BC}
 		{B4481B9A-F3F9-4D63-A043-374C5871E731} = {D794AFBE-57D9-4574-BFC4-6EEC917391BC}
 		{70123903-C1E4-462F-9590-A04A34785E6E} = {D794AFBE-57D9-4574-BFC4-6EEC917391BC}
