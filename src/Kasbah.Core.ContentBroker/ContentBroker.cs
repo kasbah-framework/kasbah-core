@@ -1,32 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Kasbah.Core.Annotations;
 using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
-using Kasbah.Core.Utils;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.ContentBroker
 {
-    // TODO: implement caching and event bussing
     public partial class ContentBroker
     {
         #region Public Constructors
 
-        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, ILoggerFactory loggerFactory)
+        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, ILoggerFactory loggerFactory, TypeHandler typeHandler)
         {
             _contentTreeService = contentTreeService;
             _indexService = indexService;
             _eventService = eventService;
             _log = loggerFactory.CreateLogger<ContentBroker>();
+            _typeHandler = typeHandler;
         }
 
         #endregion
@@ -37,7 +31,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var node = InternalCreateNode(parent, alias, type);
 
-            _eventService.Emit<NodeCreated>(new NodeCreated
+            _eventService.Emit(new NodeCreated
             {
                 Payload = node
             });
@@ -75,7 +69,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var dict = InternalGetNodeVersion(node, version);
 
-            return MapDictToItem(dict, type);
+            return _typeHandler.MapDictToItem(dict, type, GetNode, GetNodeVersion);
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
@@ -95,22 +89,22 @@ namespace Kasbah.Core.ContentBroker
         {
             var ret = Query(query, take, sort);
 
-            return ret.Select(ent => MapDictToItem(ent, type));
+            return ret.Select(ent => _typeHandler.MapDictToItem(ent, type, GetNode, GetNodeVersion));
         }
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)
-                                    where T : ItemBase
+            where T : ItemBase
             => Save(node, version, item);
 
         public NodeVersion Save(Guid node, Guid version, object item)
         {
-            var dict = MapItemToDict(item);
+            var dict = _typeHandler.MapItemToDict(item);
 
             dict["id"] = node;
 
             var ret = InternalSave(node, version, dict);
 
-            _eventService.Emit<ItemSaved>(new ItemSaved
+            _eventService.Emit(new ItemSaved
             {
                 Node = node,
                 Version = version,
@@ -141,108 +135,10 @@ namespace Kasbah.Core.ContentBroker
                 _indexService.Store(dict);
             }
 
-            _eventService.Emit<NodeActiveVersionSet>(new NodeActiveVersionSet
+            _eventService.Emit(new NodeActiveVersionSet
             {
                 Payload = node
             });
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        static IEnumerable<PropertyInfo> GetAllProperties(Type type)
-        {
-            if (type == null) { return Enumerable.Empty<PropertyInfo>(); }
-
-            var info = type.GetTypeInfo();
-
-            return info.DeclaredProperties.Concat(GetAllProperties(info.BaseType));
-        }
-
-        object MapDictToItem(IDictionary<string, object> dict, Type type)
-        {
-            var item = Activator.CreateInstance(type);
-            var nameResolver = new CamelCasePropertyNamesContractResolver();
-            var properties = GetAllProperties(type)
-                .Where(ent => ent.GetAttributeValue<SystemFieldAttribute, bool>(a => a == null));
-
-            foreach (var prop in properties)
-            {
-                var name = nameResolver.GetResolvedPropertyName(prop.Name);
-                object val;
-                if (dict.TryGetValue(name, out val))
-                {
-                    // TODO: type mapping -- unit test this and make it better
-                    if (typeof(ItemBase).IsAssignableFrom(prop.PropertyType) && val != null)
-                    {
-                        var reference = Guid.Parse(val.ToString());
-
-                        var refNode = GetNode(reference);
-
-                        if (refNode.ActiveVersion.HasValue)
-                        {
-                            val = GetNodeVersion(refNode.Id, refNode.ActiveVersion.Value, TypeUtil.TypeFromName(refNode.Type));
-                        }
-                        else
-                        {
-                            val = null;
-                        }
-                    }
-                    else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(prop.PropertyType) && val != null)
-                    {
-                        var reference = JsonConvert.DeserializeObject<IEnumerable<Guid>>(val.ToString());
-
-                        var refNodes = reference.Select(GetNode);
-
-                        val = refNodes.Where(ent => ent.ActiveVersion.HasValue).Select(ent => GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
-                    }
-
-                    prop.SetValue(item, val, null);
-                }
-            }
-
-            if (dict.ContainsKey("id"))
-            {
-                var id = Guid.Parse(dict["id"] as string);
-
-                // TODO: this needs to be done better.
-                var nodeProperty = type.GetProperty("Node");
-                nodeProperty?.SetValue(item, GetNode(id), null);
-            }
-
-            return item;
-        }
-
-        IDictionary<string, object> MapItemToDict(object item)
-        {
-            if (item == null) { return null; }
-
-            if (item is IDictionary<string, object>) { return item as IDictionary<string, object>; }
-            if (item is JObject) { return (item as JObject).ToObject<IDictionary<string, object>>(); }
-
-            var nameResolver = new CamelCasePropertyNamesContractResolver();
-
-            var dict = GetAllProperties(item.GetType())
-                // .Where(ent => ent.GetAttributeValue<SystemFieldAttribute, bool>(a => a == null))
-                .ToDictionary(ent => nameResolver.GetResolvedPropertyName(ent.Name),
-                    ent => ent.GetValue(item, null));
-
-            // TODO: type mapping -- unit test this and make it better
-            foreach (var key in dict.Keys)
-            {
-                var value = dict[key];
-                if (typeof(ItemBase).IsAssignableFrom(value.GetType()))
-                {
-                    dict[key] = (value as ItemBase).Id;
-                }
-                else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(value.GetType()))
-                {
-                    dict[key] = (value as IEnumerable<ItemBase>).Select(ent => ent.Id);
-                }
-            }
-
-            return dict;
         }
 
         #endregion
@@ -253,6 +149,7 @@ namespace Kasbah.Core.ContentBroker
         readonly EventService _eventService;
         readonly IndexService _indexService;
         readonly ILogger _log;
+        readonly TypeHandler _typeHandler;
 
         #endregion
     }
