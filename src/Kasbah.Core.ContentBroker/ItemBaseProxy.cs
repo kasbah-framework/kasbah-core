@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -86,11 +87,17 @@ namespace Kasbah.Core.ContentBroker
                                     }
                                     else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(method.ReturnType))
                                     {
-                                        var refNodeIds = JsonConvert.DeserializeObject<IEnumerable<Guid>>(result as string);
-                                        var refNodes = refNodeIds.Select(_contentBroker.GetNode);
+                                        var refNodeIds = JsonConvert.DeserializeObject<IEnumerable<string>>(result as string);
+                                        var refNodes = refNodeIds.Select(Guid.Parse).Select(_contentBroker.GetNode);
+
                                         result = refNodes
                                             .Where(ent => ent.ActiveVersion.HasValue)
                                             .Select(ent => _contentBroker.GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
+
+                                        result = typeof(System.Linq.Enumerable)
+                                            .GetMethod("Cast", new[] { typeof(System.Collections.IEnumerable) })
+                                            .MakeGenericMethod(method.ReturnType.GenericTypeArguments.Single())
+                                            .Invoke(null, new object[] { result });
                                     }
 
                                     handled = true;
