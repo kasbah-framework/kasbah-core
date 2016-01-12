@@ -22,6 +22,8 @@ namespace Kasbah.Core.ContentBroker.Tests
             Assert.Equal(expected, actual);
         }
 
+        // TODO: test node to node referencing
+
         #endregion
     }
 }
