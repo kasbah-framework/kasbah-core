@@ -73,6 +73,7 @@ namespace Kasbah.Core.ContentBroker
                                     if (typeof(ItemBase).IsAssignableFrom(method.ReturnType))
                                     {
                                         var refNodeId = Guid.Parse(result as string);
+
                                         var refNode = _contentBroker.GetNode(refNodeId);
                                         if (refNode.ActiveVersion.HasValue)
                                         {
