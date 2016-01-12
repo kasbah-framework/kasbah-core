@@ -16,7 +16,7 @@ namespace Kasbah.Core
 
             return info.DeclaredProperties.Concat(GetAllProperties(info.BaseType));
 #else
-            return type.GetProperties(BindingFlags.Public);
+            return type.GetProperties();
 #endif
         }
 
