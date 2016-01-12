@@ -1,11 +1,9 @@
 using System;
-using Kasbah.Core.Models;
 using Kasbah.Core.Events;
+using Kasbah.Core.Models;
 
 namespace Kasbah.Core.ContentBroker.Events
 {
-    public class ItemSaved : ItemEventBase { }
-
     public abstract class ItemEventBase : EventBase<ItemBase>
     {
         #region Public Properties
@@ -16,4 +14,6 @@ namespace Kasbah.Core.ContentBroker.Events
 
         #endregion
     }
+
+    public class ItemSaved : ItemEventBase { }
 }

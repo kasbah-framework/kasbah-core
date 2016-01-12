@@ -9,9 +9,6 @@ namespace Kasbah.Core.Events.Redis.Tests
     {
         #region Public Methods
 
-        [Fact]
-        public void Noop() { }
-
         [RedisFact]
         public void Emit_HandlerNotRegistered_WontReceiveEvents()
         {
@@ -127,6 +124,9 @@ namespace Kasbah.Core.Events.Redis.Tests
             Assert.DoesNotContain(@event.Id, handler.HandledEvents.Cast<TestEvent>().Select(ent => ent.Id));
         }
 
+        [Fact]
+        public void Noop() { }
+
         internal class EventHandler : IEventHandler
         {
             #region Public Fields
@@ -147,7 +147,11 @@ namespace Kasbah.Core.Events.Redis.Tests
 
         internal class TestEvent : EventBase
         {
+            #region Public Properties
+
             public Guid Id { get; set; } = Guid.NewGuid();
+
+            #endregion
         }
 
         #endregion

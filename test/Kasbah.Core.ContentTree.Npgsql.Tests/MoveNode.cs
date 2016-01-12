@@ -11,6 +11,25 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         #region Public Methods
 
         [DbFact]
+        public void MoveNode_WhenTargetDoesNotExist_ExceptionThrown()
+        {
+            // Arrange
+            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
+
+            var originalParent = Guid.NewGuid();
+            service.CreateNode(originalParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
+            var node = Guid.NewGuid();
+            service.CreateNode(node, originalParent, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
+
+            // Act & Assert
+            Assert.Throws<global::Npgsql.NpgsqlException>(() =>
+            {
+                service.MoveNode(node, Guid.Empty);
+            });
+        }
+
+        [DbFact]
         public void MoveNode_WhenTargetExists_NodeMoved()
         {
             // Arrange
@@ -32,26 +51,6 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
 
             // Assert
             Assert.Equal(targetParent, movedNode.Parent);
-        }
-
-        [DbFact]
-        public void MoveNode_WhenTargetDoesNotExist_ExceptionThrown()
-        {
-            // Arrange
-            var service = new NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
-
-            var originalParent = Guid.NewGuid();
-            service.CreateNode(originalParent, null, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
-
-            var node = Guid.NewGuid();
-            service.CreateNode(node, originalParent, Guid.NewGuid().ToString(), typeof(EmptyItem).FullName);
-
-
-            // Act & Assert
-            Assert.Throws<global::Npgsql.NpgsqlException>(() =>
-            {
-                service.MoveNode(node, Guid.Empty);
-            });
         }
 
         #endregion

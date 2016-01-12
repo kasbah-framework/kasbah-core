@@ -1,9 +1,3 @@
-using System;
-using Kasbah.Core.Models;
-using Kasbah.Core.ContentTree.Tests.TestImpls;
-using Moq;
-using Xunit;
-
 namespace Kasbah.Core.ContentTree.Npgsql.Tests
 {
     public class CreateNode

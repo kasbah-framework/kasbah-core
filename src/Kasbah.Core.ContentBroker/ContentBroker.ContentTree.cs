@@ -11,17 +11,17 @@ namespace Kasbah.Core.ContentBroker
         Guid InternalCreateNode(Guid? parent, string alias, string type)
              => _contentTreeService.CreateNode(parent, alias, type);
 
-        NodeVersion InternalSave(Guid node, Guid version, IDictionary<string, object> item)
-             => _contentTreeService.Save(version, node, item);
-
-        void InternalSetActiveNodeVersion(Guid id, Guid? version)
-              => _contentTreeService.SetActiveNodeVersion(id, version);
-
         IDictionary<string, object> InternalGetNodeVersion(Guid id, Guid version)
             => _contentTreeService.GetNodeVersion(id, version);
 
         NodeVersion InternalGetRawNodeVersion(Guid id, Guid version)
             => _contentTreeService.GetRawNodeVersion(id, version);
+
+        NodeVersion InternalSave(Guid node, Guid version, IDictionary<string, object> item)
+                             => _contentTreeService.Save(version, node, item);
+
+        void InternalSetActiveNodeVersion(Guid id, Guid? version)
+              => _contentTreeService.SetActiveNodeVersion(id, version);
 
         #endregion
 

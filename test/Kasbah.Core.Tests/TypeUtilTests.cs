@@ -79,9 +79,13 @@ namespace Kasbah.Core.Tests
 
     internal class ExampleType
     {
+        #region Public Properties
+
         public string Prop { get; set; }
 
         [SystemField]
         public string SystemField { get; set; }
+
+        #endregion
     }
 }

@@ -3,20 +3,6 @@ using Xunit;
 
 namespace Kasbah.Core.Index.Solr.Tests
 {
-    public class SolrFactAttribute : FactAttribute
-    {
-        #region Public Constructors
-
-        public SolrFactAttribute()
-        {
-            if (Environment.GetEnvironmentVariable("SOLR") == null)
-            {
-                Skip = "Solr unavailable";
-            }
-        }
-
-        #endregion
-    }
     public class SolrDbFactAttribute : FactAttribute
     {
         #region Public Constructors
@@ -45,6 +31,21 @@ namespace Kasbah.Core.Index.Solr.Tests
             if (Skip != null)
             {
                 Skip += " unavailable";
+            }
+        }
+
+        #endregion
+    }
+
+    public class SolrFactAttribute : FactAttribute
+    {
+        #region Public Constructors
+
+        public SolrFactAttribute()
+        {
+            if (Environment.GetEnvironmentVariable("SOLR") == null)
+            {
+                Skip = "Solr unavailable";
             }
         }
 

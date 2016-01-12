@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
@@ -16,26 +13,7 @@ namespace Kasbah.Core.ContentBroker.Tests
 {
     public class Create
     {
-        [Fact]
-        public void Create_WithValidInfo_EmitsEvent()
-        {
-            // Arrange
-            var alias = Guid.NewGuid().ToString();
-            var type = TypeUtil.TypeName<ExampleItem>();
-
-            var provider = new Mock<IEventBusProvider>();
-            provider.Setup(e => e.Emit(It.IsAny<NodeCreated>())).Verifiable();
-
-            var eventService = new EventService(provider.Object);
-
-            var service = new ContentBroker(new ContentTreeService(Mock.Of<IContentTreeProvider>()), new IndexService(Mock.Of<IIndexProvider>()), eventService, Mock.Of<ILoggerFactory>());
-
-            // Act
-            service.CreateNode(null, alias, type);
-
-            // Assert
-            provider.Verify();
-        }
+        #region Public Methods
 
         [Fact]
         public void Create_WithValidInfo_CallsMethodOnTreeProvider()
@@ -57,10 +35,37 @@ namespace Kasbah.Core.ContentBroker.Tests
             // Assert
             provider.Verify();
         }
+
+        [Fact]
+        public void Create_WithValidInfo_EmitsEvent()
+        {
+            // Arrange
+            var alias = Guid.NewGuid().ToString();
+            var type = TypeUtil.TypeName<ExampleItem>();
+
+            var provider = new Mock<IEventBusProvider>();
+            provider.Setup(e => e.Emit(It.IsAny<NodeCreated>())).Verifiable();
+
+            var eventService = new EventService(provider.Object);
+
+            var service = new ContentBroker(new ContentTreeService(Mock.Of<IContentTreeProvider>()), new IndexService(Mock.Of<IIndexProvider>()), eventService, Mock.Of<ILoggerFactory>());
+
+            // Act
+            service.CreateNode(null, alias, type);
+
+            // Assert
+            provider.Verify();
+        }
+
+        #endregion
     }
 
     class ExampleItem : ItemBase
     {
+        #region Public Properties
+
         public string String { get; set; }
+
+        #endregion
     }
 }

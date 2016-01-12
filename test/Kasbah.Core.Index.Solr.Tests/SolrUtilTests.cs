@@ -6,6 +6,8 @@ namespace Kasbah.Core.Index.Solr.Tests
 {
     public class SolrUtilTests
     {
+        #region Public Methods
+
         [Fact]
         public void SolrUtil_ObjectWithInts_HasCorrectKeyForSolr()
         {
@@ -32,5 +34,7 @@ namespace Kasbah.Core.Index.Solr.Tests
             Assert.True(solrDict.ContainsKey("D_d"), "double");
             Assert.True(solrDict.ContainsKey("E_b"), "boolean");
         }
+
+        #endregion
     }
 }

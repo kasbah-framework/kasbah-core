@@ -1,10 +1,11 @@
 using Xunit;
-using Moq;
 
 namespace Kasbah.Core.Index.Solr.Tests
 {
     public class AllTests
     {
+        #region Public Methods
+
         [Fact]
         public void CreateService()
         {
@@ -12,5 +13,7 @@ namespace Kasbah.Core.Index.Solr.Tests
             //  var contentTreeService = Mock.Of<Kasbah.Core.ContentTree.IContentTreeService>();
             //  var service = new SolrIndexService(eventService, contentTreeService);
         }
+
+        #endregion
     }
 }

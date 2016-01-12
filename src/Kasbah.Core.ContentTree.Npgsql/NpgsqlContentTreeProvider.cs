@@ -104,7 +104,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
         {
             _connection.ExecuteFromResource("Schema.fn");
             _connection.ExecuteFromResource("Schema");
-
         }
 
         #endregion

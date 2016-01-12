@@ -10,11 +10,13 @@ namespace Kasbah.Core.Events.Redis
 {
     public class RedisEventBusProvider : IEventBusProvider
     {
+        #region Public Constructors
+
         public RedisEventBusProvider()
         {
             var config = new ConfigurationOptions
             {
-               EndPoints = {
+                EndPoints = {
                    Environment.GetEnvironmentVariable("REDIS")
                },
             };
@@ -23,6 +25,10 @@ namespace Kasbah.Core.Events.Redis
 
             _subscriptions = new Dictionary<Type, ICollection<Subscription>>();
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void Emit<T>(T @event) where T : EventBase
         {
@@ -64,7 +70,6 @@ namespace Kasbah.Core.Events.Redis
         public void Unregister(IEventHandler handler)
         {
             var sub = GetConnection();
-
 
             var subscriptions = _subscriptions
                 .Where(ent => ent.Value.Any(ent2 => ent2.Handler == handler))
@@ -115,12 +120,23 @@ namespace Kasbah.Core.Events.Redis
             }
         }
 
+        #endregion
+
+        #region Private Fields
+
+        readonly ConnectionMultiplexer _redis;
+
+        readonly IDictionary<Type, ICollection<Subscription>> _subscriptions;
+
+        #endregion
+
+        #region Private Methods
+
         ISubscriber GetConnection()
         {
             return _redis.GetSubscriber();
         }
 
-        readonly ConnectionMultiplexer _redis;
-        readonly IDictionary<Type, ICollection<Subscription>> _subscriptions;
+        #endregion
     }
 }

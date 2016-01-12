@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Kasbah.Core.ContentTree.Tests.TestImpls
+﻿namespace Kasbah.Core.ContentTree.Tests.TestImpls
 {
     //internal class BasicEventHandler : IEventHandler
     //{

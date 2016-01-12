@@ -8,11 +8,20 @@ namespace Kasbah.Core.Index.Solr
 {
     public class SolrIndexProvider : IIndexProvider
     {
-        readonly ILoggerFactory _loggerFactory;
+        #region Public Constructors
+
         public SolrIndexProvider(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
         }
+
+        #endregion
+
+        #region Private Fields
+
+        readonly ILoggerFactory _loggerFactory;
+
+        #endregion
 
         #region Public Methods
 

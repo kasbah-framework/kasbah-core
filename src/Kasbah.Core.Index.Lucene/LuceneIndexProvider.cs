@@ -5,7 +5,6 @@ using System.Reflection;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
-using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Version = Lucene.Net.Util.Version;
@@ -14,6 +13,8 @@ namespace Kasbah.Core.Index.Lucene
 {
     public class LuceneIndexProvider : IIndexProvider
     {
+        #region Public Constructors
+
         public LuceneIndexProvider()
         {
             _directory = GetDirectory();
@@ -21,6 +22,8 @@ namespace Kasbah.Core.Index.Lucene
             _indexWriter = new IndexWriter(_directory, _analyser, IndexWriter.MaxFieldLength.UNLIMITED);
             _indexReader = DirectoryReader.Open(_directory, true);
         }
+
+        #endregion
 
         #region Public Methods
 
@@ -123,10 +126,10 @@ namespace Kasbah.Core.Index.Lucene
 
         #region Private members
 
-        readonly Directory _directory;
-        readonly IndexWriter _indexWriter;
-        readonly IndexReader _indexReader;
         readonly StandardAnalyzer _analyser;
+        readonly Directory _directory;
+        readonly IndexReader _indexReader;
+        readonly IndexWriter _indexWriter;
 
         #endregion
     }

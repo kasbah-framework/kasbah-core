@@ -1,16 +1,19 @@
 using System.Collections.Generic;
-using Moq;
-using Xunit;
 using Kasbah.Core.Events.InProc;
+using Xunit;
 
 namespace Kasbah.Core.Events.Tests
 {
     public class EventServiceTests
     {
+        #region Private Methods
+
         IEventBusProvider GetProvider()
         {
             return new InProcEventBusProvider();
         }
+
+        #endregion
 
         #region Public Methods
 

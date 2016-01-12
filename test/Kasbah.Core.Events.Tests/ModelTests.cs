@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Xunit;
 
 namespace Kasbah.Core.Events.Tests
@@ -15,7 +14,6 @@ namespace Kasbah.Core.Events.Tests
 
             // Act
             @event.Payload = "hello";
-
 
             // Assert
             Assert.Equal("hello", @event.Payload);

@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Kasbah.Core.Models;
-using Xunit;
-using Moq;
-using Microsoft.Extensions.Logging;
 
 namespace Kasbah.Core.Index.Solr.Tests
 {

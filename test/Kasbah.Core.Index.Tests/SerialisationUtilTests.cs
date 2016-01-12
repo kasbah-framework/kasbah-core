@@ -7,6 +7,32 @@ namespace Kasbah.Core.Index.Tests
 {
     public class SerialisationUtilTests
     {
+        #region Public Methods
+
+        [Fact]
+        public void Serialise_ObjectWithIgnoredProperty_DoesNotContainIgnoredProperty()
+        {
+            // Arrange
+            var obj = new TypeWithIgnoredProperty { A = "A", B = "B" };
+
+            // Act
+            var dict = SerialisationUtil.Serialise(obj);
+
+            // Assert
+            Assert.True(dict.ContainsKey("A"));
+            Assert.False(dict.ContainsKey("B"));
+        }
+
+        [Fact]
+        public void Serialise_WithNullInput_ThrowsException()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                SerialisationUtil.Serialise(null);
+            });
+        }
+
         [Fact]
         public void Serialise_WithRegularObject_ReturnsPopulatedDictionary()
         {
@@ -23,35 +49,22 @@ namespace Kasbah.Core.Index.Tests
             Assert.Equal("C", dict["B"]);
         }
 
-        [Fact]
-        public void Serialise_WithNullInput_ThrowsException()
-        {
-            // Assert
-            Assert.Throws<ArgumentNullException>(() => {
-                SerialisationUtil.Serialise(null);
-            });
-        }
+        #endregion
 
-        [Fact]
-        public void Serialise_ObjectWithIgnoredProperty_DoesNotContainIgnoredProperty()
-        {
-            // Arrange
-            var obj = new TypeWithIgnoredProperty { A = "A", B = "B" };
-
-            // Act
-            var dict = SerialisationUtil.Serialise(obj);
-
-            // Assert
-            Assert.True(dict.ContainsKey("A"));
-            Assert.False(dict.ContainsKey("B"));
-        }
+        #region Private Classes
 
         class TypeWithIgnoredProperty
         {
+            #region Public Properties
+
             public string A { get; set; }
 
             [IndexIgnore]
             public string B { get; set; }
+
+            #endregion
         }
+
+        #endregion
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,12 +13,7 @@ namespace Kasbah.Core.ContentBroker
 {
     public class ItemBaseProxy : RealProxy
     {
-        static CamelCasePropertyNamesContractResolver NameResolver = new CamelCasePropertyNamesContractResolver();
-
-        readonly object _instance;
-        readonly ContentBroker _contentBroker;
-        readonly IDictionary<string, object> _innerDict;
-        readonly IDictionary<string, object> _valueCache;
+        #region Public Constructors
 
         public ItemBaseProxy(Type type, IDictionary<string, object> innerDict, ContentBroker contentBroker)
             : base(type)
@@ -31,15 +25,9 @@ namespace Kasbah.Core.ContentBroker
             _valueCache = new Dictionary<string, object>();
         }
 
-        object GetOrSetValue(string key, Func<object> generator)
-        {
-            if (!_valueCache.ContainsKey(key))
-            {
-                _valueCache[key] = generator();
-            }
+        #endregion
 
-            return _valueCache[key];
-        }
+        #region Public Methods
 
         public override IMessage Invoke(IMessage msg)
         {
@@ -66,6 +54,7 @@ namespace Kasbah.Core.ContentBroker
                                     handled = true;
                                 }
                                 break;
+
                             default:
                                 if (_innerDict.ContainsKey(name))
                                 {
@@ -104,7 +93,6 @@ namespace Kasbah.Core.ContentBroker
                                 }
                                 break;
                         }
-
                     }
 
                     if (!handled)
@@ -128,5 +116,32 @@ namespace Kasbah.Core.ContentBroker
                 return new ReturnMessage(e, msg as IMethodCallMessage);
             }
         }
+
+        #endregion
+
+        #region Private Fields
+
+        static CamelCasePropertyNamesContractResolver NameResolver = new CamelCasePropertyNamesContractResolver();
+
+        readonly ContentBroker _contentBroker;
+        readonly IDictionary<string, object> _innerDict;
+        readonly object _instance;
+        readonly IDictionary<string, object> _valueCache;
+
+        #endregion
+
+        #region Private Methods
+
+        object GetOrSetValue(string key, Func<object> generator)
+        {
+            if (!_valueCache.ContainsKey(key))
+            {
+                _valueCache[key] = generator();
+            }
+
+            return _valueCache[key];
+        }
+
+        #endregion
     }
 }

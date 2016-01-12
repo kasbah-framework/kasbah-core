@@ -21,6 +21,9 @@ namespace Kasbah.Core.Index
 
         #region Public Methods
 
+        public void Delete(Guid id)
+            => _indexProvider.Delete(id);
+
         public IDictionary<string, object> HandlePreIndex(object item, Type type)
         {
             var indexObject = default(IDictionary<string, object>);
@@ -68,9 +71,6 @@ namespace Kasbah.Core.Index
                 }
             }
         }
-
-        public void Delete(Guid id)
-            => _indexProvider.Delete(id);
 
         public void Store(IDictionary<string, object> value)
             => _indexProvider.Store(value);

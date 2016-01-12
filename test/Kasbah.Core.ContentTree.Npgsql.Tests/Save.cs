@@ -1,11 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using Kasbah.Core.Models;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Xunit;
-
 namespace Kasbah.Core.ContentTree.Npgsql.Tests
 {
     public class Npgsql_Save
