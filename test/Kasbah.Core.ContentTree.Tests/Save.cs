@@ -4,10 +4,15 @@ using Kasbah.Core.ContentTree.Tests.TestImpls;
 using Moq;
 using Xunit;
 
-namespace Kasbah.Core.ContentTree.Npgsql.Tests
+namespace Kasbah.Core.ContentTree.Tests
 {
     public class Save
     {
+        [Fact]
+        public void Noop()
+        {
+            var service = new ContentTreeService(Mock.Of<IContentTreeProvider>());
+        }
         //[Fact]
         //public void Save_TriggersBeforeAndAfterEvents_EventsTriggered()
         //{

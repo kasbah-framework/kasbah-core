@@ -5,7 +5,7 @@ $DNX = "C:\\Users\\Brendan\\.dnx\\runtimes\\dnx-clr-win-x86.1.0.0-rc1-update1\\b
 $ProjectRoot = "C:\\dev\\personal\\kasbah\\kasbah-core\\src\\"
 $TestRoot = "C:\\dev\\personal\\kasbah\\kasbah-core\\test\\"
 
-[string[]] $Projects = "Kasbah.Core", "Kasbah.Core.ContentTree.Npgsql", "Kasbah.Core.Events", ""
+[string[]] $Projects = "Kasbah.Core", "Kasbah.Core.ContentTree.Npgsql", "Kasbah.Core.Events", "Kasbah.Core.Index", "Kasbah.Core.Index.Solr", "Kasbah.Core.Events.Redis", "Kasbah.Core.ContentTree", "Kasbah.Core.ContentBroker", ""
 
 Remove-Item -Force -Confirm:$false -Recurse coverage
 New-Item -Type Directory -Force coverage

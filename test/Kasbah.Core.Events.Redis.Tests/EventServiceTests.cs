@@ -9,6 +9,9 @@ namespace Kasbah.Core.Events.Redis.Tests
     {
         #region Public Methods
 
+        [Fact]
+        public void Noop() { }
+
         [RedisFact]
         public void Emit_HandlerNotRegistered_WontReceiveEvents()
         {
