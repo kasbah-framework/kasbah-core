@@ -134,27 +134,32 @@ namespace Kasbah.Core.Index.Solr
         readonly ILogger _log;
 
         #endregion
+
+#if !DNXCORE50
+        internal string ContentType { set { Headers[HttpRequestHeader.ContentType] = value; } }
+#endif
     }
 
+#if DNXCORE50
     public class WebClient : IDisposable
     {
-        #region Public Constructors
+    #region Public Constructors
 
         public WebClient()
         {
         }
 
-        #endregion
+    #endregion
 
-        #region Public Properties
+    #region Public Properties
 
         public string BaseAddress { get; set; }
 
         public string ContentType { get; set; }
 
-        #endregion
+    #endregion
 
-        #region Public Methods
+    #region Public Methods
 
         public void Dispose()
         {
@@ -203,10 +208,11 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        #endregion
+    #endregion
     }
 
     public class WebException : Exception
     {
     }
+#endif
 }

@@ -7,7 +7,12 @@ namespace Kasbah.Core.Models
     {
     }
 
+#if DNXCORE50
+    public abstract class ItemBase
+#else
+
     public abstract class ItemBase : MarshalByRefObject
+#endif
     {
         [SystemField]
         public Guid Id { get; set; }
