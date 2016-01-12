@@ -5,7 +5,6 @@ using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
-using Kasbah.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
@@ -15,22 +14,15 @@ namespace Kasbah.Core.ContentBroker.Tests
 {
     public class ItemBaseProxyTests
     {
+        // TODO: outstanding tests
+        // tests caching of values
+        // test getting properties that aren't in the dict
+        // test calling methods on objects
+        // test getting the node
+        // test where there is an active version
+        // test throwing an exception in the method
+
         #region Public Methods
-
-        [Fact]
-        public void GetProp_ThatExists_ReturnsCorrectValue()
-        {
-            // Arrange
-            var expected = "hello";
-            var dict = new Dictionary<string, object> { { "string", expected } };
-            var obj = new ItemBaseProxy(typeof(ExampleItem), dict, Utils.MockContentBroker()).GetTransparentProxy() as ExampleItem;
-
-            // Act
-            var actual = obj.String;
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
 
         [Fact]
         public void GetProp_ReferencingOtherItem_HitsContentTreeService()
@@ -109,23 +101,50 @@ namespace Kasbah.Core.ContentBroker.Tests
             provider.Verify();
         }
 
+        [Fact]
+        public void GetProp_ThatExists_ReturnsCorrectValue()
+        {
+            // Arrange
+            var expected = "hello";
+            var dict = new Dictionary<string, object> { { "string", expected } };
+            var obj = new ItemBaseProxy(typeof(ExampleItem), dict, Utils.MockContentBroker()).GetTransparentProxy() as ExampleItem;
+
+            // Act
+            var actual = obj.String;
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
         #endregion
     }
 
     class CrossReferenceA : ItemBase
     {
+        #region Public Properties
+
         public string A { get; set; }
 
         public CrossReferenceB B { get; set; }
+
+        #endregion
     }
 
     class CrossReferenceB : ItemBase
     {
+        #region Public Properties
+
         public string B { get; set; }
+
+        #endregion
     }
 
     class CrossReferenceC : ItemBase
     {
+        #region Public Properties
+
         public IEnumerable<CrossReferenceB> Bs { get; set; }
+
+        #endregion
     }
 }
