@@ -18,7 +18,7 @@ foreach ($Project in $Projects) {
     $ProjectPath = $ProjectRoot + $Project + "\\bin\\debug\\dnx451"
     $TestPath = $TestRoot + $Project + ".Tests"
 
-    &$OpenCover -target:"$DNX" -targetargs:"--lib $ProjectPath -p $TestPath test" -output:"coverage\\$Project.coverage.xml" -filter:+[$Project]* -register
+    &$OpenCover -target:"$DNX" -targetargs:"--lib $ProjectPath -p $TestPath test" -output:"coverage\\$Project.coverage.xml" -filter:+[$Project]* -register -skipautoprops
 }
 
 &$ReportGenerator -reports:"coverage\\*.coverage.xml" -targetdir:"coverage"
