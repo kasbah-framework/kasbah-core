@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Kasbah.Core.Models;
+using Kasbah.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using static Kasbah.Core.ContentTree.Npgsql.Utils.SerialisationUtil;
@@ -30,6 +32,8 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
 
             _connection = new NpgsqlConnection(connectionString);
+
+            EnsureSchema();
         }
 
         #endregion
@@ -92,6 +96,17 @@ namespace Kasbah.Core.ContentTree.Npgsql
         public void SetActiveNodeVersion(Guid id, Guid? version)
         {
             _connection.ExecuteFromResource("SetActiveNodeVersion", new { id, version });
+        }
+
+        #endregion
+
+        #region Private methods
+
+        void EnsureSchema()
+        {
+            _connection.ExecuteFromResource("Schema.fn");
+            _connection.ExecuteFromResource("Schema");
+
         }
 
         #endregion

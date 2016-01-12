@@ -1,0 +1,1 @@
+select ensure_structure();
