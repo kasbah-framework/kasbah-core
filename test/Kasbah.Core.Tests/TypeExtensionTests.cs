@@ -11,6 +11,7 @@ namespace Kasbah.Core.Tests
         [Fact]
         public void GetAllProperties_ReturnsAllProperties()
         {
+#if !DNXCORE50
             // Arrange
             var type = typeof(ExampleType);
 
@@ -20,11 +21,13 @@ namespace Kasbah.Core.Tests
             // Assert
             Assert.NotEmpty(properties);
             Assert.Contains("Prop", properties.Select(ent => ent.Name));
+#endif
         }
 
         [Fact]
         public void GetAttributeValue_WithExistingAttribute_ReturnsExpectedValue()
         {
+#if !DNXCORE50
             // Arrange
             var type = typeof(ExampleType);
 
@@ -33,6 +36,7 @@ namespace Kasbah.Core.Tests
 
             // Assert
             Assert.True(result);
+#endif
         }
 
         #endregion
