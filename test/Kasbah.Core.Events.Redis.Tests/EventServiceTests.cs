@@ -124,9 +124,6 @@ namespace Kasbah.Core.Events.Redis.Tests
             Assert.DoesNotContain(@event.Id, handler.HandledEvents.Cast<TestEvent>().Select(ent => ent.Id));
         }
 
-        [Fact]
-        public void Noop() { }
-
         internal class EventHandler : IEventHandler
         {
             #region Public Fields

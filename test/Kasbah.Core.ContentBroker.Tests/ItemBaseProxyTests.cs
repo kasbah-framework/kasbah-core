@@ -16,13 +16,45 @@ namespace Kasbah.Core.ContentBroker.Tests
     {
         // TODO: outstanding tests
         // tests caching of values
-        // test getting properties that aren't in the dict
-        // test calling methods on objects
-        // test getting the node
-        // test where there is an active version
-        // test throwing an exception in the method
 
         #region Public Methods
+
+        [Fact]
+        public void CallMethod_ThatThrowsAnException_ReturnsTheSameException()
+        {
+            // Arrange
+            var dict = new Dictionary<string, object> { };
+            var obj = new ItemBaseProxy(typeof(ItemWithMethodThatThrowsException), dict, Utils.MockContentBroker()).GetTransparentProxy() as ItemWithMethodThatThrowsException;
+
+            // Act & Assert
+            Assert.Throws<CustomException>(() => obj.ExceptionThrowingMethod(new CustomException()));
+        }
+
+        [Fact]
+        public void GetNode_WhereNodeExists_ReturnsNode()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+
+            var expected = new Node { };
+
+            var provider = new Mock<IContentTreeProvider>();
+            provider.Setup(e => e.GetNode(id)).Returns(expected);
+
+            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
+            var dict = new Dictionary<string, object> {
+                { "id", id.ToString() }
+            };
+
+            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, contentBroker).GetTransparentProxy() as CrossReferenceA;
+
+            // Act
+            var node = obj.Node;
+
+            // Assert
+            Assert.NotNull(node);
+            Assert.Equal(expected, node);
+        }
 
         [Fact]
         public void GetProp_ReferencingOtherItem_HitsContentTreeService()
@@ -51,10 +83,11 @@ namespace Kasbah.Core.ContentBroker.Tests
             // Act
             var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, contentBroker).GetTransparentProxy() as CrossReferenceA;
 
-            var _ = obj.B;
+            var actual = obj.B;
 
             // Assert
             provider.Verify();
+            Assert.NotNull(actual);
         }
 
         [Fact]
@@ -99,6 +132,40 @@ namespace Kasbah.Core.ContentBroker.Tests
 
             // Assert
             provider.Verify();
+            Assert.NotNull(_0);
+            Assert.NotNull(_1);
+            Assert.NotNull(_2);
+        }
+
+        [Fact]
+        public void GetProp_ReferencingOtherItemWithNoActiveVersion_ReturnsNull()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+
+            var expected = new Node
+            {
+                ActiveVersion = null,
+                Type = typeof(CrossReferenceB).AssemblyQualifiedName
+            };
+
+            var provider = new Mock<IContentTreeProvider>();
+            provider.Setup(e => e.GetNode(id)).Returns(expected).Verifiable();
+
+            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
+            var dict = new Dictionary<string, object> {
+                { "a", "A" },
+                { "b", id.ToString() }
+            };
+
+            // Act
+            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, contentBroker).GetTransparentProxy() as CrossReferenceA;
+
+            var actual = obj.B;
+
+            // Assert
+            provider.Verify();
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -114,6 +181,49 @@ namespace Kasbah.Core.ContentBroker.Tests
 
             // Assert
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void GetProp_TwoTimes_ReturnsCachedValue()
+        {
+            // Arrange
+            var dict = new Dictionary<string, object> { { "a", "A" } };
+            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, Utils.MockContentBroker()).GetTransparentProxy() as CrossReferenceA;
+
+            // Act
+            var actual1 = obj.A;
+            var actual2 = obj.A;
+
+            // Assert
+            Assert.Same(actual1, actual2);
+        }
+
+        [Fact]
+        public void OnProxiedItem_CallMethod_ReturnsActualMethodResponse()
+        {
+            // Arrange
+            var dict = new Dictionary<string, object> { };
+            var obj = new ItemBaseProxy(typeof(ItemWithMethod), dict, Utils.MockContentBroker()).GetTransparentProxy() as ItemWithMethod;
+
+            // Act
+            var actual = obj.MyMethod();
+
+            // Assert
+            Assert.Equal(ItemWithMethod.Expected, actual);
+        }
+
+        [Fact]
+        public void OnProxiedItem_GetPropertyNotFromDict_ReturnsActualPropertyValue()
+        {
+            // Arrange
+            var dict = new Dictionary<string, object> { };
+            var obj = new ItemBaseProxy(typeof(ItemWithPropNotInDict), dict, Utils.MockContentBroker()).GetTransparentProxy() as ItemWithPropNotInDict;
+
+            // Act
+            var actual = obj.NotInDict;
+
+            // Assert
+            Assert.Equal(ItemWithPropNotInDict.Expected, actual);
         }
 
         #endregion
@@ -144,6 +254,53 @@ namespace Kasbah.Core.ContentBroker.Tests
         #region Public Properties
 
         public IEnumerable<CrossReferenceB> Bs { get; set; }
+
+        #endregion
+    }
+
+    class CustomException : Exception { }
+
+    class ItemWithMethod : ItemBase
+    {
+        #region Public Fields
+
+        public const string Expected = nameof(ItemWithMethod);
+
+        #endregion
+
+        #region Public Methods
+
+        public string MyMethod()
+        {
+            return Expected;
+        }
+
+        #endregion
+    }
+
+    class ItemWithMethodThatThrowsException : ItemBase
+    {
+        #region Public Methods
+
+        public void ExceptionThrowingMethod(Exception ex)
+        {
+            throw ex;
+        }
+
+        #endregion
+    }
+
+    class ItemWithPropNotInDict : ItemBase
+    {
+        #region Public Fields
+
+        public const string Expected = nameof(ItemWithPropNotInDict);
+
+        #endregion
+
+        #region Public Properties
+
+        public string NotInDict { get; set; } = nameof(ItemWithPropNotInDict);
 
         #endregion
     }
