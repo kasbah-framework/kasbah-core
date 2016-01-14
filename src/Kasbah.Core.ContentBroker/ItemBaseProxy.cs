@@ -105,15 +105,9 @@ namespace Kasbah.Core.ContentBroker
 
                 return new ReturnMessage(ret, null, 0, methodCall.LogicalCallContext, methodCall);
             }
-            catch (Exception e)
+            catch (TargetInvocationException ex)
             {
-                Console.WriteLine("Exception: " + e);
-                if (e is TargetInvocationException && e.InnerException != null)
-                {
-                    return new ReturnMessage(e.InnerException, msg as IMethodCallMessage);
-                }
-
-                return new ReturnMessage(e, msg as IMethodCallMessage);
+                return new ReturnMessage(ex.InnerException, msg as IMethodCallMessage);
             }
         }
 

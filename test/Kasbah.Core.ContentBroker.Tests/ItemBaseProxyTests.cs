@@ -14,9 +14,6 @@ namespace Kasbah.Core.ContentBroker.Tests
 {
     public class ItemBaseProxyTests
     {
-        // TODO: outstanding tests
-        // tests caching of values
-
         #region Public Methods
 
         [Fact]
@@ -190,12 +187,14 @@ namespace Kasbah.Core.ContentBroker.Tests
             var dict = new Dictionary<string, object> { { "a", "A" } };
             var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, Utils.MockContentBroker()).GetTransparentProxy() as CrossReferenceA;
 
+            var expected = obj.A;
+
             // Act
-            var actual1 = obj.A;
-            var actual2 = obj.A;
+            dict["a"] = "B"; // Change the value that would be returned
+            var actual = obj.A;
 
             // Assert
-            Assert.Same(actual1, actual2);
+            Assert.Same(expected, actual);
         }
 
         [Fact]
