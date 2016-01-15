@@ -25,25 +25,31 @@ namespace Kasbah.Core.ContentBroker
 
             var nameResolver = new CamelCasePropertyNamesContractResolver();
 
-            var dict = item.GetType().GetAllProperties()
-                // .Where(ent => ent.GetAttributeValue<SystemFieldAttribute, bool>(a => a == null))
-                .ToDictionary(ent => nameResolver.GetResolvedPropertyName(ent.Name),
-                    ent => ent.GetValue(item, null));
+            var props = item.GetType().GetAllProperties();
+            var dict = new Dictionary<string, object>();
 
-            // TODO: type mapping -- unit test this and make it better
-            foreach (var key in dict.Keys)
+            foreach (var prop in props)
             {
-                var value = dict[key];
-                if (typeof(ItemBase).IsAssignableFrom(value.GetType()))
+                var name = nameResolver.GetResolvedPropertyName(prop.Name);
+                var value = prop.GetValue(item, null);
+
+                if (value == null)
                 {
-                    dict[key] = (value as ItemBase).Id;
+                    dict[name] = null;
+                }
+                else if (typeof(ItemBase).IsAssignableFrom(value.GetType()))
+                {
+                    dict[name] = (value as ItemBase).Id;
                 }
                 else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(value.GetType()))
                 {
-                    dict[key] = (value as IEnumerable<ItemBase>).Select(ent => ent.Id);
+                    dict[name] = (value as IEnumerable<ItemBase>).Select(ent => ent.Id);
+                }
+                else
+                {
+                    dict[name] = value;
                 }
             }
-
             return dict;
         }
 

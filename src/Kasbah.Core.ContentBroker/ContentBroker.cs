@@ -93,9 +93,9 @@ namespace Kasbah.Core.ContentBroker
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)
             where T : ItemBase
-            => Save(node, version, item);
+            => SaveAnonymous(node, version, item);
 
-        public NodeVersion Save(Guid node, Guid version, object item)
+        public NodeVersion SaveAnonymous(Guid node, Guid version, object item)
         {
             var dict = TypeHandler.MapItemToDict(item);
 
