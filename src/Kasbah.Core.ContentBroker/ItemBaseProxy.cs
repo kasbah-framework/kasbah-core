@@ -100,6 +100,16 @@ namespace Kasbah.Core.ContentBroker
                         result = method.Invoke(_instance, methodCall.InArgs);
                     }
 
+                    if (result == null && method.ReturnType.IsValueType)
+                    {
+                        result = Activator.CreateInstance(method.ReturnType);
+                    }
+
+                    if (result is Int64 && method.ReturnType == typeof(Int32))
+                    {
+                        result = Convert.ToInt32(result);
+                    }
+
                     return result;
                 });
 
