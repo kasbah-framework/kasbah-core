@@ -15,7 +15,7 @@ namespace Kasbah.Core.ContentBroker
 {
     public class ItemBaseProxy : RealProxy
     {
-#region Public Constructors
+        #region Public Constructors
 
         public ItemBaseProxy(Type type, IDictionary<string, object> innerDict, ContentBroker contentBroker)
             : base(type)
@@ -27,9 +27,9 @@ namespace Kasbah.Core.ContentBroker
             _valueCache = new Dictionary<string, object>();
         }
 
-#endregion
+        #endregion
 
-#region Public Methods
+        #region Public Methods
 
         public override IMessage Invoke(IMessage msg)
         {
@@ -123,9 +123,9 @@ namespace Kasbah.Core.ContentBroker
             }
         }
 
-#endregion
+        #endregion
 
-#region Private Fields
+        #region Private Fields
 
         static CamelCasePropertyNamesContractResolver NameResolver = new CamelCasePropertyNamesContractResolver();
 
@@ -134,9 +134,9 @@ namespace Kasbah.Core.ContentBroker
         readonly object _instance;
         readonly IDictionary<string, object> _valueCache;
 
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
 
         object GetOrSetValue(string key, Func<object> generator)
         {
@@ -148,7 +148,8 @@ namespace Kasbah.Core.ContentBroker
             return _valueCache[key];
         }
 
-#endregion
+        #endregion
     }
 }
+
 #endif
