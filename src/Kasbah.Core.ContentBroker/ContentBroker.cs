@@ -73,17 +73,11 @@ namespace Kasbah.Core.ContentBroker
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
-        {
-            // TODO: type mapping
-
-            return _indexService.Query(query, take, sort);
-        }
+            => _indexService.Query(query, take, sort);
 
         public IEnumerable<T> Query<T>(object query, int? take = null, string sort = null)
             where T : ItemBase
-        {
-            return Query(query, typeof(T), take, sort).Cast<T>();
-        }
+            => Query(query, typeof(T), take, sort).Cast<T>();
 
         public IEnumerable<object> Query(object query, Type type, int? take = null, string sort = null)
         {

@@ -16,7 +16,7 @@ namespace Kasbah.Core.ContentBroker
         public static object MapDictToItem(Type type, IDictionary<string, object> dict, ContentBroker contentBroker)
         {
 #if DNXCORE50
-            return ItemBase.Create(type, dict, contentBroker);
+            throw new NotImplementedException();
 #else
             return new ItemBaseProxy(type, dict, contentBroker).GetTransparentProxy();
 #endif

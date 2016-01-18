@@ -19,7 +19,6 @@
     "dnx451": { },
     "dnxcore50": {
       "dependencies": {
-        "System.Reflection.DispatchProxy": "4.0.1-*",
         "System.Reflection.TypeExtensions": "4.1.0-*"
       }
     }
