@@ -1,9 +1,9 @@
 ﻿using System;
 using Kasbah.Core.ContentBroker.Events;
+using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
-using Kasbah.Core.Models;
 using Kasbah.Core.Utils;
 using Microsoft.Extensions.Logging;
 using Moq;

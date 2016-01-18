@@ -18,7 +18,8 @@
     "dnx451": { },
     "dnxcore50": {
       "dependencies": {
-        "System.Reflection": "4.1.0-*"
+        "System.Reflection": "4.1.0-*",
+        "System.Reflection.Extensions": "4.0.1-*"
       }
     }
   }

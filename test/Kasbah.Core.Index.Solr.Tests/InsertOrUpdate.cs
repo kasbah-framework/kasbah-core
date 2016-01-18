@@ -68,7 +68,7 @@ namespace Kasbah.Core.Index.Solr.Tests
 
         #region Private Classes
 
-        class TestItem : ItemBase
+        class TestItem
         {
             #region Public Properties
 

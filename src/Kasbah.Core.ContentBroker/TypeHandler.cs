@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.Models;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -11,9 +13,13 @@ namespace Kasbah.Core.ContentBroker
     {
         #region Public Methods
 
-        public static object MapDictToItem(IDictionary<string, object> dict, Type type, ContentBroker contentBroker)
+        public static object MapDictToItem(Type type, IDictionary<string, object> dict, ContentBroker contentBroker)
         {
+#if DNXCORE50
+            return ItemBase.Create(type, dict, contentBroker);
+#else
             return new ItemBaseProxy(type, dict, contentBroker).GetTransparentProxy();
+#endif
         }
 
         public static IDictionary<string, object> MapItemToDict(object item)
@@ -53,6 +59,6 @@ namespace Kasbah.Core.ContentBroker
             return dict;
         }
 
-        #endregion
+#endregion
     }
 }

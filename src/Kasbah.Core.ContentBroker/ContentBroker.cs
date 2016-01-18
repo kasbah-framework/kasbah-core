@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kasbah.Core.ContentBroker.Events;
+using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
@@ -68,7 +69,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var dict = InternalGetNodeVersion(node, version);
 
-            return TypeHandler.MapDictToItem(dict, type, this);
+            return TypeHandler.MapDictToItem(type, dict, this);
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
@@ -88,7 +89,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var ret = Query(query, take, sort);
 
-            return ret.Select(ent => TypeHandler.MapDictToItem(ent, type, this));
+            return ret.Select(ent => TypeHandler.MapDictToItem(type, ent, this));
         }
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)

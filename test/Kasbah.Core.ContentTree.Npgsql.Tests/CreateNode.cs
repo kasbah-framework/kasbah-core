@@ -23,5 +23,10 @@ namespace Kasbah.Core.ContentTree.Npgsql.Tests
         }
 
         #endregion
+    } 
+
+    class EmptyItem
+    {
+
     }
 }

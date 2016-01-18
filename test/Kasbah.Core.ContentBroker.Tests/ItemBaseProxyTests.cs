@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
@@ -21,7 +22,7 @@ namespace Kasbah.Core.ContentBroker.Tests
         {
             // Arrange
             var dict = new Dictionary<string, object> { };
-            var obj = new ItemBaseProxy(typeof(ItemWithMethodThatThrowsException), dict, Utils.MockContentBroker()).GetTransparentProxy() as ItemWithMethodThatThrowsException;
+            var obj = TypeHandler.MapDictToItem(typeof(ItemWithMethodThatThrowsException), dict, Utils.MockContentBroker()) as ItemWithMethodThatThrowsException;
 
             // Act & Assert
             Assert.Throws<CustomException>(() => obj.ExceptionThrowingMethod(new CustomException()));
@@ -43,7 +44,7 @@ namespace Kasbah.Core.ContentBroker.Tests
                 { "id", id.ToString() }
             };
 
-            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, contentBroker).GetTransparentProxy() as CrossReferenceA;
+            var obj = TypeHandler.MapDictToItem(typeof(CrossReferenceA), dict, contentBroker) as CrossReferenceA;
 
             // Act
             var node = obj.Node;
@@ -78,7 +79,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             };
 
             // Act
-            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, contentBroker).GetTransparentProxy() as CrossReferenceA;
+            var obj = TypeHandler.MapDictToItem(typeof(CrossReferenceA), dict, contentBroker) as CrossReferenceA;
 
             var actual = obj.B;
 
@@ -121,7 +122,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             };
 
             // Act
-            var obj = new ItemBaseProxy(typeof(CrossReferenceC), dict, contentBroker).GetTransparentProxy() as CrossReferenceC;
+            var obj = TypeHandler.MapDictToItem(typeof(CrossReferenceC), dict, contentBroker) as CrossReferenceC;
 
             var _0 = obj.Bs;
             var _1 = _0.First();
@@ -156,7 +157,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             };
 
             // Act
-            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, contentBroker).GetTransparentProxy() as CrossReferenceA;
+            var obj = TypeHandler.MapDictToItem(typeof(CrossReferenceA), dict, contentBroker) as CrossReferenceA;
 
             var actual = obj.B;
 
@@ -171,7 +172,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             // Arrange
             var expected = "hello";
             var dict = new Dictionary<string, object> { { "string", expected } };
-            var obj = new ItemBaseProxy(typeof(ExampleItem), dict, Utils.MockContentBroker()).GetTransparentProxy() as ExampleItem;
+            var obj = TypeHandler.MapDictToItem(typeof(ExampleItem), dict, Utils.MockContentBroker()) as ExampleItem;
 
             // Act
             var actual = obj.String;
@@ -185,7 +186,7 @@ namespace Kasbah.Core.ContentBroker.Tests
         {
             // Arrange
             var dict = new Dictionary<string, object> { { "a", "A" } };
-            var obj = new ItemBaseProxy(typeof(CrossReferenceA), dict, Utils.MockContentBroker()).GetTransparentProxy() as CrossReferenceA;
+            var obj = TypeHandler.MapDictToItem(typeof(CrossReferenceA), dict, Utils.MockContentBroker()) as CrossReferenceA;
 
             var expected = obj.A;
 
@@ -202,7 +203,7 @@ namespace Kasbah.Core.ContentBroker.Tests
         {
             // Arrange
             var dict = new Dictionary<string, object> { };
-            var obj = new ItemBaseProxy(typeof(ItemWithMethod), dict, Utils.MockContentBroker()).GetTransparentProxy() as ItemWithMethod;
+            var obj = TypeHandler.MapDictToItem(typeof(ItemWithMethod), dict, Utils.MockContentBroker()) as ItemWithMethod;
 
             // Act
             var actual = obj.MyMethod();
@@ -216,7 +217,7 @@ namespace Kasbah.Core.ContentBroker.Tests
         {
             // Arrange
             var dict = new Dictionary<string, object> { };
-            var obj = new ItemBaseProxy(typeof(ItemWithPropNotInDict), dict, Utils.MockContentBroker()).GetTransparentProxy() as ItemWithPropNotInDict;
+            var obj = TypeHandler.MapDictToItem(typeof(ItemWithPropNotInDict), dict, Utils.MockContentBroker()) as ItemWithPropNotInDict;
 
             // Act
             var actual = obj.NotInDict;

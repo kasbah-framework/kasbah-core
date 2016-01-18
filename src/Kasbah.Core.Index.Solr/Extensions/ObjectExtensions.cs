@@ -17,23 +17,7 @@ namespace Kasbah.Core.Index.Solr
                 propInfo => propInfo.GetValue(source, null)
             );
         }
-
-        public static T ToObject<T>(this IDictionary<string, object> source)
-                    where T : ItemBase, new()
-        {
-            var ret = new T();
-            var typeInfo = typeof(T).GetTypeInfo();
-
-            foreach (var item in source)
-            {
-                typeInfo.DeclaredProperties
-                    .SingleOrDefault(e => e.Name == item.Key)?
-                    .SetValue(ret, item.Value, null);
-            }
-
-            return ret;
-        }
-
+        
         #endregion
     }
 }

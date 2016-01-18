@@ -40,7 +40,7 @@ namespace Kasbah.Core.Index
             {
                 foreach (var handler in _handlers[type].OrderBy(ent => ent.Priority))
                 {
-                    var customFields = handler.AddCustomFields(item as ItemBase);
+                    var customFields = handler.AddCustomFields(indexObject);
                     foreach (var field in customFields)
                     {
                         indexObject[field.Key] = field.Value;

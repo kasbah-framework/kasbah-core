@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Kasbah.Core.Models;
 
 namespace Kasbah.Core.Index
 {
@@ -13,7 +12,7 @@ namespace Kasbah.Core.Index
 
         #region Public Methods
 
-        IDictionary<string, object> AddCustomFields(ItemBase item);
+        IDictionary<string, object> AddCustomFields(IDictionary<string, object> item);
 
         #endregion
     }

@@ -16,10 +16,7 @@ namespace Kasbah.Core.ContentTree
         #endregion
 
         #region Public Methods
-
-        public Guid CreateNode<T>(Guid? parent, string alias) where T : ItemBase
-            => CreateNode(parent, alias, typeof(T));
-
+        
         public Guid CreateNode(Guid? parent, string alias, Type type)
             => CreateNode(parent, alias, type.AssemblyQualifiedName);
 
@@ -59,12 +56,10 @@ namespace Kasbah.Core.ContentTree
 
             return ret.Id;
         }
-
-        public Guid GetOrCreate<T>(Guid? parent, string alias) where T : ItemBase
-            => GetOrCreate(parent, alias, typeof(T));
+        
 
         public NodeVersion GetRawNodeVersion(Guid id, Guid version)
-                            => _contentTreeProvider.GetRawNodeVersion(id, version);
+            => _contentTreeProvider.GetRawNodeVersion(id, version);
 
         public void MoveNode(Guid id, Guid? parent)
         {
