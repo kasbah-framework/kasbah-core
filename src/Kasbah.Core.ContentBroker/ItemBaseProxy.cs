@@ -1,6 +1,7 @@
 #if !DNXCORE50
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using System.Runtime.Remoting.Proxies;
 using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.Utils;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.ContentBroker
@@ -86,7 +88,7 @@ namespace Kasbah.Core.ContentBroker
                                             .Select(ent => _contentBroker.GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
 
                                         result = typeof(System.Linq.Enumerable)
-                                            .GetMethod("Cast", new[] { typeof(System.Collections.IEnumerable) })
+                                            .GetMethod("Cast", new[] { typeof(IEnumerable) })
                                             .MakeGenericMethod(method.ReturnType.GenericTypeArguments.Single())
                                             .Invoke(null, new object[] { result });
                                     }
@@ -110,6 +112,18 @@ namespace Kasbah.Core.ContentBroker
                     if (result is Int64 && method.ReturnType == typeof(Int32))
                     {
                         result = Convert.ToInt32(result);
+                    }
+
+                    if (result is JArray && method.ReturnType != typeof(string))
+                    {
+                        var entType = method.ReturnType.GetGenericArguments().First();
+                        var arrRes = Activator.CreateInstance(typeof(List<>).MakeGenericType(entType)) as IList;
+                        foreach (var token in result as JArray)
+                        {
+                            var ent = token.ToObject(entType);
+                            arrRes.Add(ent);
+                        }
+                        result = arrRes;
                     }
 
                     return result;
