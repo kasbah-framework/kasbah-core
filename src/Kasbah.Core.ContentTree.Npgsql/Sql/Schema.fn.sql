@@ -7,7 +7,7 @@ begin
         id uuid not null default md5(random()::text || clock_timestamp()::text)::uuid unique,
         parent_id uuid references node ( id ),
         alias varchar(256) not null,
-        type varchar(256) not null default 'Kasbah.Core.Models.EmptyItem, Kasbah.Core',
+        type varchar(256) not null default 'Kasbah.Core.ContentBroker.Models.EmptyItem, Kasbah.Core.ContentBroker',
 
         constraint uq_alias unique ( parent_id, alias )
     );
