@@ -126,6 +126,19 @@ namespace Kasbah.Core.ContentBroker
                         result = arrRes;
                     }
 
+                    if (result is string && method.ReturnType != typeof(string))
+                    {
+                        Console.WriteLine(result);
+                        try
+                        {
+                            result = JsonConvert.DeserializeObject(result as string, method.ReturnType);
+                        }
+                        catch (JsonReaderException)
+                        {
+                            result = JsonConvert.DeserializeObject($"'{result}'", method.ReturnType);
+                        }
+                    }
+
                     return result;
                 });
 
