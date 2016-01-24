@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Serialization;
@@ -113,6 +114,11 @@ namespace Kasbah.Core.Index.Solr
                 {
                     key = key + TypeSuffixes.Guid;
                     value = value.ToString();
+                }
+                else if (value is IEnumerable)
+                {
+                    value = string.Join(", ", (value as IEnumerable));
+                    key = key + TypeSuffixes.General;
                 }
                 else
                 {
