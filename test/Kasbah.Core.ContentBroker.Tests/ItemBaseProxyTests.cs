@@ -118,7 +118,7 @@ namespace Kasbah.Core.ContentBroker.Tests
 
             var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
-                { "bs", JsonConvert.SerializeObject(new [] { id1, id2 }) }
+                { "bs", JsonConvert.DeserializeObject(JsonConvert.SerializeObject(new [] { id1, id2 })) }
             };
 
             // Act
