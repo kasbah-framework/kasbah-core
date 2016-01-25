@@ -80,8 +80,8 @@ namespace Kasbah.Core.ContentBroker
                                     }
                                     else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(method.ReturnType))
                                     {
-                                        var refNodeIds = JsonConvert.DeserializeObject<IEnumerable<string>>(result as string);
-                                        var refNodes = refNodeIds.Select(Guid.Parse).Select(_contentBroker.GetNode);
+                                        //var refNodeIds = JsonConvert.DeserializeObject<IEnumerable<string>>(result as string);
+                                        var refNodes = (result as JArray).ToObject<IEnumerable<Guid>>().Select(_contentBroker.GetNode);
 
                                         result = refNodes
                                             .Where(ent => ent.ActiveVersion.HasValue)
