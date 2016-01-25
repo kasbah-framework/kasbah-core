@@ -13,6 +13,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         readonly NpgsqlConnection _connection;
         readonly ILogger _log;
+        readonly object _lock = new object();
 
         #endregion
 
@@ -40,7 +41,10 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public void CreateNode(Guid id, Guid? parent, string alias, string type)
         {
-            _connection.ExecuteFromResource("CreateNode", new { id, parent, alias, type });
+            lock (_lock)
+            {
+                _connection.ExecuteFromResource("CreateNode", new { id, parent, alias, type });
+            }
         }
 
         public void Dispose()
@@ -49,51 +53,78 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
-            return _connection.QueryFromResource<NodeVersion>("GetAllNodeVersions", new { id });
+            lock (_lock)
+            {
+                return _connection.QueryFromResource<NodeVersion>("GetAllNodeVersions", new { id });
+            }
         }
 
         public Node GetChild(Guid? parent, string alias)
         {
-            return _connection.QuerySingleFromResource<Node>("GetChild", new { parent, alias });
+            lock (_lock)
+            {
+                return _connection.QuerySingleFromResource<Node>("GetChild", new { parent, alias });
+            }
         }
 
         public IEnumerable<Node> GetChildren(Guid? id)
         {
-            return _connection.QueryFromResource<Node>("GetChildren", new { id });
+            lock (_lock)
+            {
+                return _connection.QueryFromResource<Node>("GetChildren", new { id });
+            }
         }
 
         public Node GetNode(Guid id)
         {
-            return _connection.QuerySingleFromResource<Node>("GetNode", new { id });
+            lock (_lock)
+            {
+                return _connection.QuerySingleFromResource<Node>("GetNode", new { id });
+            }
         }
 
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
-            var data = GetRawNodeVersion(id, version);
+            lock (_lock)
+            {
+                var data = GetRawNodeVersion(id, version);
 
-            return data == null ? null : Deserialise(data.Data);
+                return data == null ? null : Deserialise(data.Data);
+            }
         }
 
         public NodeVersion GetRawNodeVersion(Guid id, Guid version)
         {
-            return _connection.QuerySingleFromResource<NodeVersion>("GetNodeVersion", new { id, version });
+            lock (_lock)
+            {
+                return _connection.QuerySingleFromResource<NodeVersion>("GetNodeVersion", new { id, version });
+            }
         }
 
         public void MoveNode(Guid id, Guid? parent)
         {
-            _connection.ExecuteFromResource("MoveNode", new { id, parent });
+            lock (_lock)
+            {
+                _connection.ExecuteFromResource("MoveNode", new { id, parent });
+            }
         }
 
         public NodeVersion Save(Guid id, Guid node, IDictionary<string, object> item)
         {
-            var data = Serialise(item);
+            lock (_lock)
+            {
+                var data = Serialise(item);
 
-            return _connection.QuerySingleFromResource<NodeVersion>("Save", new { id, node, data });
+                return _connection.QuerySingleFromResource<NodeVersion>("Save", new { id, node, data });
+            }
         }
 
         public void SetActiveNodeVersion(Guid id, Guid? version)
         {
-            _connection.ExecuteFromResource("SetActiveNodeVersion", new { id, version });
+            lock (_lock)
+            {
+                _connection.ExecuteFromResource("SetActiveNodeVersion", new { id, version });
+            }
         }
 
         #endregion
