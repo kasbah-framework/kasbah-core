@@ -17,6 +17,6 @@ namespace Kasbah.Core.ContentBroker.Models
         public Guid Id { get; set; }
 
         [SystemField]
-        public Node Node { get; }
+        public Node Node { get; internal set; }
     }
 }
