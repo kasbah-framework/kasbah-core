@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kasbah.Core.Cache;
 using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.ContentTree;
@@ -15,11 +16,12 @@ namespace Kasbah.Core.ContentBroker
     {
         #region Public Constructors
 
-        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, ILoggerFactory loggerFactory)
+        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, CacheService cacheService, ILoggerFactory loggerFactory)
         {
             _contentTreeService = contentTreeService;
             _indexService = indexService;
             _eventService = eventService;
+            _cacheService = cacheService;
             _log = loggerFactory.CreateLogger<ContentBroker>();
         }
 
@@ -30,6 +32,9 @@ namespace Kasbah.Core.ContentBroker
         public Guid CreateNode(Guid? parent, string alias, string type)
         {
             var node = InternalCreateNode(parent, alias, type);
+
+            _cacheService.Remove($"kasbah:node:{parent}");
+            _cacheService.Remove($"kasbah:node:children:{parent}");
 
             _eventService.Emit(new NodeCreated
             {
@@ -45,6 +50,28 @@ namespace Kasbah.Core.ContentBroker
         public Guid CreateNode<T>(Guid? parent, string alias)
             where T : ItemBase
             => CreateNode(parent, alias, typeof(T));
+
+        public IEnumerable<Node> GetChildren(Guid? id)
+        {
+            // TODO: dependants
+            return _cacheService.GetOrSet<IEnumerable<Node>>($"kasbah:node:children:{id}",
+                () =>  InternalGetChildren(id));
+        }
+
+        public Node GetChild(Guid? parent, string alias)
+        {
+            // TODO: dependants
+            return _cacheService.GetOrSet<Node>($"kasbah:node:child:{parent}:{alias}",
+                () =>  InternalGetChild(parent, alias));
+        }
+
+        public Node GetNode(Guid id)
+        {
+            // TODO: dependants == children
+            return _cacheService.GetOrSet<Node>($"kasbah:node:{id}",
+                () =>  InternalGetNode(id),
+                () => GetChildren(id).Select(ent => ent.Id).Select(ent => ent.ToString()));
+        }
 
         public Node GetNodeByPath(IEnumerable<string> path)
         {
@@ -67,9 +94,13 @@ namespace Kasbah.Core.ContentBroker
 
         public object GetNodeVersion(Guid node, Guid version, Type type)
         {
-            var dict = InternalGetNodeVersion(node, version);
+            // TODO: dependants
+            return _cacheService.GetOrSet($"kasbah:node_version:{node}:{version}", type, () =>
+            {
+                var dict = InternalGetNodeVersion(node, version);
 
-            return TypeHandler.MapDictToItem(type, dict, this);
+                return TypeHandler.MapDictToItem(type, dict, this);
+            });
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
@@ -142,6 +173,7 @@ namespace Kasbah.Core.ContentBroker
         readonly ContentTreeService _contentTreeService;
         readonly EventService _eventService;
         readonly IndexService _indexService;
+        readonly CacheService _cacheService;
         readonly ILogger _log;
 
         #endregion

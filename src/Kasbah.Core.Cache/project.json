@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0-*",
+  "description": "System cache service",
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
+  "projectUrl": "http://www.kasbah.io/",
+  "licenseUrl": "",
+  "dependencies": {
+    "Kasbah.Core": "1.0.0-*",
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc1-*"
+  },
+  "frameworks": {
+    "dnx451": { },
+    "dnxcore50": { }
+  }
+}

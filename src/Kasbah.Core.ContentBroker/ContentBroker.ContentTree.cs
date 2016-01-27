@@ -24,21 +24,21 @@ namespace Kasbah.Core.ContentBroker
         void InternalSetActiveNodeVersion(Guid id, Guid? version)
             => _contentTreeService.SetActiveNodeVersion(id, version);
 
+        Node InternalGetNode(Guid id)
+            => _contentTreeService.GetNode(id);
+
+        IEnumerable<Node> InternalGetChildren(Guid? id)
+            => _contentTreeService.GetChildren(id);
+
+        Node InternalGetChild(Guid? parent, string alias)
+            => _contentTreeService.GetChild(parent, alias);
+
         #endregion
 
         #region Public Methods
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
             => _contentTreeService.GetAllNodeVersions(id);
-
-        public Node GetChild(Guid? parent, string alias)
-            => _contentTreeService.GetChild(parent, alias);
-
-        public IEnumerable<Node> GetChildren(Guid? id)
-            => _contentTreeService.GetChildren(id);
-
-        public Node GetNode(Guid id)
-            => _contentTreeService.GetNode(id);
 
         public Guid GetOrCreate(Guid? parent, string alias, Type type)
             => _contentTreeService.GetOrCreate(parent, alias, type);

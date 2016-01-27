@@ -10,10 +10,11 @@
   "projectUrl": "http://www.kasbah.io/",
   "licenseUrl": "",
   "dependencies": {
-    "Kasbah.Core": "",
-    "Kasbah.Core.ContentTree": "",
-    "Kasbah.Core.Events": "",
-    "Kasbah.Core.Index": ""
+    "Kasbah.Core": "1.0.0-*",
+    "Kasbah.Core.ContentTree": "1.0.0-*",
+    "Kasbah.Core.Events": "1.0.0-*",
+    "Kasbah.Core.Index": "1.0.0-*",
+    "Kasbah.Core.Cache": "1.0.0-*"
   },
   "frameworks": {
     "dnx451": { },
