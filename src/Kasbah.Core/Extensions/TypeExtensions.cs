@@ -23,20 +23,9 @@ namespace Kasbah.Core
         public static TRet GetAttributeValue<TAttr, TRet>(this MemberInfo info, Func<TAttr, TRet> selector)
             where TAttr : Attribute
         {
-#if DNXCORE50
-
-            var attr = info.CustomAttributes.SingleOrDefault(ent => ent.AttributeType == typeof(TAttr));
-            if (attr != null)
-            {
-                return selector(attr as TAttr);
-            }
-
-            return default(TRet);
-#else
             var attribute = info.GetCustomAttribute<TAttr>();
 
             return selector(attribute);
-#endif
         }
     }
 }
