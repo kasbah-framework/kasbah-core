@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kasbah.Core.Cache;
 using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
@@ -39,7 +40,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             var provider = new Mock<IContentTreeProvider>();
             provider.Setup(e => e.GetNode(id)).Returns(expected);
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "id", id.ToString() }
             };
@@ -72,7 +73,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             provider.Setup(e => e.GetNode(id)).Returns(expected).Verifiable();
             provider.Setup(e => e.GetNodeVersion(id, versionId)).Verifiable();
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "a", "A" },
                 { "b", id.ToString() }
@@ -116,7 +117,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             provider.Setup(e => e.GetNodeVersion(id1, versionId)).Verifiable();
             provider.Setup(e => e.GetNodeVersion(id2, versionId)).Verifiable();
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "bs", JsonConvert.DeserializeObject(JsonConvert.SerializeObject(new [] { id1, id2 })) }
             };
@@ -150,7 +151,7 @@ namespace Kasbah.Core.ContentBroker.Tests
             var provider = new Mock<IContentTreeProvider>();
             provider.Setup(e => e.GetNode(id)).Returns(expected).Verifiable();
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "a", "A" },
                 { "b", id.ToString() }

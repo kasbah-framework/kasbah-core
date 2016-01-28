@@ -13,6 +13,8 @@ namespace Kasbah.Core.Cache
     {
         #region Public Constructors
 
+        public CacheService() { }
+
         public CacheService(IMemoryCache memoryCache = null, IDistributedCache distributedCache = null)
         {
             _memoryCache = memoryCache;
