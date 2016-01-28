@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -10,13 +11,81 @@ namespace Kasbah.Core.Cache
 {
     public class CacheService
     {
+        #region Public Constructors
+
         public CacheService(IMemoryCache memoryCache = null, IDistributedCache distributedCache = null)
         {
             _memoryCache = memoryCache;
             _distributedCache = distributedCache;
         }
 
-        public CacheEntry Get(string key, Type type)
+        #endregion
+
+        #region Public Methods
+
+        public object GetOrSet(string key, Type type, Func<object> generator, Func<object, IEnumerable<string>> dependencies = null)
+        {
+            var ret = Get(key, type)?.Value;
+
+            if (ret == null)
+            {
+                ret = generator();
+
+                Set(key, ret, dependencies?.Invoke(ret));
+            }
+
+            return ret;
+        }
+
+        public T GetOrSet<T>(string key, Func<T> generator, Func<T, IEnumerable<string>> dependencies = null)
+            where T : class
+        {
+            var ret = Get(key, typeof(T))?.Value as T;
+
+            if (ret == null)
+            {
+                ret = generator();
+
+                Set(key, ret, dependencies?.Invoke(ret));
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Removes item with specified key from cache
+        /// </summary>
+        public void Remove(string key)
+        {
+            var item = Get(key, typeof(object));
+
+            foreach (var dependency in GetDependencies(key))
+            {
+                Remove(dependency);
+            }
+
+            if (_distributedCache != null)
+            {
+                _distributedCache.Remove(key);
+            }
+            else if (_memoryCache != null)
+            {
+                _memoryCache.Remove(key);
+            }
+        }
+
+        #endregion
+
+        #region Private Fields
+
+        readonly IDistributedCache _distributedCache;
+        readonly IMemoryCache _memoryCache;
+
+        #endregion
+
+        #region Private Methods
+
+        CacheEntry Get(string key, Type type)
         {
             if (_distributedCache != null)
             {
@@ -27,7 +96,7 @@ namespace Kasbah.Core.Cache
                 // TODO: this is messy
                 return new CacheEntry
                 {
-                    Dependants = (entry["Dependants"] as JArray).ToObject<IEnumerable<string>>(),
+                    Dependencies = (entry["Dependencies"] as JArray).ToObject<IEnumerable<string>>(),
                     Value = (entry["Value"] as JObject).ToObject(type)
                 };
             }
@@ -41,19 +110,28 @@ namespace Kasbah.Core.Cache
             }
         }
 
-        public CacheEntry Set(string key, object value, IEnumerable<string> dependants = null)
+        IEnumerable<string> GetDependencies(string key)
         {
+            var ret = Get($"kasbah:cache_dep:{key}", typeof(IEnumerable<string>));
+
+            return (ret?.Value as IEnumerable<string>) ?? Enumerable.Empty<string>();
+        }
+
+        CacheEntry Set(string key, object value, IEnumerable<string> dependencies = null)
+        {
+            dependencies = dependencies ?? Enumerable.Empty<string>();
+
             Remove(key);
 
             var entry = new CacheEntry
             {
-                Dependants = dependants,
+                Dependencies = dependencies,
                 Value = value
             };
 
             if (_distributedCache != null)
             {
-                foreach (var dependant in dependants)
+                foreach (var dependant in dependencies)
                 {
                     _distributedCache.Remove(dependant);
                 }
@@ -64,7 +142,7 @@ namespace Kasbah.Core.Cache
             }
             else if (_memoryCache != null)
             {
-                foreach (var dependant in dependants)
+                foreach (var dependant in dependencies)
                 {
                     _memoryCache.Remove(dependant);
                 }
@@ -76,57 +154,22 @@ namespace Kasbah.Core.Cache
                 return null;
             }
 
+            if (!key.StartsWith("kasbah:cache_dep:"))
+            {
+                SetDependencies(key, dependencies);
+            }
+
             return entry;
         }
 
-        public object GetOrSet(string key, Type type, Func<object> generator, Func<IEnumerable<string>> dependants = null)
+        void SetDependencies(string key, IEnumerable<string> dependencies)
         {
-            if (key == null) { throw new ArgumentNullException(nameof(key)); }
-            if (type == null) { throw new ArgumentNullException(nameof(type)); }
-            if (generator == null) { throw new ArgumentNullException(nameof(generator)); }
-
-            var ret = Get(key, type)?.Value;
-
-            if (ret == null)
+            if (dependencies != null)
             {
-                ret = generator();
-
-                Set(key, ret, dependants());
-            }
-
-            return ret;
-        }
-
-        public T GetOrSet<T>(string key, Func<T> generator, Func<IEnumerable<string>> dependants = null)
-            where T : class
-            => GetOrSet(key, typeof(T), generator, dependants) as T;
-
-        /// <summary>
-        /// Removes item with specified key from cache
-        /// </summary>
-        public void Remove(string key)
-        {
-            var item = Get(key, typeof(object));
-
-            if (_distributedCache != null)
-            {
-                _distributedCache.Remove(key);
-            }
-            else if (_memoryCache != null)
-            {
-                _memoryCache.Remove(key);
-            }
-
-            if (item != null && item.Dependants != null)
-            {
-                foreach (var dependant in item.Dependants)
-                {
-                    Remove(dependant);
-                }
+                Set($"kasbah:cache_dep:{key}", dependencies);
             }
         }
 
-        readonly IMemoryCache _memoryCache;
-        readonly IDistributedCache _distributedCache;
+        #endregion
     }
 }

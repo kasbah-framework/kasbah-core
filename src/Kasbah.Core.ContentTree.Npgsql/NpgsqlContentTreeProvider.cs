@@ -15,6 +15,8 @@ namespace Kasbah.Core.ContentTree.Npgsql
         readonly ILogger _log;
         readonly object _lock = new object();
 
+        static bool FirstRun = true;
+
         #endregion
 
         #region Public Constructors
@@ -32,7 +34,14 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             _connection = new NpgsqlConnection(connectionString);
 
-            EnsureSchema();
+            if (FirstRun)
+            {
+                lock (_lock)
+                {
+                    FirstRun = false;
+                    EnsureSchema();
+                }
+            }
         }
 
         #endregion
