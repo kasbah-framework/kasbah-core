@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 #if !DNXCORE50
+
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
+
 #endif
+
 using Kasbah.Core.ContentBroker.Models;
 using Kasbah.Core.Utils;
 using Newtonsoft.Json;
@@ -20,7 +24,6 @@ namespace Kasbah.Core.ContentBroker
         : RealProxy
 #endif
     {
-
         #region Public Constructors
 
         public ItemBaseProxy(Type type, IDictionary<string, object> innerDict, ContentBroker contentBroker)
@@ -34,7 +37,6 @@ namespace Kasbah.Core.ContentBroker
 
             _valueCache = new Dictionary<string, object>();
 
-
 #if DNXCORE50
             InitialiseInstance();
 #endif
@@ -43,12 +45,14 @@ namespace Kasbah.Core.ContentBroker
         #endregion
 
         #region Public Methods
+
 #if DNXCORE50
         public object GetTransparentProxy()
         {
             return _instance;
         }
 #else
+
         public override IMessage Invoke(IMessage msg)
         {
             var methodCall = (IMethodCallMessage)msg;
@@ -80,6 +84,7 @@ namespace Kasbah.Core.ContentBroker
                 return new ReturnMessage(ex.InnerException, msg as IMethodCallMessage);
             }
         }
+
 #endif
 
         #endregion
@@ -192,7 +197,6 @@ namespace Kasbah.Core.ContentBroker
                     result = JsonConvert.DeserializeObject($"'{result}'", returnType);
                 }
             }
-
 
             return result;
         }

@@ -28,6 +28,8 @@ namespace Kasbah.Core.ContentTree
 
         void SetActiveNodeVersion(Guid id, Guid? version);
 
+        void Delete(Guid id);
+
         #endregion
     }
 }

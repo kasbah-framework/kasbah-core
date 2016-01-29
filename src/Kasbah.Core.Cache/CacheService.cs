@@ -13,11 +13,13 @@ namespace Kasbah.Core.Cache
     {
         #region Public Constructors
 
-        public CacheService() { }
+        public CacheService()
+        {
+        }
 
         public CacheService(IMemoryCache memoryCache = null, IDistributedCache distributedCache = null)
         {
-            _memoryCache = memoryCache;
+            _memoryCache = null; // memoryCache;
             _distributedCache = distributedCache;
         }
 
@@ -48,7 +50,10 @@ namespace Kasbah.Core.Cache
             {
                 ret = generator();
 
-                Set(key, ret, dependencies?.Invoke(ret));
+                if (ret != null)
+                {
+                    Set(key, ret, dependencies?.Invoke(ret));
+                }
             }
 
             return ret;

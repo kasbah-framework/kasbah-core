@@ -16,7 +16,7 @@ namespace Kasbah.Core.ContentTree
         #endregion
 
         #region Public Methods
-        
+
         public Guid CreateNode(Guid? parent, string alias, Type type)
             => CreateNode(parent, alias, type.AssemblyQualifiedName);
 
@@ -30,6 +30,9 @@ namespace Kasbah.Core.ContentTree
 
             return id;
         }
+
+        public void Delete(Guid id)
+            => _contentTreeProvider.Delete(id);
 
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
             => _contentTreeProvider.GetAllNodeVersions(id);
@@ -59,7 +62,6 @@ namespace Kasbah.Core.ContentTree
 
             return ret.Id;
         }
-        
 
         public NodeVersion GetRawNodeVersion(Guid id, Guid version)
             => _contentTreeProvider.GetRawNodeVersion(id, version);

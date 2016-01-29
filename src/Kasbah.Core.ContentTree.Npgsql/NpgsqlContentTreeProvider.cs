@@ -11,11 +11,10 @@ namespace Kasbah.Core.ContentTree.Npgsql
     {
         #region Private Members
 
-        readonly NpgsqlConnection _connection;
-        readonly ILogger _log;
-        readonly object _lock = new object();
-
         static bool FirstRun = true;
+        readonly NpgsqlConnection _connection;
+        readonly object _lock = new object();
+        readonly ILogger _log;
 
         #endregion
 
@@ -53,6 +52,14 @@ namespace Kasbah.Core.ContentTree.Npgsql
             lock (_lock)
             {
                 _connection.ExecuteFromResource("CreateNode", new { id, parent, alias, type });
+            }
+        }
+
+        public void Delete(Guid id)
+        {
+            lock (_lock)
+            {
+                _connection.ExecuteFromResource("Delete", new { id });
             }
         }
 

@@ -54,12 +54,17 @@ namespace Kasbah.Core.Index.Solr
             SubmitUpdate(request);
         }
 
-        public SelectResponse Select(string query, int? rows, string sort)
+        public SelectResponse Select(string query, int? start, int? rows, string sort)
         {
             var baseUri = new Uri(new Uri(BaseAddress), _selectUri);
             var uriBuilder = new UriBuilder(baseUri);
 
             var queryString = $"wt=json&q={query}";
+
+            if (start.HasValue)
+            {
+                queryString += $"&start={start}";
+            }
             if (rows.HasValue)
             {
                 queryString += $"&rows={rows}";

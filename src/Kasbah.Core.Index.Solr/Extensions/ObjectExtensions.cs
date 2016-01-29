@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Kasbah.Core.Models;
 
 namespace Kasbah.Core.Index.Solr
 {
@@ -17,7 +16,7 @@ namespace Kasbah.Core.Index.Solr
                 propInfo => propInfo.GetValue(source, null)
             );
         }
-        
+
         #endregion
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kasbah.Core.Index.Utils;
-using Kasbah.Core.Models;
 
 namespace Kasbah.Core.Index
 {
@@ -51,9 +50,9 @@ namespace Kasbah.Core.Index
             return indexObject;
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null, string sort = null)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
         {
-            return _indexProvider.Query(query, limit, sort);
+            return _indexProvider.Query(query, skip, take, sort);
         }
 
         public void Register<T>(IIndexHandler handler)

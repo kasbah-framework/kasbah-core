@@ -8,7 +8,7 @@ using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
-using Microsoft.Extensions.Logging; 
+using Microsoft.Extensions.Logging;
 
 // TODO: unit test the caching strategy to within an inch of its life.
 
@@ -51,6 +51,14 @@ namespace Kasbah.Core.ContentBroker
         public Guid CreateNode<T>(Guid? parent, string alias)
             where T : ItemBase
             => CreateNode(parent, alias, typeof(T));
+
+        public void Delete(Guid id)
+        {
+            _cacheService.Remove($"kasbah:node:{id}");
+
+            _contentTreeService.Delete(id);
+        }
+            
 
         public Node GetChild(Guid? parent, string alias)
         {
@@ -122,20 +130,20 @@ namespace Kasbah.Core.ContentBroker
             });
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query, int? take = null, string sort = null)
-            => _indexService.Query(query, take, sort);
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
+            => _indexService.Query(query, skip, take, sort);
 
-        public IEnumerable<T> Query<T>(object query, int? take = null, string sort = null)
+        public IEnumerable<T> Query<T>(object query, int? skip = null,int? take = null, string sort = null)
             where T : ItemBase
-            => Query(query, typeof(T), take, sort).Cast<T>();
+            => Query(query, typeof(T), skip, take, sort).Cast<T>();
 
-        public IEnumerable<object> Query(object query, Type type, int? take = null, string sort = null)
+        public IEnumerable<object> Query(object query, Type type, int? skip = null, int? take = null, string sort = null)
         {
             // TODO: dependants
             var cacheKey = $"kasbah:query:{query.GetHashCode()}:{type}:{take}:{sort}";
             return _cacheService.GetOrSet(cacheKey, () =>
             {
-                var ret = Query(query, take, sort);
+                var ret = Query(query, skip, take, sort);
 
                 return ret.Select(ent => TypeHandler.MapDictToItem(type, ent, this));
             });

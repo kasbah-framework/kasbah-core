@@ -33,13 +33,13 @@ namespace Kasbah.Core.Index.Solr
             }
         }
 
-        public IEnumerable<IDictionary<string, object>> Query(object query, int? limit = null, string sort = null)
+        public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
         {
             using (var connection = GetConnection())
             {
                 var solrQuery = ParseQuery(query);
 
-                var response = connection.Select(ParseQuery(query), limit, sort);
+                var response = connection.Select(ParseQuery(query), skip, take, sort);
 
                 return response.Response.Documents.Select(SolrUtil.ConverFromSolr);
             }
