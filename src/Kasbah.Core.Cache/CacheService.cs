@@ -17,9 +17,8 @@ namespace Kasbah.Core.Cache
         {
         }
 
-        public CacheService(IMemoryCache memoryCache = null, IDistributedCache distributedCache = null)
+        public CacheService(IDistributedCache distributedCache = null)
         {
-            _memoryCache = null; // memoryCache;
             _distributedCache = distributedCache;
         }
 
@@ -75,10 +74,6 @@ namespace Kasbah.Core.Cache
             {
                 _distributedCache.Remove(key);
             }
-            else if (_memoryCache != null)
-            {
-                _memoryCache.Remove(key);
-            }
         }
 
         #endregion
@@ -86,7 +81,6 @@ namespace Kasbah.Core.Cache
         #region Private Fields
 
         readonly IDistributedCache _distributedCache;
-        readonly IMemoryCache _memoryCache;
 
         #endregion
 
@@ -106,10 +100,6 @@ namespace Kasbah.Core.Cache
                     Dependencies = (entry["Dependencies"] as JArray).ToObject<IEnumerable<string>>(),
                     Value = (entry["Value"] as JObject).ToObject(type)
                 };
-            }
-            else if (_memoryCache != null)
-            {
-                return _memoryCache.Get(key) as CacheEntry;
             }
             else
             {
@@ -146,15 +136,6 @@ namespace Kasbah.Core.Cache
                 var data = JsonConvert.SerializeObject(entry);
 
                 _distributedCache.Set(key, Encoding.UTF8.GetBytes(data));
-            }
-            else if (_memoryCache != null)
-            {
-                foreach (var dependant in dependencies)
-                {
-                    _memoryCache.Remove(dependant);
-                }
-
-                _memoryCache.Set(key, entry);
             }
             else
             {

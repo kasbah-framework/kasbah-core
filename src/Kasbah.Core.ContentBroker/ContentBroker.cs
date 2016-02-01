@@ -57,6 +57,7 @@ namespace Kasbah.Core.ContentBroker
             _cacheService.Remove($"kasbah:node:{id}");
 
             _contentTreeService.Delete(id);
+            _indexService.Delete(id);
         }
             
 
