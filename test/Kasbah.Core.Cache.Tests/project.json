@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0-*",
+  "description": "Kasbah.Core.Cache Unit Tests",
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
+  "projectUrl": "http://www.kasbah.io/",
+  "licenseUrl": "",
+  "dependencies": {
+    "Kasbah.Core.Cache": "",
+    "Moq": "4.2.1510.2205",
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-*"
+  },
+  "frameworks": {
+    "dnx451": { }
+  },
+  "commands": {
+    "test": "xunit.runner.dnx"
+  }
+}
