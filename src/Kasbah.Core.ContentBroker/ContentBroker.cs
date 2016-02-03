@@ -59,7 +59,7 @@ namespace Kasbah.Core.ContentBroker
             _contentTreeService.Delete(id);
             _indexService.Delete(id);
         }
-            
+
 
         public Node GetChild(Guid? parent, string alias)
         {
@@ -134,20 +134,20 @@ namespace Kasbah.Core.ContentBroker
         public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
             => _indexService.Query(query, skip, take, sort);
 
-        public IEnumerable<T> Query<T>(object query, int? skip = null,int? take = null, string sort = null)
+        public IEnumerable<T> Query<T>(object query, int? skip = null, int? take = null, string sort = null)
             where T : ItemBase
             => Query(query, typeof(T), skip, take, sort).Cast<T>();
 
         public IEnumerable<object> Query(object query, Type type, int? skip = null, int? take = null, string sort = null)
         {
             // TODO: dependants
-            var cacheKey = $"kasbah:query:{query.GetHashCode()}:{type}:{take}:{sort}";
-            return _cacheService.GetOrSet(cacheKey, () =>
-            {
-                var ret = Query(query, skip, take, sort);
+            // var cacheKey = $"kasbah:query:{query.GetHashCode()}:{type}:{take}:{sort}";
+            // return _cacheService.GetOrSet(cacheKey, () =>
+            // {
+            var ret = Query(query, skip, take, sort);
 
-                return ret.Select(ent => TypeHandler.MapDictToItem(type, ent, this));
-            });
+            return ret.Select(ent => TypeHandler.MapDictToItem(type, ent, this));
+            // });
         }
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)
