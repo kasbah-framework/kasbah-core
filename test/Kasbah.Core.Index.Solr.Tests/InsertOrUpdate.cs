@@ -1,4 +1,10 @@
-using Kasbah.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Xunit;
 
 namespace Kasbah.Core.Index.Solr.Tests
 {
@@ -6,63 +12,44 @@ namespace Kasbah.Core.Index.Solr.Tests
     {
         #region Public Methods
 
-        //[SolrDbFact]
-        //public void ActiveVersionSet_VersionIndexed()
-        //{
-        //    // Arrange
-        //    var contentTreeProvider = new Kasbah.Core.ContentTree.Npgsql.NpgsqlContentTreeProvider(Mock.Of<ILoggerFactory>());
-        //    var contentTreeService = new Kasbah.Core.ContentTree.ContentTreeService(contentTreeProvider);
-        //    var provider = new SolrIndexProvider();
-        //    var service = new IndexService(provider);
+        [SolrDbFact]
+        public void Index_RegularObject_SuccessfullyIndexes()
+        {
+            // Arrange
+            var provider = new SolrIndexProvider(Mock.Of<ILoggerFactory>());
 
-        //    var node = contentTreeService.CreateNode<TestItem>(null, Guid.NewGuid().ToString());
+            // Act
+            provider.Store(new Dictionary<string, object> {
+                 { "id", Guid.NewGuid() },
+                 { "A", 1 }
+             });
 
-        //    var version = contentTreeService.Save<TestItem>(Guid.NewGuid(), node, new TestItem { Value = Guid.NewGuid().ToString() });
+            // Assert
+        }
 
-        //    // Act
-        //    contentTreeService.SetActiveNodeVersion(node, version.Id);
+        [SolrDbFact]
+        public void Query_WhereEntryExists_ReturnsIndexEntry()
+        {
+            // Arrange
+            var provider = new SolrIndexProvider(Mock.Of<ILoggerFactory>());
 
-        //    // Assert
-        //}
+            var id = Guid.NewGuid();
+            const int aValue = 1;
 
-        // [SolrDbFact]
-        // public void Index_RegularObject_SuccessfullyIndexes()
-        // {
-        //     // Arrange
-        //     var provider = new SolrIndexProvider();
+            provider.Store(new Dictionary<string, object> {
+                 { "id", id },
+                 { "A", aValue }
+             });
 
-        //     // Act
-        //     provider.Store(new Dictionary<string, object> {
-        //         { "id", Guid.NewGuid() },
-        //         { "A", 1 }
-        //     });
+            // Act
+            Thread.Sleep(1100); // commit timeout 1000ms
 
-        //     // Assert
-        // }
+            var results = provider.Query(new { id });
 
-        // [SolrDbFact]
-        // public void Query_WhereEntryExists_ReturnsIndexEntry()
-        // {
-        //     // Arrange
-        //     var provider = new SolrIndexProvider();
-
-        //     var value = Guid.NewGuid();
-
-        //     provider.Store(new Dictionary<string, object> {
-        //         { "id", Guid.NewGuid() },
-        //         { "A", 1 },
-        //         { "Value", value }
-        //     });
-
-        //     // Act
-        //     Thread.Sleep(1100); // commit timeout 1000ms
-
-        //     var results = provider.Query(new { Value = value });
-
-        //     // Assert
-        //     Assert.NotEmpty(results);
-        //     Assert.Equal(value, results.First()["Value"]);
-        // }
+            // Assert
+            Assert.NotEmpty(results);
+            Assert.Equal(aValue, results.First()["A"]);
+        }
 
         #endregion
 

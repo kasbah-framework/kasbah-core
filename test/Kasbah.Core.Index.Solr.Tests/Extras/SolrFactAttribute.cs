@@ -9,28 +9,9 @@ namespace Kasbah.Core.Index.Solr.Tests
 
         public SolrDbFactAttribute()
         {
-            Skip = null;
-
             if (Environment.GetEnvironmentVariable("SOLR") == null)
             {
-                Skip = "Solr";
-            }
-
-            if (Environment.GetEnvironmentVariable("DB") == null)
-            {
-                if (Skip == null)
-                {
-                    Skip = "Database";
-                }
-                else
-                {
-                    Skip += " and database";
-                }
-            }
-
-            if (Skip != null)
-            {
-                Skip += " unavailable";
+                Skip = "Solr unavailable";
             }
         }
 
