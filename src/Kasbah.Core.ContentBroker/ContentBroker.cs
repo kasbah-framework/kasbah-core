@@ -35,7 +35,7 @@ namespace Kasbah.Core.ContentBroker
         {
             var node = InternalCreateNode(parent, alias, type);
 
-            _cacheService.Remove($"kasbah:node:{parent}");
+            _cacheService.Remove(CacheKeys.Children(parent));
 
             _eventService.Emit(new NodeCreated
             {
@@ -54,7 +54,11 @@ namespace Kasbah.Core.ContentBroker
 
         public void Delete(Guid id)
         {
-            _cacheService.Remove($"kasbah:node:{id}");
+            var node = GetNode(id);
+
+            _cacheService.Remove(CacheKeys.Node(id));
+            _cacheService.Remove(CacheKeys.Children(node.Parent));
+            _cacheService.Remove(CacheKeys.Child(node.Parent, node.Alias));
 
             _contentTreeService.Delete(id);
             _indexService.Delete(id);
@@ -64,33 +68,24 @@ namespace Kasbah.Core.ContentBroker
         public Node GetChild(Guid? parent, string alias)
         {
             // TODO: dependants
-            return _cacheService.GetOrSet<Node>($"kasbah:node:child:{parent}:{alias}",
-                () => InternalGetChild(parent, alias));
+            return _cacheService.GetOrSet<Node>(CacheKeys.Child(parent, alias),
+                () => InternalGetChild(parent, alias),
+                (node) => new[] { CacheKeys.Node(node.Id) });
         }
 
         public IEnumerable<Node> GetChildren(Guid? id)
         {
             // TODO: dependants
-            return _cacheService.GetOrSet<IEnumerable<Node>>($"kasbah:node:children:{id}",
-                () => InternalGetChildren(id));
+            return _cacheService.GetOrSet<IEnumerable<Node>>(CacheKeys.Children(id),
+                () => InternalGetChildren(id),
+                (children) => children.Select(ent => CacheKeys.Node(ent.Id)));
         }
 
         public Node GetNode(Guid id)
         {
             // TODO: dependants == children
-            var cacheKey = $"kasbah:node:{id}";
-            return _cacheService.GetOrSet<Node>(cacheKey,
-                () => InternalGetNode(id),
-                (node) =>
-                {
-                    var ret = new[]
-                    {
-                        $"kasbah:node:children:{node.Parent}",
-                        $"kasbah:node:child:{node.Parent}:{node.Alias}"
-                    };
-
-                    return ret.Concat(GetChildren(node.Id).SelectMany(child => new[] { $"kasbah:node:{child.Id}", $"kasbah:noder:child:{node.Id}:{child.Alias}" }));
-                });
+            return _cacheService.GetOrSet<Node>(CacheKeys.Node(id),
+                () => InternalGetNode(id));
         }
 
         public Node GetNodeByPath(IEnumerable<string> path)
@@ -115,20 +110,13 @@ namespace Kasbah.Core.ContentBroker
         public object GetNodeVersion(Guid node, Guid version, Type type)
         {
             // TODO: dependants
-            var cacheKey = $"kasbah:node_version:{node}:{version}";
-            return _cacheService.GetOrSet(cacheKey, type, () =>
+            return _cacheService.GetOrSet(CacheKeys.NodeVersion(node, version), type, () =>
             {
                 var dict = InternalGetNodeVersion(node, version);
 
                 return TypeHandler.MapDictToItem(type, dict, this);
             },
-            (nodeVersion) =>
-            {
-                return new[]
-                {
-                    $"kasbah:node:{node}"
-                };
-            });
+            (nodeVersion) => new[] { CacheKeys.Node(node) });
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
@@ -140,14 +128,9 @@ namespace Kasbah.Core.ContentBroker
 
         public IEnumerable<object> Query(object query, Type type, int? skip = null, int? take = null, string sort = null)
         {
-            // TODO: dependants
-            // var cacheKey = $"kasbah:query:{query.GetHashCode()}:{type}:{take}:{sort}";
-            // return _cacheService.GetOrSet(cacheKey, () =>
-            // {
             var ret = Query(query, skip, take, sort);
 
             return ret.Select(ent => TypeHandler.MapDictToItem(type, ent, this));
-            // });
         }
 
         public NodeVersion Save<T>(Guid node, Guid version, T item)
@@ -156,7 +139,7 @@ namespace Kasbah.Core.ContentBroker
 
         public NodeVersion SaveAnonymous(Guid node, Guid version, object item)
         {
-            _cacheService.Remove($"kasbah:node_version:{node}:{version}");
+            _cacheService.Remove(CacheKeys.NodeVersion(node, version));
 
             var dict = TypeHandler.MapItemToDict(item);
 
@@ -176,10 +159,9 @@ namespace Kasbah.Core.ContentBroker
 
         public void SetActiveNodeVersion(Guid node, Guid? version)
         {
-            var nodeItem = GetNode(node);
-            _cacheService.Remove($"kasbah:node:{node}");
-
             InternalSetActiveNodeVersion(node, version);
+
+            _cacheService.Remove(CacheKeys.Node(node));
 
             if (!version.HasValue)
             {
@@ -187,6 +169,8 @@ namespace Kasbah.Core.ContentBroker
             }
             else
             {
+                var nodeItem = GetNode(node);
+
                 var versionItem = InternalGetRawNodeVersion(node, version.Value);
                 var dict = GetNodeVersion(node, version.Value);
                 dict["id"] = node;
@@ -214,5 +198,19 @@ namespace Kasbah.Core.ContentBroker
         readonly ILogger _log;
 
         #endregion
+
+        public static class CacheKeys
+        {
+            const string Prefix = "kasbah";
+
+            public static string Node(Guid id)
+                => $"{Prefix}:node:{id}";
+            public static string Children(Guid? id)
+                => $"{Prefix}:node_children:{id}";
+            public static string Child(Guid? id, string alias)
+                => $"{Prefix}:node_child:{id}:{alias}";
+            public static string NodeVersion(Guid node, Guid version)
+                => $"{Prefix}:node_version:{node}:{version}";
+        }
     }
 }
