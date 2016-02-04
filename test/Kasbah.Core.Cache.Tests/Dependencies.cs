@@ -10,16 +10,20 @@ namespace Kasbah.Core.Cache.Tests
         public void InvalidateItem_WithDependencies_RecursivelyInvalitesDependencies()
         {
             // Arrange
-            var service = new CacheService(Mock.Of<IDistributedCache>());
+            var provider = new Mock<IDistributedCache>();
+            provider.Setup(e => e.Remove("dep")).Verifiable();
+
+            var service = new CacheService(provider.Object);
 
             service.GetOrSet("test", typeof(object),
                 () => new object(),
-                (obj) => null);
+                (obj) => new[] { "dep" });
 
             // Act
             service.Remove("test");
 
             // Assert
+            provider.VerifyAll();
         }
     }
 }

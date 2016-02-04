@@ -94,6 +94,11 @@ namespace Kasbah.Core.Cache
 
                 var entry = JsonConvert.DeserializeObject<IDictionary<string, object>>(Encoding.UTF8.GetString(data, 0, data.Length));
 
+                if (entry == null)
+                {
+                    return null;
+                }
+
                 // TODO: this is messy
                 return new CacheEntry
                 {
