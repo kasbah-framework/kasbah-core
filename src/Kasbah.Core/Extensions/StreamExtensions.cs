@@ -5,6 +5,17 @@ namespace Kasbah.Core
 {
     public static class StreamExtensions
     {
+        #region Public Methods
+
+        public static string SHA1(this Stream stream)
+        {
+            using (var sha = System.Security.Cryptography.SHA1.Create())
+            {
+                var checksum = sha.ComputeHash(stream);
+                return BitConverter.ToString(checksum).Replace("-", string.Empty);
+            }
+        }
+
         public static byte[] ToArray(this Stream stream)
         {
             if (stream is MemoryStream)
@@ -21,13 +32,6 @@ namespace Kasbah.Core
             }
         }
 
-        public static string SHA1(this Stream stream)
-        {
-            using (var sha = System.Security.Cryptography.SHA1.Create())
-            {
-                var checksum = sha.ComputeHash(stream);
-                return  BitConverter.ToString(checksum).Replace("-", string.Empty);
-            }
-        }
+        #endregion
     }
 }

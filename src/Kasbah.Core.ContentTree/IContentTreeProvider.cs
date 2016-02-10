@@ -10,6 +10,8 @@ namespace Kasbah.Core.ContentTree
 
         void CreateNode(Guid id, Guid? parent, string alias, string type);
 
+        void Delete(Guid id);
+
         IEnumerable<NodeVersion> GetAllNodeVersions(Guid id);
 
         Node GetChild(Guid? parent, string alias);
@@ -27,8 +29,6 @@ namespace Kasbah.Core.ContentTree
         NodeVersion Save(Guid id, Guid node, IDictionary<string, object> item);
 
         void SetActiveNodeVersion(Guid id, Guid? version);
-
-        void Delete(Guid id);
 
         #endregion
     }

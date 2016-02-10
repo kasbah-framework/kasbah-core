@@ -26,7 +26,7 @@ namespace Kasbah.Core.Index.Solr.Models
     {
         #region Public Properties
 
-        [JsonProperty("commit")]
+        [JsonProperty("commit", Order = int.MaxValue)]
         public object Commit { get; set; } = new object();
 
         #endregion
