@@ -1,8 +1,10 @@
 image: microsoft/aspnet:1.0.0-rc1-update1
 stages:
   - build
-
+artifacts:
+  paths:
+    - **/*.nupkg
 job1:
   stage: build
   script:
-    - bash build.sh
+    - bash build.sh --quiet verify
