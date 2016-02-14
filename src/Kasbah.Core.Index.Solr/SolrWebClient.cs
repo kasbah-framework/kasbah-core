@@ -97,6 +97,8 @@ namespace Kasbah.Core.Index.Solr
             {
                 var ret = UploadString(uri, data);
 
+                _log.LogVerbose($"SubmitRequest response: {ret}");
+
                 return JsonConvert.DeserializeObject<BaseResponse>(ret);
             }
             catch (WebException ex)

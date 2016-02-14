@@ -64,7 +64,6 @@ namespace Kasbah.Core.ContentBroker
             _indexService.Delete(id);
         }
 
-
         public Node GetChild(Guid? parent, string alias)
         {
             // TODO: dependants
@@ -199,18 +198,33 @@ namespace Kasbah.Core.ContentBroker
 
         #endregion
 
+        #region Public Classes
+
         public static class CacheKeys
         {
-            const string Prefix = "kasbah";
+            #region Public Methods
+
+            public static string Child(Guid? id, string alias)
+                => $"{Prefix}:node_child:{id}:{alias}";
+
+            public static string Children(Guid? id)
+                => $"{Prefix}:node_children:{id}";
 
             public static string Node(Guid id)
                 => $"{Prefix}:node:{id}";
-            public static string Children(Guid? id)
-                => $"{Prefix}:node_children:{id}";
-            public static string Child(Guid? id, string alias)
-                => $"{Prefix}:node_child:{id}:{alias}";
+
             public static string NodeVersion(Guid node, Guid version)
                 => $"{Prefix}:node_version:{node}:{version}";
+
+            #endregion
+
+            #region Private Fields
+
+            const string Prefix = "kasbah";
+
+            #endregion
         }
+
+        #endregion
     }
 }
