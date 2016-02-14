@@ -5,4 +5,4 @@ stages:
 job1:
   stage: build
   script:
-    - build.sh
+    - bash build.sh
