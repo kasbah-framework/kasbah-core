@@ -1,0 +1,8 @@
+image: microsoft/aspnet:1.0.0-rc1-update1
+stages:
+  - build
+
+job1:
+  stage: build
+  script:
+    - build.sh
