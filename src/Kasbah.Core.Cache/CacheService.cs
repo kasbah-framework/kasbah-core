@@ -92,6 +92,11 @@ namespace Kasbah.Core.Cache
             {
                 var data = _distributedCache.Get(key);
 
+                if (data == null)
+                {
+                    return null;
+                }
+
                 var entry = JsonConvert.DeserializeObject<IDictionary<string, object>>(Encoding.UTF8.GetString(data, 0, data.Length));
 
                 if (entry == null)
@@ -103,7 +108,7 @@ namespace Kasbah.Core.Cache
                 return new CacheEntry
                 {
                     Dependencies = (entry["Dependencies"] as JArray).ToObject<IEnumerable<string>>(),
-                    Value = (entry["Value"] as JObject).ToObject(type)
+                    Value = (entry["Value"] as JToken).ToObject(type)
                 };
             }
             else

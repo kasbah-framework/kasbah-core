@@ -67,7 +67,7 @@ namespace Kasbah.Core.ContentBroker
         public Node GetChild(Guid? parent, string alias)
         {
             // TODO: dependants
-            return _cacheService.GetOrSet<Node>(CacheKeys.Child(parent, alias),
+            return _cacheService.GetOrSet(CacheKeys.Child(parent, alias),
                 () => InternalGetChild(parent, alias),
                 (node) => new[] { CacheKeys.Node(node.Id) });
         }
@@ -75,7 +75,7 @@ namespace Kasbah.Core.ContentBroker
         public IEnumerable<Node> GetChildren(Guid? id)
         {
             // TODO: dependants
-            return _cacheService.GetOrSet<IEnumerable<Node>>(CacheKeys.Children(id),
+            return _cacheService.GetOrSet(CacheKeys.Children(id),
                 () => InternalGetChildren(id),
                 (children) => children.Select(ent => CacheKeys.Node(ent.Id)));
         }
@@ -83,7 +83,7 @@ namespace Kasbah.Core.ContentBroker
         public Node GetNode(Guid id)
         {
             // TODO: dependants == children
-            return _cacheService.GetOrSet<Node>(CacheKeys.Node(id),
+            return _cacheService.GetOrSet(CacheKeys.Node(id),
                 () => InternalGetNode(id));
         }
 
@@ -109,13 +109,11 @@ namespace Kasbah.Core.ContentBroker
         public object GetNodeVersion(Guid node, Guid version, Type type)
         {
             // TODO: dependants
-            return _cacheService.GetOrSet(CacheKeys.NodeVersion(node, version), type, () =>
-            {
-                var dict = InternalGetNodeVersion(node, version);
+            var dict = _cacheService.GetOrSet(CacheKeys.NodeVersion(node, version),
+                () => InternalGetNodeVersion(node, version),
+                (nodeVersion) => new[] { CacheKeys.Node(node) });
 
-                return TypeHandler.MapDictToItem(type, dict, this);
-            },
-            (nodeVersion) => new[] { CacheKeys.Node(node) });
+            return TypeHandler.MapDictToItem(type, dict, this);
         }
 
         public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
