@@ -1,7 +1,5 @@
 # Kasbah.Core
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ctj1sioh6d4y7m8d?svg=true)](https://ci.appveyor.com/project/brendanmckenzie/kasbah-core)
-
 Kasbah is a framework that can be used whenever an application requires data to be stored in a tree structure that can be easily queried and searched.
 
 This core framework is no use on its own.  It simply provides a base to work with.
