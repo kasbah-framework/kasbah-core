@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
@@ -40,6 +41,20 @@ namespace Kasbah.Core.Cache
             return ret;
         }
 
+        public async Task<object> GetOrSetAsync(string key, Type type, Func<Task<object>> generator, Func<object, IEnumerable<string>> dependencies = null)
+        {
+            var ret = Get(key, type)?.Value;
+
+            if (ret == null)
+            {
+                ret = await generator();
+
+                Set(key, ret, dependencies?.Invoke(ret));
+            }
+
+            return ret;
+        }
+
         public T GetOrSet<T>(string key, Func<T> generator, Func<T, IEnumerable<string>> dependencies = null)
             where T : class
         {
@@ -48,6 +63,24 @@ namespace Kasbah.Core.Cache
             if (ret == null)
             {
                 ret = generator();
+
+                if (ret != null)
+                {
+                    Set(key, ret, dependencies?.Invoke(ret));
+                }
+            }
+
+            return ret;
+        }
+
+        public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> generator, Func<T, IEnumerable<string>> dependencies = null)
+            where T : class
+        {
+            var ret = Get(key, typeof(T))?.Value as T;
+
+            if (ret == null)
+            {
+                ret = await generator();
 
                 if (ret != null)
                 {
