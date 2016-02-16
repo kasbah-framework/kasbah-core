@@ -116,94 +116,102 @@ namespace Kasbah.Core.ContentBroker
         {
             // TODO: make this great.
             var result = default(object);
-            var name = NameResolver.GetResolvedPropertyName(propertyName);
 
-            switch (name)
+            var staticAttr = _instance.GetType().GetProperty(propertyName).GetCustomAttribute<StaticAttribute>();
+            if (staticAttr != null)
             {
-                case "node":
-                    {
-                        var id = Guid.Parse(_innerDict["id"] as string);
-
-                        result = _contentBroker.GetNode(id);
-                    }
-                    break;
-
-                default:
-                    if (_innerDict.ContainsKey(name))
-                    {
-                        result = _innerDict[name];
-
-                        if (typeof(ItemBase).IsAssignableFrom(returnType))
+                result = staticAttr.StaticValue;
+            }
+            else
+            {
+                var name = NameResolver.GetResolvedPropertyName(propertyName);
+                switch (name)
+                {
+                    case "node":
                         {
-                            var refNodeId = Guid.Parse(result as string);
+                            var id = Guid.Parse(_innerDict["id"] as string);
 
-                            var refNode = _contentBroker.GetNode(refNodeId);
-                            if (refNode.ActiveVersion.HasValue)
+                            result = _contentBroker.GetNode(id);
+                        }
+                        break;
+
+                    default:
+                        if (_innerDict.ContainsKey(name))
+                        {
+                            result = _innerDict[name];
+
+                            if (typeof(ItemBase).IsAssignableFrom(returnType))
                             {
-                                result = _contentBroker.GetNodeVersion(refNodeId, refNode.ActiveVersion.Value, TypeUtil.TypeFromName(refNode.Type));
+                                var refNodeId = Guid.Parse(result as string);
+
+                                var refNode = _contentBroker.GetNode(refNodeId);
+                                if (refNode.ActiveVersion.HasValue)
+                                {
+                                    result = _contentBroker.GetNodeVersion(refNodeId, refNode.ActiveVersion.Value, TypeUtil.TypeFromName(refNode.Type));
+                                }
+                                else
+                                {
+                                    result = null;
+                                }
                             }
-                            else
+                            else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(returnType))
                             {
-                                result = null;
+                                var refNodes = (result as JArray).ToObject<IEnumerable<Guid>>().Select(_contentBroker.GetNode);
+
+                                result = refNodes
+                                    .Where(ent => ent.ActiveVersion.HasValue)
+                                    .Select(ent => _contentBroker.GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
+
+                                result = typeof(Enumerable)
+                                    .GetMethod("Cast", new[] { typeof(IEnumerable) })
+                                    .MakeGenericMethod(returnType.GenericTypeArguments.Single())
+                                    .Invoke(null, new object[] { result });
                             }
                         }
-                        else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(returnType))
-                        {
-                            var refNodes = (result as JArray).ToObject<IEnumerable<Guid>>().Select(_contentBroker.GetNode);
+                        break;
+                }
 
-                            result = refNodes
-                                .Where(ent => ent.ActiveVersion.HasValue)
-                                .Select(ent => _contentBroker.GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
+                if (result == null && returnType.GetTypeInfo().IsValueType)
+                {
+                    result = Activator.CreateInstance(returnType);
+                }
 
-                            result = typeof(Enumerable)
-                                .GetMethod("Cast", new[] { typeof(IEnumerable) })
-                                .MakeGenericMethod(returnType.GenericTypeArguments.Single())
-                                .Invoke(null, new object[] { result });
-                        }
+                if (result is Int64 && returnType == typeof(Int32))
+                {
+                    result = Convert.ToInt32(result);
+                }
+
+                if (result is JArray && returnType != typeof(string))
+                {
+                    var entType = returnType.GetGenericArguments().First();
+                    var arrRes = Activator.CreateInstance(typeof(List<>).MakeGenericType(entType)) as IList;
+                    foreach (var token in result as JArray)
+                    {
+                        var ent = token.ToObject(entType);
+                        arrRes.Add(ent);
                     }
-                    break;
-            }
-
-            if (result == null && returnType.GetTypeInfo().IsValueType)
-            {
-                result = Activator.CreateInstance(returnType);
-            }
-
-            if (result is Int64 && returnType == typeof(Int32))
-            {
-                result = Convert.ToInt32(result);
-            }
-
-            if (result is JArray && returnType != typeof(string))
-            {
-                var entType = returnType.GetGenericArguments().First();
-                var arrRes = Activator.CreateInstance(typeof(List<>).MakeGenericType(entType)) as IList;
-                foreach (var token in result as JArray)
-                {
-                    var ent = token.ToObject(entType);
-                    arrRes.Add(ent);
+                    result = arrRes;
                 }
-                result = arrRes;
-            }
 
-            if (result is string && returnType != typeof(string))
-            {
-                try
+                if (result is string && returnType != typeof(string))
                 {
-                    result = JsonConvert.DeserializeObject(result as string, returnType);
+                    try
+                    {
+                        result = JsonConvert.DeserializeObject(result as string, returnType);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        result = JsonConvert.DeserializeObject($"'{result}'", returnType);
+                    }
                 }
-                catch (JsonReaderException)
-                {
-                    result = JsonConvert.DeserializeObject($"'{result}'", returnType);
-                }
-            }
 
-            if (result == null)
-            {
-                var defaultAttr = _instance.GetType().GetProperty(propertyName).GetCustomAttribute<DefaultAttribute>();
-                if (defaultAttr != null)
+                if (result == null)
                 {
-                    result = defaultAttr.DefaultValue;
+                    var defaultAttr = _instance.GetType().GetProperty(propertyName).GetCustomAttribute<DefaultAttribute>();
+                    if (defaultAttr != null)
+                    {
+                        result = defaultAttr.DefaultValue;
+                    }
                 }
             }
 
