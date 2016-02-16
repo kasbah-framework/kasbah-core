@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kasbah.Core.Annotations;
+using Kasbah.Core.ContentBroker.Models;
+using Kasbah.Core.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 #if !DNXCORE50
 
@@ -10,12 +16,6 @@ using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
 
 #endif
-
-using Kasbah.Core.ContentBroker.Models;
-using Kasbah.Core.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 namespace Kasbah.Core.ContentBroker
 {
@@ -195,6 +195,15 @@ namespace Kasbah.Core.ContentBroker
                 catch (JsonReaderException)
                 {
                     result = JsonConvert.DeserializeObject($"'{result}'", returnType);
+                }
+            }
+
+            if (result == null)
+            {
+                var defaultAttr = _instance.GetType().GetProperty(propertyName).GetCustomAttribute<DefaultAttribute>();
+                if (defaultAttr != null)
+                {
+                    result = defaultAttr.DefaultValue;
                 }
             }
 
