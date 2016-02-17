@@ -117,7 +117,10 @@ namespace Kasbah.Core.ContentBroker
             // TODO: make this great.
             var result = default(object);
 
-            var staticAttr = _instance.GetType().GetProperty(propertyName).GetCustomAttribute<StaticAttribute>();
+            var type = _instance.GetType();
+            var property = type.GetProperties().Where(ent => ent.Name == propertyName).OrderBy(ent => ent.DeclaringType == type ? 0 : 1).First();
+
+            var staticAttr = property.GetCustomAttribute<StaticAttribute>();
             if (staticAttr != null)
             {
                 result = staticAttr.StaticValue;
@@ -207,7 +210,7 @@ namespace Kasbah.Core.ContentBroker
 
                 if (result == null)
                 {
-                    var defaultAttr = _instance.GetType().GetProperty(propertyName).GetCustomAttribute<DefaultAttribute>();
+                    var defaultAttr = property.GetCustomAttribute<DefaultAttribute>();
                     if (defaultAttr != null)
                     {
                         result = defaultAttr.DefaultValue;
