@@ -1,3 +1,4 @@
+//#define ENABLE_SCHEMA_CHECK
 using System;
 using System.Collections.Generic;
 using Kasbah.Core.Models;
@@ -11,7 +12,9 @@ namespace Kasbah.Core.ContentTree.Npgsql
     {
         #region Private Members
 
+#if ENABLE_SCHEMA_CHECK
         static bool FirstRun = true;
+#endif
         readonly NpgsqlConnection _connection;
         readonly object _lock = new object();
         readonly ILogger _log;
@@ -33,6 +36,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             _connection = new NpgsqlConnection(connectionString);
 
+#if ENABLE_SCHEMA_CHECK
             if (FirstRun)
             {
                 lock (_lock)
@@ -41,6 +45,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
                     EnsureSchema();
                 }
             }
+#endif
         }
 
         #endregion
@@ -147,11 +152,13 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         #region Private methods
 
+#if ENABLE_SCHEMA_CHECK
         void EnsureSchema()
         {
             _connection.ExecuteFromResource("Schema.fn");
             _connection.ExecuteFromResource("Schema");
         }
+#endif
 
         #endregion
     }
