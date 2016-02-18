@@ -64,7 +64,7 @@ namespace Kasbah.Core.Index.Solr
 
         SolrWebClient GetConnection()
         {
-            var connectionString = Environment.GetEnvironmentVariable("SOLR");
+            var connectionString = Environment.GetEnvironmentVariable("KASBAH_SOLR");
 
             if (string.IsNullOrEmpty(connectionString))
             {

@@ -1,1 +1,0 @@
-select ensure_structure();

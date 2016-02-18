@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Npgsql.Logging;
 
-namespace Kasbah.Core.ContentTree.Npgsql
+namespace Kasbah.Core.ContentTree.Npgsql.Logging
 {
     public class KasbahNpgsqlLogger : NpgsqlLogger
     {
@@ -64,33 +64,6 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
             throw new ArgumentOutOfRangeException(nameof(level));
         }
-
-        #endregion
-    }
-
-    public class KasbahNpgsqlLoggingProvider : INpgsqlLoggingProvider
-    {
-        #region Public Constructors
-
-        public KasbahNpgsqlLoggingProvider(ILoggerFactory loggerFactory)
-        {
-            _loggerFactory = loggerFactory;
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public NpgsqlLogger CreateLogger(string name)
-        {
-            return new KasbahNpgsqlLogger(_loggerFactory, name);
-        }
-
-        #endregion
-
-        #region Private Fields
-
-        readonly ILoggerFactory _loggerFactory;
 
         #endregion
     }
