@@ -161,7 +161,10 @@ namespace Kasbah.Core.Cache
         {
             dependencies = dependencies ?? Enumerable.Empty<string>();
 
-            Remove(key);
+            if (!key.StartsWith("kasbah:cache_dep:"))
+            {
+                Remove(key);
+            }
 
             var entry = new CacheEntry
             {
@@ -198,6 +201,18 @@ namespace Kasbah.Core.Cache
             if (dependencies != null)
             {
                 Set($"kasbah:cache_dep:{key}", dependencies);
+                //foreach (var dep in dependencies)
+                //{
+                //    var revCacheKey = $"kasbah:cache_dep:{dep}";
+                //    var depEntry = Get(revCacheKey, typeof(IEnumerable<string>));
+                //    var revCacheVal = new[] { key }.AsEnumerable();
+                //    if (depEntry != null)
+                //    {
+                //        revCacheVal = revCacheVal.Concat(depEntry.Value as IEnumerable<string>);
+                //    }
+
+                //    Set($"kasbah:cache_dep:{dep}", revCacheVal);
+                //}
             }
         }
 
