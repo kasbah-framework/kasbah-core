@@ -66,15 +66,13 @@ namespace Kasbah.Core.ContentBroker
 
         public Node GetChild(Guid? parent, string alias)
         {
-            // TODO: dependants
             return _cacheService.GetOrSet(CacheKeys.Child(parent, alias),
                 () => InternalGetChild(parent, alias),
-                (node) => new[] { CacheKeys.Node(node.Id) });
+                (node) => new[] { CacheKeys.Node(node.Parent.Value) });
         }
 
         public IEnumerable<Node> GetChildren(Guid? id)
         {
-            // TODO: dependants
             return _cacheService.GetOrSet(CacheKeys.Children(id),
                 () => InternalGetChildren(id),
                 (children) => children.Select(ent => CacheKeys.Node(ent.Id)));
@@ -82,7 +80,6 @@ namespace Kasbah.Core.ContentBroker
 
         public Node GetNode(Guid id)
         {
-            // TODO: dependants == children
             return _cacheService.GetOrSet(CacheKeys.Node(id),
                 () => InternalGetNode(id));
         }
