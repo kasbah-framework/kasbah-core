@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kasbah.Core.Index.Utils;
 
 namespace Kasbah.Core.Index
 {
@@ -18,43 +17,45 @@ namespace Kasbah.Core.Index
 
         #endregion
 
-        #region Public Methods
+        #region Private Methods
 
-        public void Delete(Guid id)
-            => _indexProvider.Delete(id);
-
-        public IDictionary<string, object> HandlePreIndex(object item, Type type)
+        IDictionary<string, object> HandlePreIndex(IDictionary<string, object> item, Type type)
         {
-            var indexObject = default(IDictionary<string, object>);
-            if (item is IDictionary<string, object>)
-            {
-                indexObject = item as IDictionary<string, object>;
-            }
-            else
-            {
-                indexObject = SerialisationUtil.Serialise(item);
-            }
-
             if (type != null && _handlers.ContainsKey(type))
             {
                 foreach (var handler in _handlers[type].OrderBy(ent => ent.Priority))
                 {
-                    var customFields = handler.AddCustomFields(indexObject);
+                    var customFields = handler.AddCustomFields(item);
                     foreach (var field in customFields)
                     {
-                        indexObject[field.Key] = field.Value;
+                        item[field.Key] = field.Value;
                     }
                 }
             }
 
-            return indexObject;
+            return item;
         }
 
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Deletes an item from the index with the specified identifier.
+        /// </summary>
+        /// <param name="id">The node identifier.</param>
+        public void Delete(Guid id)
+            => _indexProvider.Delete(id);
+
+        /// <see cref="IIndexProvider.Query(object, int?, int?, string)"/>
         public IEnumerable<IDictionary<string, object>> Query(object query, int? skip = null, int? take = null, string sort = null)
-        {
-            return _indexProvider.Query(query, skip, take, sort);
-        }
+            => _indexProvider.Query(query, skip, take, sort);
 
+        /// <summary>
+        /// Registers the specified handler.
+        /// </summary>
+        /// <typeparam name="T">The type of object to handle.</typeparam>
+        /// <param name="handler">The handler.</param>
         public void Register<T>(IIndexHandler handler)
         {
             lock (_lockObj)
@@ -71,9 +72,18 @@ namespace Kasbah.Core.Index
             }
         }
 
-        public void Store(IDictionary<string, object> value)
-            => _indexProvider.Store(value);
+        /// <see cref="IIndexProvider.Store(IDictionary{string, object})"/>
+        public void Store(IDictionary<string, object> value, Type type)
+        {
+            value = HandlePreIndex(value, type);
 
+            _indexProvider.Store(value);
+        }
+
+        /// <summary>
+        /// Unregisters the specified handler.
+        /// </summary>
+        /// <param name="handler">The handler.</param>
         public void Unregister(IIndexHandler handler)
         {
             lock (_lockObj)
@@ -89,6 +99,11 @@ namespace Kasbah.Core.Index
             }
         }
 
+        /// <summary>
+        /// Unregisters the specified handler from handling items of a specific type.
+        /// </summary>
+        /// <typeparam name="T">The type the handler should no longer handle.</typeparam>
+        /// <param name="handler">The handler.</param>
         public void Unregister<T>(IIndexHandler handler)
         {
             lock (_lockObj)

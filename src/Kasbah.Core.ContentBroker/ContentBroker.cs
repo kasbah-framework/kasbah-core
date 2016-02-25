@@ -8,6 +8,7 @@ using Kasbah.Core.ContentTree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
+using Kasbah.Core.Utils;
 using Microsoft.Extensions.Logging;
 
 // TODO: unit test the caching strategy to within an inch of its life.
@@ -86,11 +87,11 @@ namespace Kasbah.Core.ContentBroker
         }
 
         /// <summary>
-        /// Gets the child node with <paramref name="alias"/> under <paramref name="parent"/>.
+        /// Gets the child node under <paramref name="parent"/> with <paramref name="alias"/>.
         /// </summary>
         /// <param name="parent">The parent node identifier.</param>
-        /// <param name="alias">The node alias.</param>
-        /// <returns>The child node if it exists, otherwise null.</returns>
+        /// <param name="alias">The alias.</param>
+        /// <returns>The requested child node if it exists, otherwise null.</returns>
         public Node GetChild(Guid? parent, string alias)
         {
             return _cacheService.GetOrSet(CacheKeys.Child(parent, alias),
@@ -250,7 +251,7 @@ namespace Kasbah.Core.ContentBroker
                 dict["__modified"] = versionItem.Modified;
                 dict["__created"] = versionItem.Created;
 
-                _indexService.Store(dict);
+                _indexService.Store(dict, TypeUtil.TypeFromName(nodeItem.Type));
             }
 
             _eventService.Emit(new NodeActiveVersionSet
