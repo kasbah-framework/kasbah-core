@@ -40,6 +40,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
 
         #region Public Methods
 
+        /// <inheritdoc/>
         public void CreateNode(Guid id, Guid? parent, string alias, string type)
         {
             lock (_lock)
@@ -48,6 +49,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public void Delete(Guid id)
         {
             lock (_lock)
@@ -56,10 +58,12 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
         }
 
+        /// <inheritdoc/>
         public IEnumerable<NodeVersion> GetAllNodeVersions(Guid id)
         {
             lock (_lock)
@@ -68,6 +72,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public Node GetChild(Guid? parent, string alias)
         {
             lock (_lock)
@@ -76,6 +81,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerable<Node> GetChildren(Guid? id)
         {
             lock (_lock)
@@ -84,6 +90,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public Node GetNode(Guid id)
         {
             lock (_lock)
@@ -92,6 +99,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public IDictionary<string, object> GetNodeVersion(Guid id, Guid version)
         {
             lock (_lock)
@@ -102,6 +110,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public NodeVersion GetRawNodeVersion(Guid id, Guid version)
         {
             lock (_lock)
@@ -110,6 +119,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public void MoveNode(Guid id, Guid? parent)
         {
             lock (_lock)
@@ -118,6 +128,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public NodeVersion Save(Guid id, Guid node, IDictionary<string, object> item)
         {
             lock (_lock)
@@ -128,6 +139,7 @@ namespace Kasbah.Core.ContentTree.Npgsql
             }
         }
 
+        /// <inheritdoc/>
         public void SetActiveNodeVersion(Guid id, Guid? version)
         {
             lock (_lock)

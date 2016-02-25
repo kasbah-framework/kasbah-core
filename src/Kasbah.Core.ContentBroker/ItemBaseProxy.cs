@@ -154,6 +154,7 @@ namespace Kasbah.Core.ContentBroker
                                 }
                                 else
                                 {
+                                    // TODO: should this return null, or should an exception be raised?
                                     result = null;
                                 }
                             }
@@ -165,6 +166,8 @@ namespace Kasbah.Core.ContentBroker
                                     .Where(ent => ent.ActiveVersion.HasValue)
                                     .Select(ent => _contentBroker.GetNodeVersion(ent.Id, ent.ActiveVersion.Value, TypeUtil.TypeFromName(ent.Type)));
 
+                                // TODO: as above, should referenced values that doesn't have an active
+                                //   version return null, or raise an exception?
                                 result = typeof(Enumerable)
                                     .GetMethod("Cast", new[] { typeof(IEnumerable) })
                                     .MakeGenericMethod(returnType.GenericTypeArguments.Single())
