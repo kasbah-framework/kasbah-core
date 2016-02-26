@@ -61,7 +61,7 @@ namespace Kasbah.Core.Cache
         /// <see cref="GetOrSet(string, Type, Func{object}, Func{object, IEnumerable{string}})"/>
         public T GetOrSet<T>(string key, Func<T> generator, Func<T, IEnumerable<string>> dependencies = null)
             where T : class
-            => GetOrSet(key, typeof(T), generator, dependencies: (o) => dependencies(o as T)) as T;
+            => GetOrSet(key, typeof(T), generator, dependencies: (o) => dependencies?.Invoke(o as T)) as T;
 
         /// <see cref="GetOrSet(string, Type, Func{object}, Func{object, IEnumerable{string}})"/>
         public async Task<object> GetOrSetAsync(string key, Type type, Func<Task<object>> generator, Func<object, IEnumerable<string>> dependencies = null)
@@ -81,7 +81,7 @@ namespace Kasbah.Core.Cache
         /// <see cref="GetOrSet(string, Type, Func{object}, Func{object, IEnumerable{string}})"/>
         public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> generator, Func<T, IEnumerable<string>> dependencies = null)
             where T : class
-            => await GetOrSetAsync(key, typeof(T), async () => await generator() as T, (o) => dependencies(o as T)) as T;
+            => await GetOrSetAsync(key, typeof(T), async () => await generator() as T, (o) => dependencies?.Invoke(o as T)) as T;
 
         /// <summary>
         /// Removes the entry specified by <paramref name="key"/>.
