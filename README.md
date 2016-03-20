@@ -12,7 +12,7 @@ This core project contains services for interacting with data at a low level and
 
 The services provided by the core are:
 
- * **ContentTreeService** *Kasbah.Core.ContentTree* provides an interface for interacting with the core datastore that holds the current tree structure along with all versions of data stored in the tree
+ * **TreeService** *Kasbah.Core.Tree* provides an interface for interacting with the core datastore that holds the current tree structure along with all versions of data stored in the tree
  * **IndexService** *Kasbah.Core.Index* provides an interface for searching the currently active node data
  * **EventService** *Kasbah.Core.Events* provides a messaging bus for communication throughout the system
  * **ContentBroker** *Kasbah.Core.ContentBroker* ties all the core services together
@@ -23,7 +23,7 @@ Core services are based on abstract providers so the core system is not tied to 
 
 Implementations of providers shipped with the core are:
 
- * ContentTreeService
+ * TreeService
   * Npgsql - for working with Postgresql databases
  * IndexService
   * Solr - Best for distributed systems where the application can be running on multiple hosts

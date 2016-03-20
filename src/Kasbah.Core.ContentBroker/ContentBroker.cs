@@ -4,7 +4,7 @@ using System.Linq;
 using Kasbah.Core.Cache;
 using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentBroker.Models;
-using Kasbah.Core.ContentTree;
+using Kasbah.Core.Tree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
@@ -22,14 +22,14 @@ namespace Kasbah.Core.ContentBroker
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentBroker"/> class.
         /// </summary>
-        /// <param name="contentTreeService">The content tree service.</param>
+        /// <param name="treeService">The content tree service.</param>
         /// <param name="indexService">The index service.</param>
         /// <param name="eventService">The event service.</param>
         /// <param name="cacheService">The cache service.</param>
         /// <param name="loggerFactory">The logger factory.</param>
-        public ContentBroker(ContentTreeService contentTreeService, IndexService indexService, EventService eventService, CacheService cacheService, ILoggerFactory loggerFactory)
+        public ContentBroker(TreeService treeService, IndexService indexService, EventService eventService, CacheService cacheService, ILoggerFactory loggerFactory)
         {
-            _contentTreeService = contentTreeService;
+            _treeService = treeService;
             _indexService = indexService;
             _eventService = eventService;
             _cacheService = cacheService;
@@ -82,7 +82,7 @@ namespace Kasbah.Core.ContentBroker
             _cacheService.Remove(CacheKeys.Children(node.Parent));
             _cacheService.Remove(CacheKeys.Child(node.Parent, node.Alias));
 
-            _contentTreeService.Delete(id);
+            _treeService.Delete(id);
             _indexService.Delete(id);
         }
 
@@ -265,7 +265,7 @@ namespace Kasbah.Core.ContentBroker
         #region Private Fields
 
         readonly CacheService _cacheService;
-        readonly ContentTreeService _contentTreeService;
+        readonly treeService _treeService;
         readonly EventService _eventService;
         readonly IndexService _indexService;
         readonly ILogger _log;

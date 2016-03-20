@@ -1,6 +1,6 @@
 using System;
 using Kasbah.Core.Cache;
-using Kasbah.Core.ContentTree;
+using Kasbah.Core.Tree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Utils;
@@ -39,6 +39,6 @@ namespace Kasbah.Core.ContentBroker.Tests
         #endregion
 
         static ContentBroker MockContentBroker(CacheService cacheService)
-            => new ContentBroker(new ContentTreeService(Mock.Of<IContentTreeProvider>()), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), cacheService, Mock.Of<ILoggerFactory>());
+            => new ContentBroker(new TreeService(Mock.Of<ITreeProvider>()), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), cacheService, Mock.Of<ILoggerFactory>());
     }
 }

@@ -2,7 +2,7 @@
 using Kasbah.Core.Cache;
 using Kasbah.Core.ContentBroker.Events;
 using Kasbah.Core.ContentBroker.Models;
-using Kasbah.Core.ContentTree;
+using Kasbah.Core.Tree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Utils;
@@ -23,10 +23,10 @@ namespace Kasbah.Core.ContentBroker.Tests
             var alias = Guid.NewGuid().ToString();
             var type = TypeUtil.TypeName<ExampleItem>();
 
-            var provider = new Mock<IContentTreeProvider>();
+            var provider = new Mock<ITreeProvider>();
             provider.Setup(e => e.CreateNode(It.IsAny<Guid>(), null, alias, type)).Verifiable();
 
-            var contentTreeService = new ContentTreeService(provider.Object);
+            var contentTreeService = new TreeService(provider.Object);
 
             var service = new ContentBroker(contentTreeService, new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
 
@@ -49,7 +49,7 @@ namespace Kasbah.Core.ContentBroker.Tests
 
             var eventService = new EventService(provider.Object);
 
-            var service = new ContentBroker(new ContentTreeService(Mock.Of<IContentTreeProvider>()), new IndexService(Mock.Of<IIndexProvider>()), eventService, Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
+            var service = new ContentBroker(new TreeService(Mock.Of<ITreeProvider>()), new IndexService(Mock.Of<IIndexProvider>()), eventService, Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
 
             // Act
             service.CreateNode(null, alias, type);

@@ -1,19 +1,19 @@
 {
   "version": "1.0.0-*",
-  "description": "Kasbah.Core.ContentTree Unit Tests",
+  "description": "Kasbah.Core.Index Unit Tests",
   "authors": [
     "Brendan McKenzie"
   ],
   "tags": [
     "kasbah"
   ],
-  "projectUrl": "http://www.kasbah.io/",
-  "licenseUrl": "",
+  "projectUrl": "https://www.kasbah.io/",
+  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-*",
-    "Kasbah.Core": "",
-    "Kasbah.Core.Index": ""
+    "Kasbah.Core": "1.0.0-*",
+    "Kasbah.Core.Index": "1.0.0-*"
   },
   "frameworks": {
     "dnx451": { },
@@ -21,8 +21,5 @@
   },
   "commands": {
     "test": "xunit.runner.dnx"
-  },
-  "resource": [
-    "Resources/**/*"
-  ]
+  }
 }

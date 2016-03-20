@@ -7,13 +7,13 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core", "src\Kasbah.C
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentBroker", "src\Kasbah.Core.ContentBroker\Kasbah.Core.ContentBroker.xproj", "{21C4DD88-5430-4C3C-A7F6-CD1C994BD8CE}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentTree", "src\Kasbah.Core.ContentTree\Kasbah.Core.ContentTree.xproj", "{D9A1F01D-2161-4FEB-A99C-03CDE0720B34}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Tree", "src\Kasbah.Core.Tree\Kasbah.Core.Tree.xproj", "{D9A1F01D-2161-4FEB-A99C-03CDE0720B34}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Events", "src\Kasbah.Core.Events\Kasbah.Core.Events.xproj", "{09841FBE-6C1A-4A24-A5CD-7B70B95B53C9}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Index", "src\Kasbah.Core.Index\Kasbah.Core.Index.xproj", "{0D933BF9-7E4C-459D-B6FA-1F7C068C5EDB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentTree.Npgsql", "src\Kasbah.Core.ContentTree.Npgsql\Kasbah.Core.ContentTree.Npgsql.xproj", "{F75FBA8F-5C97-4855-9B80-0801667F2BB0}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Tree.Npgsql", "src\Kasbah.Core.Tree.Npgsql\Kasbah.Core.Tree.Npgsql.xproj", "{F75FBA8F-5C97-4855-9B80-0801667F2BB0}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Events.InProc", "src\Kasbah.Core.Events.InProc\Kasbah.Core.Events.InProc.xproj", "{C3FD1798-B9D9-4B9C-8580-57F49FA9C260}"
 EndProject
@@ -27,9 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{DC4A3071-B8F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D794AFBE-57D9-4574-BFC4-6EEC917391BC}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentTree.Npgsql.Tests", "test\Kasbah.Core.ContentTree.Npgsql.Tests\Kasbah.Core.ContentTree.Npgsql.Tests.xproj", "{E47F84B0-2E42-48AF-BBE2-31FB8F26BF46}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Tree.Npgsql.Tests", "test\Kasbah.Core.Tree.Npgsql.Tests\Kasbah.Core.Tree.Npgsql.Tests.xproj", "{E47F84B0-2E42-48AF-BBE2-31FB8F26BF46}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.ContentTree.Tests", "test\Kasbah.Core.ContentTree.Tests\Kasbah.Core.ContentTree.Tests.xproj", "{B4481B9A-F3F9-4D63-A043-374C5871E731}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Tree.Tests", "test\Kasbah.Core.Tree.Tests\Kasbah.Core.Tree.Tests.xproj", "{B4481B9A-F3F9-4D63-A043-374C5871E731}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kasbah.Core.Events.Redis.Tests", "test\Kasbah.Core.Events.Redis.Tests\Kasbah.Core.Events.Redis.Tests.xproj", "{70123903-C1E4-462F-9590-A04A34785E6E}"
 EndProject

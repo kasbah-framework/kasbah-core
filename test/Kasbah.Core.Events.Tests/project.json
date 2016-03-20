@@ -7,13 +7,13 @@
   "tags": [
     "kasbah"
   ],
-  "projectUrl": "http://www.kasbah.io/",
-  "licenseUrl": "",
+  "projectUrl": "https://www.kasbah.io/",
+  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-rc1-*",
-    "Kasbah.Core.Events": "",
-    "Kasbah.Core.Events.InProc": "",
+    "Kasbah.Core.Events": "1.0.0-*",
+    "Kasbah.Core.Events.InProc": "1.0.0-*",
     "Moq": "4.2.1510.2205"
   },
   "frameworks": {

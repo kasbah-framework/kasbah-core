@@ -8,8 +8,8 @@
   "tags": [
     "kasbah"
   ],
-  "projectUrl": "http://www.kasbah.io/",
-  "licenseUrl": "",
+  "projectUrl": "https://www.kasbah.io/",
+  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Microsoft.Extensions.Logging": "1.0.0-rc1-*",
     "Newtonsoft.Json": "8.0.1-*"

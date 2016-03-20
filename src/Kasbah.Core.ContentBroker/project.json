@@ -7,11 +7,11 @@
   "tags": [
     "kasbah"
   ],
-  "projectUrl": "http://www.kasbah.io/",
-  "licenseUrl": "",
+  "projectUrl": "https://www.kasbah.io/",
+  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "1.0.0-*",
-    "Kasbah.Core.ContentTree": "1.0.0-*",
+    "Kasbah.Core.Tree": "1.0.0-*",
     "Kasbah.Core.Events": "1.0.0-*",
     "Kasbah.Core.Index": "1.0.0-*",
     "Kasbah.Core.Cache": "1.0.0-*"

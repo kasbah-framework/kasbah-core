@@ -8,5 +8,6 @@ It will also handle caching of content including cache invalidation and upating.
 
  * `Kasbah.Core`
  * `Kasbah.Core.Events`
- * `Kasbah.Core.ContentTree`
+ * `Kasbah.Core.Tree`
  * `Kasbah.Core.Index`
+ * `Kasbah.Core.Cache`

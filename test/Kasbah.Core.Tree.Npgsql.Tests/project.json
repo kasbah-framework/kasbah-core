@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0-*",
+  "description": "Kasbah.Core.Tree.Npgsql Unit Tests",
+  "authors": [
+    "Brendan McKenzie"
+  ],
+  "tags": [
+    "kasbah"
+  ],
+  "projectUrl": "https://www.kasbah.io/",
+  "licenseUrl": "https://www.kasbah.io/license.txt",
+  "dependencies": {
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-*",
+    "Kasbah.Core.Tree.Npgsql": "1.0.0-*",
+    "Moq": "4.2.1510.2205"
+  },
+  "frameworks": {
+    "dnx451": {}
+  },
+  "commands": {
+    "test": "xunit.runner.dnx"
+  }
+}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kasbah.Core.Cache;
 using Kasbah.Core.ContentBroker.Models;
-using Kasbah.Core.ContentTree;
+using Kasbah.Core.Tree;
 using Kasbah.Core.Events;
 using Kasbah.Core.Index;
 using Kasbah.Core.Models;
@@ -37,10 +37,10 @@ namespace Kasbah.Core.ContentBroker.Tests
 
             var expected = new Node { };
 
-            var provider = new Mock<IContentTreeProvider>();
+            var provider = new Mock<ITreeProvider>();
             provider.Setup(e => e.GetNode(id)).Returns(expected);
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new TreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "id", id.ToString() }
             };
@@ -56,7 +56,7 @@ namespace Kasbah.Core.ContentBroker.Tests
         }
 
         [Fact]
-        public void GetProp_ReferencingOtherItem_HitsContentTreeService()
+        public void GetProp_ReferencingOtherItem_HitsTreeService()
         {
             // Arrange
             var id = Guid.NewGuid();
@@ -69,11 +69,11 @@ namespace Kasbah.Core.ContentBroker.Tests
                 Type = typeof(CrossReferenceB).AssemblyQualifiedName
             };
 
-            var provider = new Mock<IContentTreeProvider>();
+            var provider = new Mock<ITreeProvider>();
             provider.Setup(e => e.GetNode(id)).Returns(expected).Verifiable();
             provider.Setup(e => e.GetNodeVersion(id, versionId)).Verifiable();
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new TreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "a", "A" },
                 { "b", id.ToString() }
@@ -90,7 +90,7 @@ namespace Kasbah.Core.ContentBroker.Tests
         }
 
         [Fact]
-        public void GetProp_ReferencingOtherItems_HitsContentTreeService()
+        public void GetProp_ReferencingOtherItems_HitsTreeService()
         {
             // Arrange
             var id1 = Guid.NewGuid();
@@ -111,13 +111,13 @@ namespace Kasbah.Core.ContentBroker.Tests
                 Type = typeof(CrossReferenceB).AssemblyQualifiedName
             };
 
-            var provider = new Mock<IContentTreeProvider>();
+            var provider = new Mock<ITreeProvider>();
             provider.Setup(e => e.GetNode(id1)).Returns(expected1).Verifiable();
             provider.Setup(e => e.GetNode(id2)).Returns(expected2).Verifiable();
             provider.Setup(e => e.GetNodeVersion(id1, versionId)).Verifiable();
             provider.Setup(e => e.GetNodeVersion(id2, versionId)).Verifiable();
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new TreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "bs", JsonConvert.DeserializeObject(JsonConvert.SerializeObject(new [] { id1, id2 })) }
             };
@@ -148,10 +148,10 @@ namespace Kasbah.Core.ContentBroker.Tests
                 Type = typeof(CrossReferenceB).AssemblyQualifiedName
             };
 
-            var provider = new Mock<IContentTreeProvider>();
+            var provider = new Mock<ITreeProvider>();
             provider.Setup(e => e.GetNode(id)).Returns(expected).Verifiable();
 
-            var contentBroker = new ContentBroker(new ContentTreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
+            var contentBroker = new ContentBroker(new TreeService(provider.Object), new IndexService(Mock.Of<IIndexProvider>()), new EventService(Mock.Of<IEventBusProvider>()), Mock.Of<CacheService>(), Mock.Of<ILoggerFactory>());
             var dict = new Dictionary<string, object> {
                 { "a", "A" },
                 { "b", id.ToString() }

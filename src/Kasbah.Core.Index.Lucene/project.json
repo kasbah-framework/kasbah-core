@@ -7,8 +7,8 @@
   "tags": [
     "kasbah"
   ],
-  "projectUrl": "http://www.kasbah.io/",
-  "licenseUrl": "",
+  "projectUrl": "https://www.kasbah.io/",
+  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "",
     "Kasbah.Core.Index": "",
