@@ -265,7 +265,7 @@ namespace Kasbah.Core.ContentBroker
         #region Private Fields
 
         readonly CacheService _cacheService;
-        readonly treeService _treeService;
+        readonly TreeService _treeService;
         readonly EventService _eventService;
         readonly IndexService _indexService;
         readonly ILogger _log;
