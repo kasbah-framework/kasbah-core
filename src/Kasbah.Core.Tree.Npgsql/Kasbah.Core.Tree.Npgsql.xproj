@@ -6,12 +6,11 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>f75fba8f-5c97-4855-9b80-0801667f2bb0</ProjectGuid>
+    <ProjectGuid>9cc6200a-49fa-4a0f-8ae2-9dd74efc3789</ProjectGuid>
     <RootNamespace>Kasbah.Core.Tree.Npgsql</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">..\Kasbah.Core\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">..\Kasbah.Core\artifacts\bin\$(MSBuildProjectName)\</OutputPath>
   </PropertyGroup>
-
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
