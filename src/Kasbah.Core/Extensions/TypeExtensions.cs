@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+// using System.Collections.Generic;
 using System.Reflection;
 
 namespace Kasbah.Core
@@ -8,10 +8,10 @@ namespace Kasbah.Core
     {
         #region Public Methods
 
-        public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
-        {
-            return type.GetRuntimeProperties();
-        }
+        // public static IEnumerable<PropertyInfo> GetAllProperties(this Type type)
+        // {
+        //     return type.GetRuntimeProperties();
+        // }
 
         public static TRet GetAttributeValue<TAttr, TRet>(this MemberInfo info, Func<TAttr, TRet> selector)
             where TAttr : Attribute

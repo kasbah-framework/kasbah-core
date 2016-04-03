@@ -26,7 +26,7 @@ namespace Kasbah.Core.ContentBroker
 
             var nameResolver = new CamelCasePropertyNamesContractResolver();
 
-            var props = item.GetType().GetAllProperties();
+            var props = item.GetType().GetRuntimeProperties();
             var dict = new Dictionary<string, object>();
 
             foreach (var prop in props)

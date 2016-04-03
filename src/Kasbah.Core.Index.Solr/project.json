@@ -11,11 +11,10 @@
     "Newtonsoft.Json": "8.0.1-*"
   },
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": {
-      "dependencies": {
-        "System.Net.Requests": "4.0.10"
-      }
+    "netstandardapp1.5": {
+      "imports": [
+        "dnxcore50"
+      ]
     }
   }
 }

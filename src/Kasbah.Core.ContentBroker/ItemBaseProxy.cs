@@ -227,7 +227,7 @@ namespace Kasbah.Core.ContentBroker
 #if DNXCORE50
         void InitialiseInstance()
         {
-            var properties = _instance.GetType().GetAllProperties();
+            var properties = _instance.GetType().GetRuntimeProperties();
             foreach (var property in properties)
             {
                 if (property.SetMethod != null)
