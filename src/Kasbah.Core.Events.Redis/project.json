@@ -16,7 +16,11 @@
     "StackExchange.Redis": "1.1.0-*"
   },
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "netstandardapp1.5": {
+      "imports": [
+        "dotnet5.6",
+        "dnxcore50"
+      ]
+    }
   }
 }

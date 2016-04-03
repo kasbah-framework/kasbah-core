@@ -76,11 +76,11 @@ namespace Kasbah.Core.Index.Solr
 
             uriBuilder.Query = queryString;
 
-            _log.LogVerbose($"Select request: {uriBuilder.Uri}");
+            _log.LogDebug($"Select request: {uriBuilder.Uri}");
 
             var data = DownloadString(uriBuilder.Uri);
 
-            _log.LogVerbose($"Select response: {data}");
+            _log.LogDebug($"Select response: {data}");
 
             return JsonConvert.DeserializeObject<SelectResponse>(data);
         }
@@ -91,13 +91,13 @@ namespace Kasbah.Core.Index.Solr
 
             var data = JsonConvert.SerializeObject(request);
 
-            _log.LogVerbose($"SubmitRequest data: {data}");
+            _log.LogDebug($"SubmitRequest data: {data}");
 
             try
             {
                 var ret = UploadString(uri, data);
 
-                _log.LogVerbose($"SubmitRequest response: {ret}");
+                _log.LogDebug($"SubmitRequest response: {ret}");
 
                 return JsonConvert.DeserializeObject<BaseResponse>(ret);
             }
