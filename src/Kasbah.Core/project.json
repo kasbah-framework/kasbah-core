@@ -21,6 +21,7 @@
         "System.Console": "4.0.0-*"
       },
       "imports": [
+        "dotnet5.6",
         "dnxcore50"
       ]
     }

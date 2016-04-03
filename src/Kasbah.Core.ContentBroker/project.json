@@ -24,7 +24,7 @@
         ]
       },
       "imports": [
-        "dnxcore50"
+        "dotnet5.6"
       ]
     }
   }
