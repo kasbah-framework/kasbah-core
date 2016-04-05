@@ -11,8 +11,7 @@
   "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "1.0.0-*",
-    "Kasbah.Core.Events": "1.0.0-*",
-    "Newtonsoft.Json": "8.0.1-*"
+    "Kasbah.Core.Events": "1.0.0-*"
   },
   "frameworks": {
     "netstandardapp1.5": {
