@@ -38,11 +38,11 @@ namespace Kasbah.Core.ContentBroker
                 {
                     dict[name] = null;
                 }
-                else if (typeof(ItemBase).IsAssignableFrom(value.GetType()))
+                else if (typeof(ItemBase).GetTypeInfo().IsAssignableFrom(value.GetType().GetTypeInfo()))
                 {
                     dict[name] = (value as ItemBase).Id;
                 }
-                else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(value.GetType()))
+                else if (typeof(IEnumerable<ItemBase>).GetTypeInfo().IsAssignableFrom(value.GetType().GetTypeInfo()))
                 {
                     dict[name] = (value as IEnumerable<ItemBase>).Select(ent => ent.Id);
                 }

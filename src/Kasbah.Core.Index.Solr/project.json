@@ -8,7 +8,6 @@
   "dependencies": {
     "Kasbah.Core": "1.0.0-*",
     "Kasbah.Core.Index": "1.0.0-*",
-    "Newtonsoft.Json": "8.0.1-*",
     "System.Net.Requests": "4.0.11-*"
   },
   "frameworks": {

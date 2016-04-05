@@ -118,7 +118,7 @@ namespace Kasbah.Core.ContentBroker
             var result = default(object);
 
             var type = _instance.GetType();
-            var property = type.GetProperties().Where(ent => ent.Name == propertyName).OrderBy(ent => ent.DeclaringType == type ? 0 : 1).First();
+            var property = type.GetTypeInfo().GetProperties().Where(ent => ent.Name == propertyName).OrderBy(ent => ent.DeclaringType == type ? 0 : 1).First();
 
             var staticAttr = property.GetCustomAttribute<StaticAttribute>();
             if (staticAttr != null)
@@ -143,7 +143,7 @@ namespace Kasbah.Core.ContentBroker
                         {
                             result = _innerDict[name];
 
-                            if (typeof(ItemBase).IsAssignableFrom(returnType))
+                            if (typeof(ItemBase).GetTypeInfo().IsAssignableFrom(returnType))
                             {
                                 var refNodeId = Guid.Parse(result as string);
 
@@ -158,7 +158,7 @@ namespace Kasbah.Core.ContentBroker
                                     result = null;
                                 }
                             }
-                            else if (typeof(IEnumerable<ItemBase>).IsAssignableFrom(returnType))
+                            else if (typeof(IEnumerable<ItemBase>).GetTypeInfo().IsAssignableFrom(returnType))
                             {
                                 var refNodes = (result as JArray).ToObject<IEnumerable<Guid>>().Select(_contentBroker.GetNode);
 
@@ -169,6 +169,7 @@ namespace Kasbah.Core.ContentBroker
                                 // TODO: as above, should referenced values that doesn't have an active
                                 //   version return null, or raise an exception?
                                 result = typeof(Enumerable)
+                                    .GetTypeInfo()
                                     .GetMethod("Cast", new[] { typeof(IEnumerable) })
                                     .MakeGenericMethod(returnType.GenericTypeArguments.Single())
                                     .Invoke(null, new object[] { result });
@@ -189,7 +190,7 @@ namespace Kasbah.Core.ContentBroker
 
                 if (result is JArray && returnType != typeof(string))
                 {
-                    var entType = returnType.GetGenericArguments().First();
+                    var entType = returnType.GetTypeInfo().GetGenericArguments().First();
                     var arrRes = Activator.CreateInstance(typeof(List<>).MakeGenericType(entType)) as IList;
                     foreach (var token in result as JArray)
                     {

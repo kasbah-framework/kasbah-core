@@ -12,7 +12,8 @@
   "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Microsoft.Extensions.Logging": "1.0.0-rc2-*",
-    "Newtonsoft.Json": "8.0.1-*"
+    "Newtonsoft.Json": "8.0.3",
+    "System.Security.Cryptography.Algorithms": "4.1.0-rc3-24004-00"
   },
   "frameworks": {
     "netstandardapp1.5": {
