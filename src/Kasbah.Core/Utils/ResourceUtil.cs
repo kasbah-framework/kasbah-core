@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -21,7 +22,7 @@ namespace Kasbah.Core.Utils
             {
                 if (stream == null)
                 {
-                    throw new ResourceNotFoundException(name);
+                    throw new ResourceNotFoundException(name, assembly.GetManifestResourceNames());
                 }
 
                 using (var reader = new StreamReader(stream))
@@ -38,8 +39,8 @@ namespace Kasbah.Core.Utils
     {
         #region Public Constructors
 
-        public ResourceNotFoundException(string resourceName)
-            : base($"Resource not found {resourceName}")
+        public ResourceNotFoundException(string resourceName, IEnumerable<string> availableResources)
+            : base($"Resource not found {resourceName}.  Available resources: {string.Join("; ", availableResources)}")
         {
         }
 
