@@ -275,3 +275,6 @@ coverage/
 
 # NuGet
 .nuget/
+
+# Build
+.build/
