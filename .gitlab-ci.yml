@@ -1,7 +1,10 @@
 image: microsoft/dotnet:1.0.0-rc2-core
+before_script:
+  - apt-get update
+  - apt-get install -y uuidgen unzip
 stages:
   - build
-job1:
+build:
   stage: build
   script:
     - bash build.sh --quiet verify
