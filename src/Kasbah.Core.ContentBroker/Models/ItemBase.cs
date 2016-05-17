@@ -9,9 +9,6 @@ namespace Kasbah.Core.ContentBroker.Models
     }
 
     public abstract class ItemBase
-#if !DNXCORE50
-        : MarshalByRefObject
-#endif
     {
         /// <summary>
         /// Gets or sets the node identifier.

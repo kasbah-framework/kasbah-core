@@ -1,10 +1,14 @@
 {
   "version": "1.0.0-*",
+  "packOptions": {
+    "tags": [
+      "kasbah"
+    ],
+    "projectUrl": "https://www.kasbah.io/",
+    "licenseUrl": "https://www.kasbah.io/license.txt"
+  },
   "description": "Defines the operations availble for querying and manipulating the content tree",
   "authors": [ "Brendan McKenzie" ],
-  "tags": [ "kasbah" ],
-  "projectUrl": "https://www.kasbah.io/",
-  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "1.0.0-*"
   },

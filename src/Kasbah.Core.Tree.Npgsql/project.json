@@ -1,18 +1,20 @@
 {
   "version": "1.0.0-*",
+  "packOptions": {
+    "tags": [
+      "kasbah"
+    ],
+    "projectUrl": "https://www.kasbah.io/",
+    "licenseUrl": "https://www.kasbah.io/license.txt"
+  },
   "description": "Implements the content tree operations against the PostgreSQL database provider",
   "authors": [
     "Brendan McKenzie"
   ],
-  "tags": [
-    "kasbah"
-  ],
-  "projectUrl": "https://www.kasbah.io/",
-  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core.Tree": "1.0.0-*",
-    "Npgsql": "3.1.0-*",
-    "Dapper": "1.50.0-*"
+    "Npgsql": "3.1.0",
+    "Dapper": "1.50.0-beta9"
   },
   "frameworks": {
     "netstandardapp1.5": {
@@ -22,7 +24,9 @@
       ]
     }
   },
-  "resource": [
-    "Sql/**/*.sql"
-  ]
+  "buildOptions": {
+    "embed": [
+      "Sql/**/*.sql"
+    ]
+  }
 }

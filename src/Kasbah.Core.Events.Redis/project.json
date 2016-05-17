@@ -1,19 +1,20 @@
 {
   "version": "1.0.0-*",
+  "packOptions": {
+    "tags": [
+      "kasbah"
+    ],
+    "projectUrl": "https://www.kasbah.io/",
+    "licenseUrl": "https://www.kasbah.io/license.txt"
+  },
   "description": "Provides a messaging system for inter-system communication",
   "authors": [
     "Brendan McKenzie"
   ],
-  "tags": [
-    "kasbah"
-  ],
-  "projectUrl": "https://www.kasbah.io/",
-  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "1.0.0-*",
     "Kasbah.Core.Events": "1.0.0-*",
-    "Newtonsoft.Json": "8.0.1-*",
-    "StackExchange.Redis": "1.1.0-*"
+    "StackExchange.Redis": "1.1.0-alpha2"
   },
   "frameworks": {
     "netstandardapp1.5": {

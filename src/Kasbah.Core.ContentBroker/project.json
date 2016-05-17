@@ -1,14 +1,16 @@
 {
   "version": "1.0.0-*",
+  "packOptions": {
+    "tags": [
+      "kasbah"
+    ],
+    "projectUrl": "https://www.kasbah.io/",
+    "licenseUrl": "https://www.kasbah.io/license.txt"
+  },
   "description": "Provides a single interface to access all internal services",
   "authors": [
     "Brendan McKenzie"
   ],
-  "tags": [
-    "kasbah"
-  ],
-  "projectUrl": "https://www.kasbah.io/",
-  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "1.0.0-*",
     "Kasbah.Core.Tree": "1.0.0-*",
@@ -18,11 +20,6 @@
   },
   "frameworks": {
     "netstandardapp1.5": {
-      "compilationOptions": {
-        "define": [
-          "DNXCORE50"
-        ]
-      },
       "imports": [
         "dotnet5.6",
         "dnxcore50"

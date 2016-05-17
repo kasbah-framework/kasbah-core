@@ -10,26 +10,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-#if !DNXCORE50
-
-using System.Runtime.Remoting.Messaging;
-using System.Runtime.Remoting.Proxies;
-
-#endif
-
 namespace Kasbah.Core.ContentBroker
 {
     public class ItemBaseProxy
-#if !DNXCORE50
-        : RealProxy
-#endif
     {
         #region Public Constructors
 
         public ItemBaseProxy(Type type, IDictionary<string, object> innerDict, ContentBroker contentBroker)
-#if !DNXCORE50
-            : base(type)
-#endif
         {
             _instance = Activator.CreateInstance(type);
             _innerDict = innerDict;
@@ -37,55 +24,17 @@ namespace Kasbah.Core.ContentBroker
 
             _valueCache = new Dictionary<string, object>();
 
-#if DNXCORE50
             InitialiseInstance();
-#endif
         }
 
         #endregion
 
         #region Public Methods
 
-#if DNXCORE50
         public object GetTransparentProxy()
         {
             return _instance;
         }
-#else
-
-        public override IMessage Invoke(IMessage msg)
-        {
-            var methodCall = (IMethodCallMessage)msg;
-            var method = (MethodInfo)methodCall.MethodBase;
-
-            try
-            {
-                var result = default(object);
-                var handled = false;
-                if (method.Name.StartsWith("get_"))
-                {
-                    result = GetOrSetValue(method.Name, () =>
-                     {
-                         return GetPropertyValue(method.Name.Substring("get_".Length), method.ReturnType);
-                     });
-
-                    handled = result != null;
-                }
-
-                if (!handled)
-                {
-                    result = method.Invoke(_instance, methodCall.InArgs);
-                }
-
-                return new ReturnMessage(result, null, 0, methodCall.LogicalCallContext, methodCall);
-            }
-            catch (TargetInvocationException ex)
-            {
-                return new ReturnMessage(ex.InnerException, msg as IMethodCallMessage);
-            }
-        }
-
-#endif
 
         #endregion
 
@@ -225,7 +174,6 @@ namespace Kasbah.Core.ContentBroker
             return result;
         }
 
-#if DNXCORE50
         void InitialiseInstance()
         {
             var properties = _instance.GetType().GetRuntimeProperties();
@@ -239,7 +187,6 @@ namespace Kasbah.Core.ContentBroker
                 }
             }
         }
-#endif
 
         #endregion
     }

@@ -142,12 +142,8 @@ namespace Kasbah.Core.Index.Solr
 
         #endregion
 
-#if !DNXCORE50
-        internal string ContentType { set { Headers[HttpRequestHeader.ContentType] = value; } }
-#endif
     }
 
-#if DNXCORE50
     public class WebClient : IDisposable
     {
     #region Public Constructors
@@ -221,5 +217,4 @@ namespace Kasbah.Core.Index.Solr
     public class WebException : Exception
     {
     }
-#endif
 }

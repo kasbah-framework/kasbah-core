@@ -1,25 +1,27 @@
 {
   "version": "1.0.0-*",
+  "packOptions": {
+    "tags": [
+      "kasbah"
+    ],
+    "projectUrl": "https://www.kasbah.io/",
+    "licenseUrl": "https://www.kasbah.io/license.txt"
+  },
   "description": "Core functions and helpers used system-wide",
   "authors": [
     "Brendan McKenzie",
     "Chris Paynter"
   ],
-  "tags": [
-    "kasbah"
-  ],
-  "projectUrl": "https://www.kasbah.io/",
-  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
-    "Microsoft.Extensions.Logging": "1.0.0-rc2-*",
+    "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
     "Newtonsoft.Json": "8.0.3",
-    "System.Security.Cryptography.Algorithms": "4.1.0-rc3-24004-00"
+    "System.Security.Cryptography.Algorithms": "4.1.0-rc2-24027"
   },
   "frameworks": {
     "netstandardapp1.5": {
       "dependencies": {
-        "NETStandard.Library": "1.5.0-*",
-        "System.Console": "4.0.0-*"
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Console": "4.0.0-rc2-24027"
       },
       "imports": [
         "dotnet5.6",

@@ -1,17 +1,19 @@
 {
   "version": "1.0.0-*",
+  "packOptions": {
+    "tags": [
+      "kasbah"
+    ],
+    "projectUrl": "https://www.kasbah.io/",
+    "licenseUrl": "https://www.kasbah.io/license.txt"
+  },
   "description": "System cache service",
   "authors": [
     "Brendan McKenzie"
   ],
-  "tags": [
-    "kasbah"
-  ],
-  "projectUrl": "https://www.kasbah.io/",
-  "licenseUrl": "https://www.kasbah.io/license.txt",
   "dependencies": {
     "Kasbah.Core": "1.0.0-*",
-    "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc2-*"
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0-rc2-final"
   },
   "frameworks": {
     "netstandardapp1.5": {
