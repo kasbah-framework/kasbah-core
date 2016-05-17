@@ -17,12 +17,7 @@
     "Dapper": "1.50.0-beta9"
   },
   "frameworks": {
-    "netstandardapp1.5": {
-      "imports": [
-        "dotnet5.6",
-        "dnxcore50"
-      ]
-    }
+    "dnxcore50": { }
   },
   "buildOptions": {
     "embed": [

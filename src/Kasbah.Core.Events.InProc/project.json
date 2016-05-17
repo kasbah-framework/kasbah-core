@@ -16,11 +16,6 @@
     "Kasbah.Core.Events": "1.0.0-*"
   },
   "frameworks": {
-    "netstandardapp1.5": {
-      "imports": [
-        "dotnet5.6",
-        "dnxcore50"
-      ]
-    }
+    "dnxcore50": { }
   }
 }
