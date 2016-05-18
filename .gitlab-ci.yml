@@ -1,10 +1,7 @@
-image: microsoft/dotnet:1.0.0-rc2-core
+image: microsoft/dotnet:latest
 stages:
   - build
 build:
   stage: build
   script:
     - bash build.sh
-  artifacts:
-    paths:
-      - src/*/bin/Debug/*.nupkg
