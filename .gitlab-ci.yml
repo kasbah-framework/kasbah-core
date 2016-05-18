@@ -1,13 +1,10 @@
 image: microsoft/dotnet:1.0.0-rc2-core
-before_script:
-  - apt-get update
-  - apt-get install -y uuid-runtime unzip
 stages:
   - build
 build:
   stage: build
   script:
-    - bash build.sh --quiet verify
+    - bash build.sh
   artifacts:
     paths:
       - src/*/bin/Debug/*.nupkg
